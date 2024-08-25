@@ -163,18 +163,18 @@ public class AnalizadorLexico {
 			updateLexema();
 			return e5();
 		}
+		if (lastReadChar == '\'') {
+			throw new ExcepcionLexica(lexema, io.getLineNumber());	
+		}
 		
-		throw new ExcepcionLexica(lexema, io.getLineNumber());		
+		updateLexema();
+		return e6();
 	}
 	
 	private Token e5() throws ExcepcionLexica {
 		updateLastReadChar();
-		if (Character.isAlphabetic(lastReadChar)) {
-			updateLexema();
-			return e6();
-		}
-		
-		throw new ExcepcionLexica(lexema, io.getLineNumber());
+		updateLexema();
+		return e6();
 	}
 	
 	private Token e6() throws ExcepcionLexica {
