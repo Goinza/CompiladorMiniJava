@@ -1,6 +1,5 @@
 package main;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import sourcemanager.SourceManager;
@@ -13,11 +12,6 @@ public class AnalizadorLexico {
 	
 	public AnalizadorLexico(SourceManager sm) {
 		io = sm;
-		try {
-			io.open(""); //Add filepath
-		} catch (FileNotFoundException e) {
-			System.out.println(e.getMessage());
-		}
 		updateLastReadChar();
 	}
 	
@@ -211,6 +205,7 @@ public class AnalizadorLexico {
 			return e39();
 		}
 		
+		updateLexema();
 		throw new ExcepcionLexica(lexema, io.getLineNumber());		
 	}
 	
@@ -461,7 +456,18 @@ public class AnalizadorLexico {
 		return new Token("opMultiplicacion", lexema, io.getLineNumber());
 	}
 	
-	private Token e33() {
+	private Token e33() throws ExcepcionLexica {
+		if (lastReadChar == '*') {
+			lexema = "";
+			updateLastReadChar();
+			return e40();
+		}
+		if (lastReadChar == '/') {
+			lexema = "";
+			updateLastReadChar();
+			return e42();
+		}
+		
 		return new Token("opDivision", lexema, io.getLineNumber());
 	}
 	
@@ -497,6 +503,36 @@ public class AnalizadorLexico {
 	
 	private Token e39() {
 		return new Token("EOF", lexema, io.getLineNumber());
+	}
+	
+	private Token e40() throws ExcepcionLexica {
+		if (lastReadChar == '*') {
+			updateLastReadChar();
+			return e41();
+		}
+		
+		updateLastReadChar();
+		return e40();
+	}
+	
+	private Token e41() throws ExcepcionLexica {
+		if (lastReadChar == '/') {
+			updateLastReadChar();
+			return e0();
+		}
+		
+		updateLastReadChar();
+		return e40();
+	}
+	
+	private Token e42() throws ExcepcionLexica {
+		if (lastReadChar == '\n') {
+			updateLastReadChar();
+			return e0();
+		}
+		
+		updateLastReadChar();
+		return e42();
 	}
 	
 }

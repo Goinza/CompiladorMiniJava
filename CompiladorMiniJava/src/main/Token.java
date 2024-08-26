@@ -23,5 +23,9 @@ public class Token {
 	public int getLinea() {
 		return linea;
 	}
+	
+	public String toString() {
+		return "(" + token + "," + lexema + "," + linea + ")";
+	}
 
 }
