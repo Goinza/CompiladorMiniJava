@@ -287,7 +287,11 @@ public class AnalizadorLexico {
 			return e5();
 		}
 		if (lastReadChar == '\'') {
+			updateLexema();
 			throw new ExcepcionLexica(lexema, io.getLineNumber());	
+		}
+		if (lastReadChar == SourceManager.END_OF_FILE) {
+			throw new ExcepcionLexica(lexema, io.getLineNumber());
 		}
 		
 		updateLexema();
@@ -296,6 +300,10 @@ public class AnalizadorLexico {
 	}
 	
 	private Token e5() throws ExcepcionLexica {
+		if (lastReadChar == SourceManager.END_OF_FILE) {
+			throw new ExcepcionLexica(lexema, io.getLineNumber());
+		}	
+		
 		updateLexema();
 		updateLastReadChar();
 		return e6();
@@ -316,20 +324,24 @@ public class AnalizadorLexico {
 	}
 	
 	private Token e8() throws ExcepcionLexica {
-		if (Character.isAlphabetic(lastReadChar)) {
-			updateLexema();
-			updateLastReadChar();
-			return e9();
+		if (lastReadChar == SourceManager.END_OF_FILE) {
+			throw new ExcepcionLexica(lexema, io.getLineNumber());
+		}
+		if (lastReadChar == '\n') {
+			throw new ExcepcionLexica(lexema, io.getLineNumber());
 		}
 		
-		throw new ExcepcionLexica(lexema, io.getLineNumber());
+		updateLexema();
+		updateLastReadChar();
+		return e9();	
 	}
 	
 	private Token e9() throws ExcepcionLexica {
-		if (Character.isAlphabetic(lastReadChar)) {
-			updateLexema();
-			updateLastReadChar();
-			return e9();
+		if (lastReadChar == SourceManager.END_OF_FILE) {
+			throw new ExcepcionLexica(lexema, io.getLineNumber());
+		}
+		if (lastReadChar == '\n') {
+			throw new ExcepcionLexica(lexema, io.getLineNumber());
 		}
 		if (lastReadChar == '"') {
 			updateLexema();
@@ -340,9 +352,11 @@ public class AnalizadorLexico {
 			updateLexema();
 			updateLastReadChar();
 			return e11();
-		}
+		}				
 		
-		throw new ExcepcionLexica(lexema, io.getLineNumber());
+		updateLexema();
+		updateLastReadChar();
+		return e9();
 	}
 	
 	private Token e10() {
@@ -526,6 +540,9 @@ public class AnalizadorLexico {
 		if (lastReadChar == '*') {
 			updateLastReadChar();
 			return e41();
+		}
+		if (lastReadChar == SourceManager.END_OF_FILE) {
+			throw new ExcepcionLexica(lexema, io.getLineNumber());
 		}
 		
 		updateLastReadChar();
