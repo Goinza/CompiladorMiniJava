@@ -60,6 +60,7 @@ public class AnalizadorLexico {
 			case "break":
 			case "this":
 			case "new":
+			case "float":
 				type = "word" + word;
 				break;
 			default:
@@ -225,6 +226,11 @@ public class AnalizadorLexico {
 			updateLastReadChar();
 			return e1();
 		}
+		if (lastReadChar == '_') {
+			updateLexema();
+			updateLastReadChar();
+			return e1();
+		}
 		
 		return new Token("idClase", lexema, io.getLineNumber());
 	}
@@ -245,6 +251,11 @@ public class AnalizadorLexico {
 			updateLastReadChar();
 			return e2();
 		}
+		if (lastReadChar == '_') {
+			updateLexema();
+			updateLastReadChar();
+			return e2();
+		}
 		
 		return new Token(getIdType(lexema), lexema, io.getLineNumber());
 	}	
@@ -254,6 +265,12 @@ public class AnalizadorLexico {
 			updateLexema();
 			updateLastReadChar();
 			return e3();
+		}
+		
+		if (lastReadChar == '.') {
+			updateLexema();
+			updateLastReadChar();
+			return e43();
 		}
 		
 		if (lexema.length() > 9) {
@@ -533,6 +550,26 @@ public class AnalizadorLexico {
 		
 		updateLastReadChar();
 		return e42();
+	}
+	
+	private Token e43() throws ExcepcionLexica {
+		if (Character.isDigit(lastReadChar)) {
+			updateLexema();
+			updateLastReadChar();
+			return e44();
+		}
+		
+		throw new ExcepcionLexica(lexema, io.getLineNumber());
+	}
+	
+	private Token e44() {
+		if (Character.isDigit(lastReadChar)) {
+			updateLexema();
+			updateLastReadChar();
+			return e44();
+		}
+		
+		return new Token("floatLiteral", lexema, io.getLineNumber());
 	}
 	
 }

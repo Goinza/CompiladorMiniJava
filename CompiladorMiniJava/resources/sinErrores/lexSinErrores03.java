@@ -1,5 +1,5 @@
 ///[SinErrores]
-55 + 123
+55 + 123.34
 /*
  * comentario
  */
