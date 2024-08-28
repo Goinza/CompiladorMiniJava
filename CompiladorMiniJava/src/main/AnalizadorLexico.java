@@ -291,6 +291,7 @@ public class AnalizadorLexico {
 			throw new ExcepcionLexica(lexema, io.getLineNumber());	
 		}
 		if (lastReadChar == SourceManager.END_OF_FILE) {
+			updateLexema();
 			throw new ExcepcionLexica(lexema, io.getLineNumber());
 		}
 		
@@ -301,6 +302,7 @@ public class AnalizadorLexico {
 	
 	private Token e5() throws ExcepcionLexica {
 		if (lastReadChar == SourceManager.END_OF_FILE) {
+			updateLexema();
 			throw new ExcepcionLexica(lexema, io.getLineNumber());
 		}	
 		
@@ -554,6 +556,10 @@ public class AnalizadorLexico {
 			updateLastReadChar();
 			return e0();
 		}
+		if (lastReadChar == '*') {
+			updateLastReadChar();
+			return e41();
+		}
 		
 		updateLastReadChar();
 		return e40();
@@ -563,6 +569,9 @@ public class AnalizadorLexico {
 		if (lastReadChar == '\n') {
 			updateLastReadChar();
 			return e0();
+		}
+		if (lastReadChar == SourceManager.END_OF_FILE) {
+			return e39();
 		}
 		
 		updateLastReadChar();
