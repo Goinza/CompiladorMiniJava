@@ -1,7 +1,8 @@
-package main;
+package lexico;
 
 import java.io.IOException;
 
+import main.Token;
 import sourcemanager.SourceManager;
 
 public class AnalizadorLexico {
@@ -37,11 +38,7 @@ public class AnalizadorLexico {
 		switch (word) {
 			case "true":
 			case "false":
-				type = "boolLiteral";
-				break;
 			case "null":
-				type = "nullLiteral";
-				break;
 			case "class":
 			case "extends":
 			case "public":
@@ -99,7 +96,7 @@ public class AnalizadorLexico {
 		if (lastReadChar == '"') {
 			updateLexema();
 			updateLastReadChar();
-			return e8();
+			return e9();
 		}
 		if (lastReadChar == '(') {
 			updateLexema();
@@ -207,7 +204,7 @@ public class AnalizadorLexico {
 		}
 		
 		updateLexema();
-		throw new ExcepcionLexica(lexema, io.getLineNumber());		
+		throw new ExcepcionLexica(lexema, io.getLineNumber(), "Simbolo no es válido");		
 	}
 	
 	private Token e1() {
@@ -263,19 +260,23 @@ public class AnalizadorLexico {
 	private Token e3() throws ExcepcionLexica {
 		if (Character.isDigit(lastReadChar)) {
 			updateLexema();
+			if (lexema.length() > 9) {
+				throw new ExcepcionLexica(lexema, io.getLineNumber(), "Numero entero no puede exceder 9 dígitos");
+			}
+			
 			updateLastReadChar();
 			return e3();
+		}
+		if (Character.isAlphabetic(lastReadChar)) {
+			updateLexema();
+			throw new ExcepcionLexica(lexema, io.getLineNumber(), "Número entero no puede contener letras");
 		}
 		
 		if (lastReadChar == '.') {
 			updateLexema();
 			updateLastReadChar();
 			return e43();
-		}
-		
-		if (lexema.length() > 9) {
-			throw new ExcepcionLexica(lexema, io.getLineNumber());
-		}
+		}		
 		
 		return new Token("intLiteral", lexema, io.getLineNumber());
 	}
@@ -288,11 +289,11 @@ public class AnalizadorLexico {
 		}
 		if (lastReadChar == '\'') {
 			updateLexema();
-			throw new ExcepcionLexica(lexema, io.getLineNumber());	
+			throw new ExcepcionLexica(lexema, io.getLineNumber(), "Caracter no puede ser vacío");	
 		}
 		if (lastReadChar == SourceManager.END_OF_FILE) {
 			updateLexema();
-			throw new ExcepcionLexica(lexema, io.getLineNumber());
+			throw new ExcepcionLexica(lexema, io.getLineNumber(), "Caracter no terminó en comilla simple");
 		}
 		
 		updateLexema();
@@ -303,8 +304,12 @@ public class AnalizadorLexico {
 	private Token e5() throws ExcepcionLexica {
 		if (lastReadChar == SourceManager.END_OF_FILE) {
 			updateLexema();
-			throw new ExcepcionLexica(lexema, io.getLineNumber());
+			throw new ExcepcionLexica(lexema, io.getLineNumber(), "Caracter no terminó en comilla simple");
 		}	
+		if (lastReadChar == '\'') {
+			updateLexema();
+			throw new ExcepcionLexica(lexema, io.getLineNumber(), "Barra invertida no es un caracter válido");
+		}
 		
 		updateLexema();
 		updateLastReadChar();
@@ -318,32 +323,19 @@ public class AnalizadorLexico {
 			return e7();
 		}
 		
-		throw new ExcepcionLexica(lexema, io.getLineNumber());
+		throw new ExcepcionLexica(lexema, io.getLineNumber(), "Caracter no terminó en comilla simple");
 	}
 	
 	private Token e7() {
 		return new Token("charLiteral", lexema, io.getLineNumber());
 	}
 	
-	private Token e8() throws ExcepcionLexica {
-		if (lastReadChar == SourceManager.END_OF_FILE) {
-			throw new ExcepcionLexica(lexema, io.getLineNumber());
-		}
-		if (lastReadChar == '\n') {
-			throw new ExcepcionLexica(lexema, io.getLineNumber());
-		}
-		
-		updateLexema();
-		updateLastReadChar();
-		return e9();	
-	}
-	
 	private Token e9() throws ExcepcionLexica {
 		if (lastReadChar == SourceManager.END_OF_FILE) {
-			throw new ExcepcionLexica(lexema, io.getLineNumber());
+			throw new ExcepcionLexica(lexema, io.getLineNumber(), "String no terminó en comilla doble");
 		}
 		if (lastReadChar == '\n') {
-			throw new ExcepcionLexica(lexema, io.getLineNumber());
+			throw new ExcepcionLexica(lexema, io.getLineNumber(), "String no terminó en comilla doble");
 		}
 		if (lastReadChar == '"') {
 			updateLexema();
@@ -366,13 +358,13 @@ public class AnalizadorLexico {
 	}
 	
 	private Token e11() throws ExcepcionLexica {
-		if (lastReadChar == '"') {
+		if (lastReadChar != 'n') {
 			updateLexema();
 			updateLastReadChar();
 			return e9();
 		}
 		
-		throw new ExcepcionLexica(lexema, io.getLineNumber());
+		throw new ExcepcionLexica(lexema, io.getLineNumber(), "String no puede contener un salto de línea");
 	}
 	
 	private Token e12() {
@@ -514,7 +506,7 @@ public class AnalizadorLexico {
 			updateLastReadChar();
 			return e36();
 		}
-		throw new ExcepcionLexica(lexema, io.getLineNumber());
+		throw new ExcepcionLexica(lexema, io.getLineNumber(), "Token no es válido");
 	}
 	
 	private Token e36() {
@@ -527,7 +519,7 @@ public class AnalizadorLexico {
 			updateLastReadChar();
 			return e38();
 		}
-		throw new ExcepcionLexica(lexema, io.getLineNumber());
+		throw new ExcepcionLexica(lexema, io.getLineNumber(), "Token no es válido");
 	}
 	
 	private Token e38() {
@@ -544,7 +536,7 @@ public class AnalizadorLexico {
 			return e41();
 		}
 		if (lastReadChar == SourceManager.END_OF_FILE) {
-			throw new ExcepcionLexica(lexema, io.getLineNumber());
+			throw new ExcepcionLexica(lexema, io.getLineNumber(), "Comentario multilinea no fue cerrado");
 		}
 		
 		updateLastReadChar();
@@ -585,14 +577,39 @@ public class AnalizadorLexico {
 			return e44();
 		}
 		
-		throw new ExcepcionLexica(lexema, io.getLineNumber());
+		throw new ExcepcionLexica(lexema, io.getLineNumber(), "Número flotante debe contener al menos un dígito posterior al punto decimal");
 	}
 	
-	private Token e44() {
+	private Token e44() throws ExcepcionLexica {
 		if (Character.isDigit(lastReadChar)) {
 			updateLexema();
 			updateLastReadChar();
 			return e44();
+		}
+		if (lastReadChar == 'e' || lastReadChar == 'E') {
+			updateLexema();
+			updateLastReadChar();
+			return e45();
+		}
+		
+		return new Token("floatLiteral", lexema, io.getLineNumber());
+	}
+	
+	private Token e45() throws ExcepcionLexica {
+		if (Character.isDigit(lastReadChar)) {
+			updateLexema();
+			updateLastReadChar();
+			return e46();
+		}
+		
+		throw new ExcepcionLexica(lexema, io.getLineNumber(), "Número flotante debe contener al menos un dígito posterior al símbolo de notación científica");
+	}
+	
+	private Token e46() {
+		if (Character.isDigit(lastReadChar)) {
+			updateLexema();
+			updateLastReadChar();
+			return e46();
 		}
 		
 		return new Token("floatLiteral", lexema, io.getLineNumber());

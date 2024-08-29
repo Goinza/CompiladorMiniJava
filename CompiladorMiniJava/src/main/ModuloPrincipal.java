@@ -2,6 +2,8 @@ package main;
 
 import java.io.FileNotFoundException;
 
+import lexico.AnalizadorLexico;
+import lexico.ExcepcionLexica;
 import sourcemanager.SourceManager;
 import sourcemanager.SourceManagerImpl;
 

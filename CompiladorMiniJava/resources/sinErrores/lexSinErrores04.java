@@ -8,7 +8,9 @@ EjemploClase00 ejemplo_metodo01 ejemploVariable02
 Comentario de 
 varias lineas
 */
-367 487.31 'c' '\n' "cadena" "otra\"cadena"
+367 487.31 4.8731e2 'c' '\n' "cadena" "otra\"cadena" 
+//cadena vacia
+""
 ( ) {} ; , .:
 > < ! == >= <= !=
 + - * / % && ||

@@ -3,3 +3,4 @@
 //Error en lectura de caracteres
 
 'g'    + '\'
+"Hola"
