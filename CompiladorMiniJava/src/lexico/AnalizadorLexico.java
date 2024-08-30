@@ -261,7 +261,7 @@ public class AnalizadorLexico {
 		if (Character.isDigit(lastReadChar)) {
 			updateLexema();
 			if (lexema.length() > 9) {
-				throw new ExcepcionLexica(lexema, io.getLineNumber(), "Numero entero no puede exceder 9 dígitos");
+				throw new ExcepcionLexica(lexema, io.getLineNumber(), "Numero entero no puede exceder los 9 dígitos");
 			}
 			
 			updateLastReadChar();
