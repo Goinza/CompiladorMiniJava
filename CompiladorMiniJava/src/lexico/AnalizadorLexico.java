@@ -335,7 +335,7 @@ public class AnalizadorLexico {
 			throw new ExcepcionLexica(lexema, io.getLineNumber(), "String no terminó en comilla doble");
 		}
 		if (lastReadChar == '\n') {
-			throw new ExcepcionLexica(lexema, io.getLineNumber(), "String no terminó en comilla doble");
+			throw new ExcepcionLexica(lexema, io.getLineNumber(), "String no puede contener un salto de línea");
 		}
 		if (lastReadChar == '"') {
 			updateLexema();
@@ -358,13 +358,15 @@ public class AnalizadorLexico {
 	}
 	
 	private Token e11() throws ExcepcionLexica {
-		if (lastReadChar != 'n') {
-			updateLexema();
-			updateLastReadChar();
-			return e9();
+		if (lastReadChar == SourceManager.END_OF_FILE) {
+			throw new ExcepcionLexica(lexema, io.getLineNumber(), "String no terminó en comilla doble");
 		}
-		
-		throw new ExcepcionLexica(lexema, io.getLineNumber(), "String no puede contener un salto de línea");
+		if (lastReadChar == '\n') {
+			throw new ExcepcionLexica(lexema, io.getLineNumber(), "String no puede contener un salto de línea");
+		}
+		updateLexema();
+		updateLastReadChar();
+		return e9();
 	}
 	
 	private Token e12() {
@@ -601,6 +603,11 @@ public class AnalizadorLexico {
 			updateLastReadChar();
 			return e46();
 		}
+		if (lastReadChar == '+' || lastReadChar == '-') {
+			updateLexema();
+			updateLastReadChar();
+			return e47();
+		}
 		
 		throw new ExcepcionLexica(lexema, io.getLineNumber(), "Número flotante debe contener al menos un dígito posterior al símbolo de notación científica");
 	}
@@ -613,6 +620,16 @@ public class AnalizadorLexico {
 		}
 		
 		return new Token("floatLiteral", lexema, io.getLineNumber());
+	}
+	
+	private Token e47() throws ExcepcionLexica {
+		if (Character.isDigit(lastReadChar)) {
+			updateLexema();
+			updateLastReadChar();
+			return e46();
+		}
+		
+		throw new ExcepcionLexica(lexema, io.getLineNumber(), "Número flotante debe contener al menos un dígito posterior al símbolo de notación científica");
 	}
 	
 }
