@@ -194,7 +194,8 @@ public class AnalizadorLexico {
 			return e37();
 		}
 		if (lastReadChar == SourceManager.END_OF_FILE) {
-			updateLexema();
+			//EOF se expresa con el caracter $
+			lexema += '$';
 			try {
 				io.close();
 			} catch (IOException e) {
