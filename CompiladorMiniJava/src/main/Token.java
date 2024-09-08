@@ -12,7 +12,7 @@ public class Token {
 		linea = lin;
 	}
 
-	public String getToken() {
+	public String getTipoToken() {
 		return token;
 	}
 

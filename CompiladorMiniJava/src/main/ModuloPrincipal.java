@@ -20,7 +20,7 @@ public class ModuloPrincipal {
 			do {				
 				token = lexico.getNextToken();
 				System.out.println(token.toString());
-			} while (token.getToken() != "EOF");
+			} while (token.getTipoToken() != "EOF");
 			
 			System.out.println("[SinErrores]");
 		} catch (FileNotFoundException e1) {
