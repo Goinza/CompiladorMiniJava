@@ -58,6 +58,7 @@ public class AnalizadorLexico {
 			case "this":
 			case "new":
 			case "float":
+			case "default":
 				type = "word" + word;
 				break;
 			default:
