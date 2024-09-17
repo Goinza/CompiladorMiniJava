@@ -285,10 +285,10 @@ public class AnalizadorSintactico {
 		expresion();
 		match("parentesisFin");
 		sentencia();
-		elseNT();
+		elseOpcional();
 	}
 	
-	private void elseNT() throws ExcepcionLexica, ExcepcionSintactica {
+	private void elseOpcional() throws ExcepcionLexica, ExcepcionSintactica {
 		if (tokenActual.getTipoToken().equals("wordelse")) {
 			match("wordelse");
 			sentencia();	
