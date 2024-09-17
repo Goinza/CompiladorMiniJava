@@ -169,7 +169,7 @@ public class AnalizadorSintactico {
 	}
 	
 	private void listaArgsFormalesOpcional() throws ExcepcionLexica, ExcepcionSintactica {
-		List<String> primerosListaArgsFormales = Arrays.asList("wordboolean", "wordchar", "wordint", "wordidClase");
+		List<String> primerosListaArgsFormales = Arrays.asList("wordboolean", "wordchar", "wordint", "idClase");
 		if (primerosListaArgsFormales.contains(tokenActual.getTipoToken())) {
 			listaArgsFormales();
 		}

@@ -25,6 +25,9 @@ public class ModuloPrincipal {
 		}		
 		catch (ExcepcionLexica e) {
 			System.out.println(e.getMessage());
+			if (testFlag) {
+				e.printStackTrace();				
+			}
 			System.out.println(e.getErrorCode());
 		}
 		catch (ExcepcionSintactica e2) {
