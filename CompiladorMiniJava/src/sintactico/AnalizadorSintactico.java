@@ -121,7 +121,7 @@ public class AnalizadorSintactico {
 			match("wordvoid");
 		}
 		else {
-			throw new ExcepcionSintactica(tokenActual, "boolean, char, int, idClase o void");
+			throw new ExcepcionSintactica(tokenActual, "boolean, char, int, void o identificador de clase");
 		}
 	}
 	
@@ -134,7 +134,7 @@ public class AnalizadorSintactico {
 			match("idClase");
 		}
 		else {
-			throw new ExcepcionSintactica(tokenActual, "boolean, char, int o idClase");
+			throw new ExcepcionSintactica(tokenActual, "boolean, char, int o identificador de clase");
 		}
 	}
 	
@@ -249,7 +249,7 @@ public class AnalizadorSintactico {
 			bloque();
 		}
 		else {
-			throw new ExcepcionSintactica(tokenActual, "+, -, !, true, false, null, this, new, (, intLiteral, charLiteral, stringLiteral, idMetVar, idClase, var, return, break, if, while, switch o {");
+			throw new ExcepcionSintactica(tokenActual, "+, -, !, true, false, null, this, new, (, literal de entero, literal de caracter, literal de string, identificador de metodo/variable, identificador de clase, var, return, break, if, while, switch o {");
 		}
 	}
 	
@@ -458,7 +458,7 @@ public class AnalizadorSintactico {
 			operando();
 		}
 		else {
-			throw new ExcepcionSintactica(tokenActual, "+, -, !, true, false, null, this, new, (, intLiteral, charLiteral, stringLiteral, idMetVar o idClase");
+			throw new ExcepcionSintactica(tokenActual, "+, -, !, true, false, null, this, new, (, literal de entero, literal de caracter, literal de string, identificador de metodo/variable o identificador de clase");
 		}
 	}
 	
@@ -487,7 +487,7 @@ public class AnalizadorSintactico {
 			acceso();
 		}
 		else {
-			throw new ExcepcionSintactica(tokenActual, "true, fale, null, intLiteral, charLiteral, stringLiteral, this, new, (, idMetVar, idClase");
+			throw new ExcepcionSintactica(tokenActual, "true, fale, null, literal de entero, literal de caracter, literal de string, this, new, (, identificador de metodo/variable, identificador de clase");
 		}
 	}
 	
@@ -501,7 +501,7 @@ public class AnalizadorSintactico {
 			literalObjeto();
 		}
 		else {
-			throw new ExcepcionSintactica(tokenActual, "true, false, intLiteral, charLiteral, null o stringLiteral");
+			throw new ExcepcionSintactica(tokenActual, "true, false, literal de entero, literal de caracter, null o literal de string");
 		}
 	}
 	
@@ -519,7 +519,7 @@ public class AnalizadorSintactico {
 			match("charLiteral");
 		}
 		else {
-			throw new ExcepcionSintactica(tokenActual, "true, false, intLiteral o charLiteral");
+			throw new ExcepcionSintactica(tokenActual, "true, false, literal de entero o literal de caracter");
 		}
 	}
 	
@@ -531,7 +531,7 @@ public class AnalizadorSintactico {
 			match("stringLiteral");
 		}
 		else {
-			throw new ExcepcionSintactica(tokenActual, "null o stringLiteral");
+			throw new ExcepcionSintactica(tokenActual, "null o literal de string");
 		}
 	}
 	
@@ -557,7 +557,7 @@ public class AnalizadorSintactico {
 			expresionParentizada();
 		}
 		else {
-			throw new ExcepcionSintactica(tokenActual, "this, idMetVar, new, idClase o (");
+			throw new ExcepcionSintactica(tokenActual, "this, identificador de metodo/variable, new, identificador de clase o (");
 		}
 	}
 	
