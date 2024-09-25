@@ -7,10 +7,19 @@ public class TablaSimbolos {
 	
 	private Map<String, Clase> clases;
 	private Clase claseActual;
-	private Metodo metodoActual;
+	private EntidadLlamable metodoActual;
+	static private TablaSimbolos ts;
 	
-	public TablaSimbolos() {
+	private TablaSimbolos() {
 		clases = new HashMap<String, Clase>();
+	}
+	
+	public static TablaSimbolos getTabla() {
+		if (ts == null) {
+			ts = new TablaSimbolos();
+		}
+		
+		return ts;
 	}
 	
 	public Map<String, Clase> getClases() {
@@ -21,7 +30,7 @@ public class TablaSimbolos {
 		return claseActual;
 	}
 	
-	public Metodo getMetodoActual() {
+	public EntidadLlamable getMetodoActual() {
 		return metodoActual;
 	}
 	
@@ -33,7 +42,7 @@ public class TablaSimbolos {
 		claseActual = c;
 	}
 	
-	public void setMetodoActual(Metodo m) {
+	public void setMetodoActual(EntidadLlamable m) {
 		metodoActual = m;
 	}
 	

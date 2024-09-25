@@ -3,7 +3,7 @@ package semantico;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Constructor {
+public class Constructor implements EntidadLlamable {
 
 	private String nombre;
 	private Map<String, Parametro> parametros;

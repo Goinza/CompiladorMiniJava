@@ -6,6 +6,7 @@ import java.util.Map;
 public class Clase {
 
 	private String nombre;
+	private String padre;
 	private Map<String, Atributo> atributos;
 	private Map<String, Constructor> constructores;
 	private Map<String, Metodo> metodos;
@@ -21,6 +22,10 @@ public class Clase {
 		return nombre;
 	}
 	
+	public String getPadre() {
+		return padre;
+	}
+	
 	public Map<String, Atributo> getAtributos() {
 		return atributos;
 	}
@@ -31,6 +36,10 @@ public class Clase {
 	
 	public Map<String, Metodo> getMetodos() {
 		return metodos;
+	}
+	
+	public void setPadre(String padre) {
+		this.padre = padre;
 	}
 	
 	public void agregarAtributo(Atributo a) {

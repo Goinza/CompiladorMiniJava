@@ -3,7 +3,7 @@ package semantico;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Metodo {
+public class Metodo implements EntidadLlamable {
 	
 	private String nombre;
 	private Tipo tipoRetorno;
