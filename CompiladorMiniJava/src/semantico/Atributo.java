@@ -27,5 +27,12 @@ public class Atributo extends EntidadDeclarada {
 	public boolean esEstatico() {
 		return esEstatico;
 	}
+
+	public void verificarDeclaracion() throws ExcepcionSemantica {
+		if (tipo.getNombre().equals("void")) {
+			throw new ExcepcionSemantica(tipo.getToken(), "Atributo no puede tener tipo void");
+		}
+		tipo.verificarDeclaracion();
+	}
 	
 }

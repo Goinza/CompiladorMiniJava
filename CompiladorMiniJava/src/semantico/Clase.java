@@ -11,12 +11,14 @@ public class Clase extends EntidadDeclarada {
 	private Map<String, Atributo> atributos;
 	private Constructor constructor;
 	private Map<String, Metodo> metodos;
+	private boolean estaConsolidada;
 	
 	public Clase(Token token) {
 		this.token = token;
 		this.nombre = token.getLexema();
 		atributos = new HashMap<String, Atributo>();
 		metodos = new HashMap<String, Metodo>();
+		estaConsolidada = false;
 	}
 	
 	public Clase(String nombre) {
@@ -62,6 +64,54 @@ public class Clase extends EntidadDeclarada {
 		}
 		metodos.put(m.getNombre(), m);
 	}
+
+	public void verificarDeclaracion() throws ExcepcionSemantica {
+		Token tokenPadre = null;
+		if (TablaSimbolos.getTabla().getClases().get(padre) == null) {
+			throw new ExcepcionSemantica(tokenPadre, "mensaje");
+		}
+		
+		verificarHerenciaCircular(nombre);
+		
+		for (Atributo a : atributos.values()) {
+			a.verificarDeclaracion();
+		}
+		for (Metodo m : metodos.values()) {
+			m.verificarDeclaracion();
+		}
+		if (constructor != null) {
+			constructor.verificarDeclaracion();
+		}
+		else {
+			constructor = new Constructor(nombre);
+		}
+	}
+	
+	public void verificarHerenciaCircular(String claseInicial) throws ExcepcionSemantica {
+		
+	}
+	
+	public boolean estaConsolidada() {
+		return estaConsolidada;
+	}
+	
+	public void consolidar() throws ExcepcionSemantica {
+		Clase clasePadre = TablaSimbolos.getTabla().getClases().get(padre);
+		if (!clasePadre.estaConsolidada()) {
+			clasePadre.consolidar();
+		}
+		
+		consolidarAtributos();
+		consolidarMetodos();
+	}
+	
+	private void consolidarAtributos() throws ExcepcionSemantica {
+		
+	}
+	
+	private void consolidarMetodos() throws ExcepcionSemantica {
+		
+	}	
 	
 	
 }

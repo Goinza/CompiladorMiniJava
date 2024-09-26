@@ -50,8 +50,10 @@ public class TablaSimbolos {
 		metodoActual = m;
 	}
 	
-	public void verificarDeclaracion() {
-		
+	public void verificarDeclaracion() throws ExcepcionSemantica {
+		for (Clase c : clases.values()) {
+			c.verificarDeclaracion();
+		}
 	}
 	
 	private void agregarClasesPredefinidas() throws ExcepcionSemantica {

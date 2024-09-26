@@ -13,4 +13,10 @@ public class TipoClase extends Tipo {
 		this.nombre = nombre;
 	}
 
+	public void verificarDeclaracion() throws ExcepcionSemantica {
+		if (TablaSimbolos.getTabla().getClases().get(nombre) == null) {
+			throw new ExcepcionSemantica(token, "Tipo de clase no existe");
+		}
+	}
+
 }

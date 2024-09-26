@@ -13,4 +13,9 @@ public class TipoVoid extends Tipo {
 		this.nombre = "void";
 	}
 
+	public void verificarDeclaracion() throws ExcepcionSemantica {
+		//El tipo void es siempre válido, en el sentido de que siempre existe como posible tipo de entidad
+		//Verificar que un atributo o parámetro no es responsabilidad de esta clase o metodo
+	}
+	
 }

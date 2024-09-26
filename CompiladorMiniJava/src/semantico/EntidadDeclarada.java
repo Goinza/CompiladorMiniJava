@@ -18,5 +18,11 @@ public abstract class EntidadDeclarada {
 	public void setToken(Token token) {
 		this.token = token;
 	}
+	
+	public abstract void verificarDeclaracion() throws ExcepcionSemantica;
+	
+	public boolean equals(EntidadDeclarada ed) {		
+		return nombre.equals(ed.getNombre());
+	}
 
 }
