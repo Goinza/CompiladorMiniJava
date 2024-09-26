@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 
 import lexico.AnalizadorLexico;
 import lexico.ExcepcionLexica;
+import semantico.ExcepcionSemantica;
 import sintactico.AnalizadorSintactico;
 import sintactico.ExcepcionSintactica;
 import sourcemanager.SourceManager;
@@ -37,6 +38,14 @@ public class ModuloPrincipal {
 				System.err.println(e2.getTokenActual().getTipoToken());				
 			}
 			System.out.println(e2.getErrorCode());
+		}
+		catch (ExcepcionSemantica e3) {
+			System.out.println(e3.getMessage());
+			if (testFlag) {
+				e3.printStackTrace();
+				System.err.println(e3.getTokenActual().getTipoToken());				
+			}
+			System.out.println(e3.getErrorCode());
 		}
 		
 	}

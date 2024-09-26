@@ -1,11 +1,6 @@
 package semantico;
 
-public abstract class Tipo {
+public abstract class Tipo extends EntidadDeclarada {
 	
-	protected String nombre;
-	
-	public String getNombre() {
-		return nombre;
-	}
 
 }

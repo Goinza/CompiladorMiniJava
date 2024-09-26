@@ -1,19 +1,23 @@
 package semantico;
 
-public class Atributo {
+import main.Token;
 
-	private String nombre;
+public class Atributo extends EntidadDeclarada {
+
 	private Tipo tipo;
 	private boolean esEstatico;
 	
-	public Atributo(String nombre, Tipo tipo, boolean esEstatico) {
-		this.nombre = nombre;
+	public Atributo(Token token, Tipo tipo, boolean esEstatico) {
+		this.token = token;
+		this.nombre = token.getLexema();
 		this.tipo = tipo;
 		this.esEstatico = esEstatico;
 	}
 	
-	public String getNombre() {
-		return nombre;
+	public Atributo(String nombre, Tipo tipo, boolean esEstatico) {
+		this.nombre = token.getLexema();
+		this.tipo = tipo;
+		this.esEstatico = esEstatico;
 	}
 	
 	public Tipo getTipo() {

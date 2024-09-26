@@ -1,9 +1,16 @@
 package semantico;
 
+import main.Token;
+
 public class TipoCaracter extends TipoPrimitivo {
 
+	public TipoCaracter(Token token) {
+		this.token = token;
+		this.nombre = token.getLexema();
+	}
+	
 	public TipoCaracter() {
-		nombre = "char";
+		this.nombre = "char";
 	}
 	
 }

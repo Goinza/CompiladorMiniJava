@@ -1,9 +1,16 @@
 package semantico;
 
-public class TipoVoid extends TipoPrimitivo {
+import main.Token;
+
+public class TipoVoid extends Tipo {
 	
-	public TipoVoid() {
-		nombre = "void";
+	public TipoVoid(Token token) {
+		this.token = token;
+		this.nombre = token.getLexema();
+	}
+	
+	public TipoVoid() {		
+		this.nombre = "void";
 	}
 
 }

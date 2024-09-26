@@ -10,11 +10,12 @@ public class TablaSimbolos {
 	private EntidadLlamable metodoActual;
 	static private TablaSimbolos ts;
 	
-	private TablaSimbolos() {
+	private TablaSimbolos() throws ExcepcionSemantica {
 		clases = new HashMap<String, Clase>();
+		this.agregarClasesPredefinidas();
 	}
 	
-	public static TablaSimbolos getTabla() {
+	public static TablaSimbolos getTabla() throws ExcepcionSemantica {
 		if (ts == null) {
 			ts = new TablaSimbolos();
 		}
@@ -34,7 +35,10 @@ public class TablaSimbolos {
 		return metodoActual;
 	}
 	
-	public void agregarClase(Clase c) {
+	public void agregarClase(Clase c) throws ExcepcionSemantica {
+		if (clases.get(c.getNombre()) != null) {
+			throw new ExcepcionSemantica(c.getToken(), "La clase " + c.getNombre() + " está repetida.");
+		}
 		clases.put(c.getNombre(), c);
 	}
 	
@@ -48,6 +52,13 @@ public class TablaSimbolos {
 	
 	public void verificarDeclaracion() {
 		
+	}
+	
+	private void agregarClasesPredefinidas() throws ExcepcionSemantica {
+		Clase [] predefinidas = {new ClaseObject(), new ClaseString(), new ClaseSystem()};
+		for (Clase c : predefinidas) {
+			clases.put(c.getNombre(), c);
+		}
 	}
 
 }

@@ -6,6 +6,6 @@ public interface EntidadLlamable {
 	
 	public Map<String, Parametro> getParametros();
 	
-	public void agregarParametro(Parametro p);
+	public void agregarParametro(Parametro p) throws ExcepcionSemantica;
 
 }

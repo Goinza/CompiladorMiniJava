@@ -1,17 +1,20 @@
 package semantico;
 
-public class Parametro {
+import main.Token;
 
-	private String nombre;
+public class Parametro extends EntidadDeclarada {
+
 	private Tipo tipo;
+	
+	public Parametro(Token token, Tipo tipo) {
+		this.token = token;
+		this.nombre = token.getLexema();
+		this.tipo = tipo;
+	}
 	
 	public Parametro(String nombre, Tipo tipo) {
 		this.nombre = nombre;
 		this.tipo = tipo;
-	}
-	
-	public String getNombre() {
-		return nombre;
 	}
 	
 	public Tipo getTipo() {
