@@ -15,18 +15,15 @@ public class Metodo extends EntidadDeclarada implements EntidadLlamable {
 	private boolean esEstatico;
 	
 	public Metodo(Token token, Tipo tipoRetorno, boolean esEstatico) {
+		this(token.getLexema(), tipoRetorno, esEstatico);
 		this.token = token;
-		this.nombre = token.getLexema();
-		this.tipoRetorno = tipoRetorno;
-		parametros = new HashMap<String, Parametro>();
-		listaParametros = new ArrayList<Parametro>();
-		this.esEstatico = esEstatico;
 	}
 	
 	public Metodo(String nombre, Tipo tipoRetorno, boolean esEstatico) {
 		this.nombre = nombre;
 		this.tipoRetorno = tipoRetorno;
 		parametros = new HashMap<String, Parametro>();
+		listaParametros = new ArrayList<Parametro>();
 		this.esEstatico = esEstatico;
 	}
 	

@@ -10,9 +10,8 @@ public class Constructor extends EntidadDeclarada implements EntidadLlamable {
 	private Map<String, Parametro> parametros;
 	
 	public Constructor(Token token) {
+		this(token.getLexema());
 		this.token = token;
-		this.nombre = token.getLexema();
-		parametros = new HashMap<String, Parametro>();
 	}
 	
 	public Constructor(String nombre) {

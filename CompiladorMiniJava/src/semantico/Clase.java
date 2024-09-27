@@ -15,17 +15,15 @@ public class Clase extends EntidadDeclarada {
 	private boolean estaConsolidada;
 	
 	public Clase(Token token) {
+		this(token.getLexema());
 		this.token = token;
-		this.nombre = token.getLexema();
-		atributos = new HashMap<String, Atributo>();
-		metodos = new HashMap<String, Metodo>();
-		estaConsolidada = false;
 	}
 	
 	public Clase(String nombre) {
 		this.nombre = nombre;
 		atributos = new HashMap<String, Atributo>();
 		metodos = new HashMap<String, Metodo>();
+		estaConsolidada = false;
 	}
 	
 	public String getPadre() {
@@ -78,6 +76,7 @@ public class Clase extends EntidadDeclarada {
 		for (Metodo m : metodos.values()) {
 			m.verificarDeclaracion();
 		}
+		
 		if (constructor != null) {
 			constructor.verificarDeclaracion();
 		}

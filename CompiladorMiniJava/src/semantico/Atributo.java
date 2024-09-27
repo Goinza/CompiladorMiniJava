@@ -8,10 +8,8 @@ public class Atributo extends EntidadDeclarada {
 	private boolean esEstatico;
 	
 	public Atributo(Token token, Tipo tipo, boolean esEstatico) {
-		this.token = token;
-		this.nombre = token.getLexema();
-		this.tipo = tipo;
-		this.esEstatico = esEstatico;
+		this(token.getLexema(), tipo, esEstatico);
+		this.token = token;		
 	}
 	
 	public Atributo(String nombre, Tipo tipo, boolean esEstatico) {

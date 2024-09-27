@@ -7,9 +7,8 @@ public class Parametro extends EntidadDeclarada {
 	private Tipo tipo;
 	
 	public Parametro(Token token, Tipo tipo) {
+		this(token.getLexema(), tipo);
 		this.token = token;
-		this.nombre = token.getLexema();
-		this.tipo = tipo;
 	}
 	
 	public Parametro(String nombre, Tipo tipo) {
