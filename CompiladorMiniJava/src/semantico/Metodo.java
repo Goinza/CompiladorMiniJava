@@ -67,7 +67,7 @@ public class Metodo extends EntidadDeclarada implements EntidadLlamable {
 		try {
 			List<Parametro> otraLista = m.getListaParametros();
 			int count = listaParametros.size();
-			if (nombre.equals(m.getNombre()) && count == otraLista.size() && tipoRetorno.equals(m.getTipoRetorno())) {
+			if (nombre.equals(m.getNombre()) && count == otraLista.size() && tipoRetorno.equals(m.getTipoRetorno()) && esEstatico == m.esEstatico()) {
 				int i = 0;
 				while (i<count && isEquals) {
 					isEquals = listaParametros.get(i).equals(otraLista.get(i));

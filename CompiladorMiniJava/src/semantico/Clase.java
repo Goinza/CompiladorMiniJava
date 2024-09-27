@@ -1,5 +1,6 @@
 package semantico;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -70,9 +71,7 @@ public class Clase extends EntidadDeclarada {
 		if (TablaSimbolos.getTabla().getClases().get(padre) == null) {
 			throw new ExcepcionSemantica(tokenPadre, "mensaje");
 		}
-		
-		verificarHerenciaCircular(nombre);
-		
+				
 		for (Atributo a : atributos.values()) {
 			a.verificarDeclaracion();
 		}
@@ -88,15 +87,21 @@ public class Clase extends EntidadDeclarada {
 	}
 	
 	public void verificarHerenciaCircular(String claseInicial) throws ExcepcionSemantica {
-		
+		if (nombre.equals(claseInicial)) {
+			throw new ExcepcionSemantica(token, nombre + " contiene herencia circular");
+		}
+		Clase clasePadre = TablaSimbolos.getTabla().getClases().get(padre);
+		clasePadre.verificarHerenciaCircular(claseInicial);
 	}
 	
 	public boolean estaConsolidada() {
 		return estaConsolidada;
 	}
 	
-	public void consolidar() throws ExcepcionSemantica {
+	public void consolidar() throws ExcepcionSemantica {		
 		Clase clasePadre = TablaSimbolos.getTabla().getClases().get(padre);
+		clasePadre.verificarHerenciaCircular(nombre);
+		
 		if (!clasePadre.estaConsolidada()) {
 			clasePadre.consolidar();
 		}
@@ -106,11 +111,33 @@ public class Clase extends EntidadDeclarada {
 	}
 	
 	private void consolidarAtributos() throws ExcepcionSemantica {
+		Clase clasePadre = TablaSimbolos.getTabla().getClases().get(padre);
 		
+		Collection<Atributo> atributosPadre = clasePadre.getAtributos().values();
+		Atributo atributoActual;
+		for (Atributo a : atributosPadre) {
+			atributoActual = atributos.get(a.getNombre());
+			if (atributoActual != null) {
+				throw new ExcepcionSemantica(atributoActual.token, "El atributo " + atributoActual.getNombre() + " ya existe en una super clase");
+			}
+			atributos.put(a.getNombre(), a);
+		}
 	}
 	
 	private void consolidarMetodos() throws ExcepcionSemantica {
+		Clase clasePadre = TablaSimbolos.getTabla().getClases().get(padre);
 		
+		Collection<Metodo> metodosPadre = clasePadre.getMetodos().values();
+		Metodo metodoActual;
+		for (Metodo m : metodosPadre) {
+			metodoActual = metodos.get(m.getNombre());
+			if (metodoActual == null) {
+				metodos.put(m.getNombre(), m);
+			}
+			else if (!metodoActual.equals(m)) {
+				throw new ExcepcionSemantica(metodoActual.getToken(), "El metodo " + metodoActual.getNombre() + " esta sobrecargado");
+			}			
+		}
 	}	
 	
 	
