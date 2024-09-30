@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import lexico.AnalizadorLexico;
 import lexico.ExcepcionLexica;
 import semantico.ExcepcionSemantica;
+import semantico.TablaSimbolos;
 import sintactico.AnalizadorSintactico;
 import sintactico.ExcepcionSintactica;
 import sourcemanager.SourceManager;
@@ -17,9 +18,13 @@ public class ModuloPrincipal {
 		SourceManager sm = new SourceManagerImpl();
 		boolean testFlag = false;
 		try {
+			TablaSimbolos.inicializarTabla();
 			sm.open(pathFile);
 			AnalizadorLexico lexico = new AnalizadorLexico(sm);
-			new AnalizadorSintactico(lexico);			
+			new AnalizadorSintactico(lexico);	
+			TablaSimbolos.getTabla().verificarDeclaracion();
+			TablaSimbolos.getTabla().consolidar();
+			
 			System.out.println("[SinErrores]");
 		} catch (FileNotFoundException e1) {
 			System.out.println(e1.getMessage());

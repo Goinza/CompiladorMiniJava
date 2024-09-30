@@ -16,11 +16,15 @@ public class TablaSimbolos {
 	}
 	
 	public static TablaSimbolos getTabla() throws ExcepcionSemantica {
-		if (ts == null) {
-			ts = new TablaSimbolos();
+		if (TablaSimbolos.ts == null) {
+			TablaSimbolos.ts = new TablaSimbolos();
 		}
 		
-		return ts;
+		return TablaSimbolos.ts;
+	}
+	
+	public static void inicializarTabla() throws ExcepcionSemantica {
+		TablaSimbolos.ts = new TablaSimbolos();
 	}
 	
 	public Map<String, Clase> getClases() {
@@ -56,10 +60,18 @@ public class TablaSimbolos {
 		}
 	}
 	
+	public void consolidar() throws ExcepcionSemantica {
+		for (Clase c : clases.values()) {
+			if (!c.estaConsolidada()) {
+				c.consolidar();				
+			}
+		}
+	}
+	
 	private void agregarClasesPredefinidas() throws ExcepcionSemantica {
 		Clase [] predefinidas = {new ClaseObject(), new ClaseString(), new ClaseSystem()};
 		for (Clase c : predefinidas) {
-			clases.put(c.getNombre(), c);
+			agregarClase(c);
 		}
 	}
 

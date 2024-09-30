@@ -13,7 +13,7 @@ public class Atributo extends EntidadDeclarada {
 	}
 	
 	public Atributo(String nombre, Tipo tipo, boolean esEstatico) {
-		this.nombre = token.getLexema();
+		this.nombre = nombre;
 		this.tipo = tipo;
 		this.esEstatico = esEstatico;
 	}

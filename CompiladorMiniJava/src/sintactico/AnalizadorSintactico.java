@@ -1,5 +1,6 @@
 package sintactico;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -64,23 +65,23 @@ public class AnalizadorSintactico {
 		Clase c = new Clase(token);
 		ts.setClaseActual(c);
 		ts.agregarClase(c);
-		String padre = herenciaOpcional();
+		Token padre = herenciaOpcional();
 		c.setPadre(padre);
 		match("llaveInicio");
 		listaMiembros();
 		match("llaveFin");
 	}
 	
-	private String herenciaOpcional() throws ExcepcionLexica, ExcepcionSintactica {
-		String clase;
+	private Token herenciaOpcional() throws ExcepcionLexica, ExcepcionSintactica {
+		Token clase;
 		if (tokenActual.getTipoToken().equals("wordextends")) {
 			match("wordextends");
 			Token token = tokenActual;
 			match("idClase");			
-			clase = token.getLexema();
+			clase = token;
 		}
 		else {
-			clase = "Object";
+			clase = null;
 		}
 		
 		return clase;
@@ -115,12 +116,15 @@ public class AnalizadorSintactico {
 		Tipo tipo = tipoMiembro();
 		Token token = tokenActual;
 		match("idMetVar");
-		boolean esMetodo = contUnidad();
+		List<Parametro> parametros = contUnidad();
 		
-		if (esMetodo) {
+		if (parametros != null) {
 			Metodo m = new Metodo(token, tipo, esEstatico);
 			ts.getClaseActual().agregarMetodo(m);
 			ts.setMetodoActual(m);
+			for (Parametro p : parametros) {
+				m.agregarParametro(p);
+			}
 		}
 		else {
 			Atributo a = new Atributo(token, tipo, esEstatico);
@@ -128,22 +132,20 @@ public class AnalizadorSintactico {
 		}
 	}
 	
-	private boolean contUnidad() throws ExcepcionLexica, ExcepcionSintactica, ExcepcionSemantica {
-		boolean esMetodo;
+	private List<Parametro> contUnidad() throws ExcepcionLexica, ExcepcionSintactica, ExcepcionSemantica {
+		List<Parametro> parametros = null;
 		if (tokenActual.getTipoToken().equals("puntoComa")) {
-			esMetodo = false; 
 			match("puntoComa");
 		}
 		else if (tokenActual.getTipoToken().equals("parentesisInicio")) {
-			esMetodo = true;
-			argsFormales();
+			parametros = argsFormales();
 			bloque();
 		}
 		else {
 			throw new ExcepcionSintactica(tokenActual, "; o (");
 		}
 		
-		return esMetodo;
+		return parametros;
 	}
 	
 	private void constructor() throws ExcepcionLexica, ExcepcionSintactica, ExcepcionSemantica {
@@ -153,7 +155,10 @@ public class AnalizadorSintactico {
 		Constructor c = new Constructor(token);
 		ts.getClaseActual().setConstructor(c);
 		ts.setMetodoActual(c);
-		argsFormales();
+		List<Parametro> parametros = argsFormales();
+		for (Parametro p : parametros) {
+			c.agregarParametro(p);
+		}
 		bloque();
 	}
 	
@@ -231,43 +236,54 @@ public class AnalizadorSintactico {
 		return esEstatico;
 	}
 	
-	private void argsFormales() throws ExcepcionLexica, ExcepcionSintactica, ExcepcionSemantica {
+	private List<Parametro> argsFormales() throws ExcepcionLexica, ExcepcionSintactica, ExcepcionSemantica {
 		match("parentesisInicio");
-		listaArgsFormalesOpcional();
+		List<Parametro> parametros = listaArgsFormalesOpcional();
 		match("parentesisFin");
+		
+		return parametros;
 	}
 	
-	private void listaArgsFormalesOpcional() throws ExcepcionLexica, ExcepcionSintactica, ExcepcionSemantica {
+	private List<Parametro> listaArgsFormalesOpcional() throws ExcepcionLexica, ExcepcionSintactica, ExcepcionSemantica {
 		List<String> primerosListaArgsFormales = Arrays.asList("wordboolean", "wordchar", "wordint", "idClase");
+		List<Parametro> parametros;
 		if (primerosListaArgsFormales.contains(tokenActual.getTipoToken())) {
-			listaArgsFormales();
+			parametros = listaArgsFormales();
 		}
 		else {
-			
+			parametros = new ArrayList<Parametro>();
 		}
+		
+		return parametros;
 	}
 	
-	private void listaArgsFormales() throws ExcepcionLexica, ExcepcionSintactica, ExcepcionSemantica {
-		argFormal();
-		contListaArgsFormales();
+	private List<Parametro> listaArgsFormales() throws ExcepcionLexica, ExcepcionSintactica, ExcepcionSemantica {
+		Parametro p = argFormal();
+		List<Parametro> parametros = contListaArgsFormales();
+		parametros.addFirst(p);
+		
+		return parametros;
 	}
 	
-	private void contListaArgsFormales() throws ExcepcionLexica, ExcepcionSintactica, ExcepcionSemantica {
+	private List<Parametro> contListaArgsFormales() throws ExcepcionLexica, ExcepcionSintactica, ExcepcionSemantica {
+		List<Parametro> parametros;
 		if (tokenActual.getTipoToken().equals("coma")) {
 			match("coma");
-			listaArgsFormales();
+			parametros = listaArgsFormales();
 		}
 		else {
-			
+			parametros = new ArrayList<Parametro>();
 		}
+		
+		return parametros;
 	}
 	
-	private void argFormal() throws ExcepcionLexica, ExcepcionSintactica, ExcepcionSemantica {
+	private Parametro argFormal() throws ExcepcionLexica, ExcepcionSintactica, ExcepcionSemantica {
 		Tipo tipo = tipo();
 		Token token = tokenActual;
 		match("idMetVar");
 		Parametro p = new Parametro(token, tipo);
-		ts.getMetodoActual().agregarParametro(p);
+		return p;
 	}
 	
 	private void bloque() throws ExcepcionLexica, ExcepcionSintactica {

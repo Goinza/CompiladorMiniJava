@@ -4,6 +4,7 @@ public class ClaseSystem extends Clase {
 
 	public ClaseSystem() throws ExcepcionSemantica {
 		super("System");
+		this.setPadre(null);
 		agregarMetodosPredefinidos();
 	}
 

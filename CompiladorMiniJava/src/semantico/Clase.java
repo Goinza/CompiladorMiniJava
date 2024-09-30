@@ -8,11 +8,12 @@ import main.Token;
 
 public class Clase extends EntidadDeclarada {
 
-	private String padre;
-	private Map<String, Atributo> atributos;
-	private Constructor constructor;
-	private Map<String, Metodo> metodos;
-	private boolean estaConsolidada;
+	protected Token padre;
+	protected String nombrePadre;
+	protected Map<String, Atributo> atributos;
+	protected Constructor constructor;
+	protected Map<String, Metodo> metodos;
+	protected boolean estaConsolidada;
 	
 	public Clase(Token token) {
 		this(token.getLexema());
@@ -26,7 +27,7 @@ public class Clase extends EntidadDeclarada {
 		estaConsolidada = false;
 	}
 	
-	public String getPadre() {
+	public Token getPadre() {
 		return padre;
 	}
 	
@@ -42,8 +43,15 @@ public class Clase extends EntidadDeclarada {
 		return metodos;
 	}
 	
-	public void setPadre(String padre) {
-		this.padre = padre;
+	public void setPadre(Token padre) {
+		if (padre != null) {
+			this.padre = padre;
+			this.nombrePadre = padre.getLexema();
+		}
+		else {
+			this.padre = null;
+			this.nombrePadre = "Object";
+		}
 	}
 	
 	public void agregarAtributo(Atributo a) throws ExcepcionSemantica {
@@ -65,9 +73,8 @@ public class Clase extends EntidadDeclarada {
 	}
 
 	public void verificarDeclaracion() throws ExcepcionSemantica {
-		Token tokenPadre = null;
-		if (TablaSimbolos.getTabla().getClases().get(padre) == null) {
-			throw new ExcepcionSemantica(tokenPadre, "mensaje");
+		if (TablaSimbolos.getTabla().getClases().get(nombrePadre) == null) {
+			throw new ExcepcionSemantica(padre, "La clase " + nombrePadre + " no existe.");
 		}
 				
 		for (Atributo a : atributos.values()) {
@@ -85,12 +92,13 @@ public class Clase extends EntidadDeclarada {
 		}
 	}
 	
-	public void verificarHerenciaCircular(String claseInicial) throws ExcepcionSemantica {
-		if (nombre.equals(claseInicial)) {
+	public void verificarHerenciaCircular(Map<String, Clase> visitados) throws ExcepcionSemantica {		
+		if (visitados.get(nombre) != null) {
 			throw new ExcepcionSemantica(token, nombre + " contiene herencia circular");
 		}
-		Clase clasePadre = TablaSimbolos.getTabla().getClases().get(padre);
-		clasePadre.verificarHerenciaCircular(claseInicial);
+		visitados.put(nombre, this);
+		Clase clasePadre = TablaSimbolos.getTabla().getClases().get(nombrePadre);
+		clasePadre.verificarHerenciaCircular(visitados);
 	}
 	
 	public boolean estaConsolidada() {
@@ -98,20 +106,20 @@ public class Clase extends EntidadDeclarada {
 	}
 	
 	public void consolidar() throws ExcepcionSemantica {		
-		Clase clasePadre = TablaSimbolos.getTabla().getClases().get(padre);
-		clasePadre.verificarHerenciaCircular(nombre);
+		Clase clasePadre = TablaSimbolos.getTabla().getClases().get(nombrePadre);
+		clasePadre.verificarHerenciaCircular(new HashMap<String, Clase>());
 		
 		if (!clasePadre.estaConsolidada()) {
 			clasePadre.consolidar();
 		}
 		
-		consolidarAtributos();
-		consolidarMetodos();
+		consolidarAtributos(clasePadre);
+		consolidarMetodos(clasePadre);
+		
+		estaConsolidada = true;
 	}
 	
-	private void consolidarAtributos() throws ExcepcionSemantica {
-		Clase clasePadre = TablaSimbolos.getTabla().getClases().get(padre);
-		
+	private void consolidarAtributos(Clase clasePadre) throws ExcepcionSemantica {		
 		Collection<Atributo> atributosPadre = clasePadre.getAtributos().values();
 		Atributo atributoActual;
 		for (Atributo a : atributosPadre) {
@@ -123,9 +131,7 @@ public class Clase extends EntidadDeclarada {
 		}
 	}
 	
-	private void consolidarMetodos() throws ExcepcionSemantica {
-		Clase clasePadre = TablaSimbolos.getTabla().getClases().get(padre);
-		
+	private void consolidarMetodos(Clase clasePadre) throws ExcepcionSemantica {		
 		Collection<Metodo> metodosPadre = clasePadre.getMetodos().values();
 		Metodo metodoActual;
 		for (Metodo m : metodosPadre) {
@@ -135,7 +141,7 @@ public class Clase extends EntidadDeclarada {
 			}
 			else if (!metodoActual.equals(m)) {
 				throw new ExcepcionSemantica(metodoActual.getToken(), "El metodo " + metodoActual.getNombre() + " esta sobrecargado");
-			}			
+			}
 		}
 	}	
 	

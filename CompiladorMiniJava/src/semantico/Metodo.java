@@ -60,22 +60,18 @@ public class Metodo extends EntidadDeclarada implements EntidadLlamable {
 	}
 	
 	public boolean equals(Metodo m) {
-		boolean isEquals = true;
-		try {
-			List<Parametro> otraLista = m.getListaParametros();
-			int count = listaParametros.size();
-			if (nombre.equals(m.getNombre()) && count == otraLista.size() && tipoRetorno.equals(m.getTipoRetorno()) && esEstatico == m.esEstatico()) {
-				int i = 0;
-				while (i<count && isEquals) {
-					isEquals = listaParametros.get(i).equals(otraLista.get(i));
-					i++;
-				}
-				
+		boolean isEquals = false;
+		List<Parametro> otraLista = m.getListaParametros();
+		int count = listaParametros.size();
+		if (nombre.equals(m.getNombre()) && count == otraLista.size() && tipoRetorno.equals(m.getTipoRetorno()) && esEstatico == m.esEstatico()) {
+			isEquals = true;
+			int i = 0;
+			while (i<count && isEquals) {
+				isEquals = listaParametros.get(i).equals(otraLista.get(i));
+				i++;
 			}
-		}
-		catch (ClassCastException e) {
-			isEquals = false;
-		}		
+			
+		}	
 		
 		return isEquals;
 	}
