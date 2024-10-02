@@ -28,7 +28,7 @@ public class Atributo extends EntidadDeclarada {
 
 	public void verificarDeclaracion() throws ExcepcionSemantica {
 		if (tipo.getNombre().equals("void")) {
-			throw new ExcepcionSemantica(tipo.getToken(), "Atributo no puede tener tipo void");
+			throw new ExcepcionSemantica(tipo.getToken(), "Los atributos no pueden tener tipo void");
 		}
 		tipo.verificarDeclaracion();
 	}

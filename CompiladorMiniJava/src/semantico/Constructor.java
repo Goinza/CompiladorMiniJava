@@ -32,7 +32,7 @@ public class Constructor extends EntidadDeclarada implements EntidadLlamable {
 
 	public void verificarDeclaracion() throws ExcepcionSemantica {
 		if (TablaSimbolos.getTabla().getClases().get(nombre) == null) {
-			throw new ExcepcionSemantica(token, "No se puede crear instancia de una clase que no existe");
+			throw new ExcepcionSemantica(token, "No se puede crear instancia de una clase inexistente");
 		}
 		
 		for (Parametro p : parametros.values()) {

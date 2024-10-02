@@ -22,7 +22,7 @@ public class Parametro extends EntidadDeclarada {
 
 	public void verificarDeclaracion() throws ExcepcionSemantica {
 		if (tipo.getNombre().equals("void")) {
-			throw new ExcepcionSemantica(tipo.getToken(), "Parámetro no puede tener tipo void");
+			throw new ExcepcionSemantica(tipo.getToken(), "Los parámetros no pueden tener tipo void");
 		}
 		tipo.verificarDeclaracion();
 	}
