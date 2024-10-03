@@ -4,7 +4,9 @@ import java.util.Map;
 
 public interface EntidadLlamable {
 	
-	public Map<String, Parametro> getParametros();
+	public Iterable<Parametro> getParametros();
+	
+	public Parametro getParametro(String nombre);
 	
 	public void agregarParametro(Parametro p) throws ExcepcionSemantica;
 

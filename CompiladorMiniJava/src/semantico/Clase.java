@@ -31,16 +31,24 @@ public class Clase extends EntidadDeclarada {
 		return padre;
 	}
 	
-	public Map<String, Atributo> getAtributos() {
-		return atributos;
+	public Iterable<Atributo> getAtributos() {
+		return atributos.values();
+	}
+	
+	public Atributo getAtributo(String nombre) {
+		return atributos.get(nombre);
 	}
 	
 	public Constructor getConstructor() {
 		return constructor;
 	}
 	
-	public Map<String, Metodo> getMetodos() {
-		return metodos;
+	public Iterable<Metodo> getMetodos() {
+		return metodos.values();
+	}
+	
+	public Metodo getMetodo(String nombre) {
+		return metodos.get(nombre);
 	}
 	
 	public void setPadre(Token padre) {
@@ -61,7 +69,13 @@ public class Clase extends EntidadDeclarada {
 		atributos.put(a.getNombre(), a);
 	}
 
-	public void setConstructor(Constructor c) {
+	public void setConstructor(Constructor c) throws ExcepcionSemantica {
+		if (constructor != null) {
+			throw new ExcepcionSemantica(c.getToken(), "La clase " + nombre + " tiene más de un constructor.");
+		}
+		if (!c.getNombre().equals(nombre)) {
+			throw new ExcepcionSemantica(c.getToken(), "El constructor de la clase " + nombre + " tiene un nombre incorrecto");
+		}
 		constructor = c;
 	}
 	
@@ -70,10 +84,14 @@ public class Clase extends EntidadDeclarada {
 			throw new ExcepcionSemantica(m.getToken(), "El método " + m.getNombre() + " está repetido.");
 		}
 		metodos.put(m.getNombre(), m);
+		
+		if (esMetodoMain(m)) {
+			TablaSimbolos.getTabla().setMain(m);
+		}
 	}
 
 	public void verificarDeclaracion() throws ExcepcionSemantica {
-		if (TablaSimbolos.getTabla().getClases().get(nombrePadre) == null) {
+		if (TablaSimbolos.getTabla().getClase(nombrePadre) == null) {
 			throw new ExcepcionSemantica(padre, "La clase " + nombrePadre + " no existe.");
 		}
 				
@@ -97,7 +115,7 @@ public class Clase extends EntidadDeclarada {
 			throw new ExcepcionSemantica(token, "La clase" + nombre + " contiene herencia circular");
 		}
 		visitados.put(nombre, this);
-		Clase clasePadre = TablaSimbolos.getTabla().getClases().get(nombrePadre);
+		Clase clasePadre = TablaSimbolos.getTabla().getClase(nombrePadre);
 		clasePadre.verificarHerenciaCircular(visitados);
 	}
 	
@@ -106,7 +124,7 @@ public class Clase extends EntidadDeclarada {
 	}
 	
 	public void consolidar() throws ExcepcionSemantica {		
-		Clase clasePadre = TablaSimbolos.getTabla().getClases().get(nombrePadre);
+		Clase clasePadre = TablaSimbolos.getTabla().getClase(nombrePadre);
 		clasePadre.verificarHerenciaCircular(new HashMap<String, Clase>());
 		
 		if (!clasePadre.estaConsolidada()) {
@@ -120,7 +138,7 @@ public class Clase extends EntidadDeclarada {
 	}
 	
 	private void consolidarAtributos(Clase clasePadre) throws ExcepcionSemantica {		
-		Collection<Atributo> atributosPadre = clasePadre.getAtributos().values();
+		Iterable<Atributo> atributosPadre = clasePadre.getAtributos();
 		Atributo atributoActual;
 		for (Atributo a : atributosPadre) {
 			atributoActual = atributos.get(a.getNombre());
@@ -132,7 +150,7 @@ public class Clase extends EntidadDeclarada {
 	}
 	
 	private void consolidarMetodos(Clase clasePadre) throws ExcepcionSemantica {		
-		Collection<Metodo> metodosPadre = clasePadre.getMetodos().values();
+		Iterable<Metodo> metodosPadre = clasePadre.getMetodos();
 		Metodo metodoActual;
 		for (Metodo m : metodosPadre) {
 			metodoActual = metodos.get(m.getNombre());
@@ -145,5 +163,12 @@ public class Clase extends EntidadDeclarada {
 		}
 	}	
 	
+	private boolean esMetodoMain(Metodo m) {
+		boolean esEstatico = m.esEstatico();
+		boolean ceroParametros = m.getListaParametros().size() == 0;
+		boolean retornoVoid = m.getTipoRetorno().getNombre() == "void";
+		
+		return esEstatico && ceroParametros && retornoVoid;
+	}
 	
 }

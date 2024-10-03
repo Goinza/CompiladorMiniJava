@@ -14,7 +14,7 @@ public class TipoClase extends Tipo {
 	}
 
 	public void verificarDeclaracion() throws ExcepcionSemantica {
-		if (TablaSimbolos.getTabla().getClases().get(nombre) == null) {
+		if (TablaSimbolos.getTabla().getClase(nombre) == null) {
 			throw new ExcepcionSemantica(token, "Tipo de clase " + nombre + " no existe");
 		}
 	}

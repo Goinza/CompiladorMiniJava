@@ -3,21 +3,24 @@ package semantico;
 import java.util.HashMap;
 import java.util.Map;
 
+import main.Token;
+
 public class TablaSimbolos {
 	
 	private Map<String, Clase> clases;
 	private Clase claseActual;
 	private EntidadLlamable metodoActual;
+	private Metodo main;
+	private Token eof;
 	static private TablaSimbolos ts;
 	
 	private TablaSimbolos() throws ExcepcionSemantica {
 		clases = new HashMap<String, Clase>();
-		this.agregarClasesPredefinidas();
 	}
 	
 	public static TablaSimbolos getTabla() throws ExcepcionSemantica {
 		if (TablaSimbolos.ts == null) {
-			TablaSimbolos.ts = new TablaSimbolos();
+			inicializarTabla();
 		}
 		
 		return TablaSimbolos.ts;
@@ -25,10 +28,23 @@ public class TablaSimbolos {
 	
 	public static void inicializarTabla() throws ExcepcionSemantica {
 		TablaSimbolos.ts = new TablaSimbolos();
+		ts.agregarClasesPredefinidas();
 	}
 	
-	public Map<String, Clase> getClases() {
-		return clases;
+	public void setMain(Metodo m) {
+		main = m;
+	}
+	
+	public void setEOFToken(Token t) {
+		eof = t;
+	}
+	
+	public Iterable<Clase> getClases() {
+		return clases.values();
+	}
+	
+	public Clase getClase(String nombre) {
+		return clases.get(nombre);
 	}
 	
 	public Clase getClaseActual() {
@@ -55,6 +71,9 @@ public class TablaSimbolos {
 	}
 	
 	public void verificarDeclaracion() throws ExcepcionSemantica {
+		if (main == null) {
+			throw new ExcepcionSemantica(eof, "Método estático main no existe.");
+		}
 		for (Clase c : clases.values()) {
 			c.verificarDeclaracion();
 		}

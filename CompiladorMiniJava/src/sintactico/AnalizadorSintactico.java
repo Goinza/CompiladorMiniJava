@@ -45,6 +45,7 @@ public class AnalizadorSintactico {
 	
 	private void inicial() throws ExcepcionLexica, ExcepcionSintactica, ExcepcionSemantica {
 		listaClases();
+		ts.setEOFToken(tokenActual);
 		match("EOF");
 	}
 	

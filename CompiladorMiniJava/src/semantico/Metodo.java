@@ -31,8 +31,12 @@ public class Metodo extends EntidadDeclarada implements EntidadLlamable {
 		return tipoRetorno;
 	}
 	
-	public Map<String, Parametro> getParametros() {
-		return parametros;
+	public Iterable<Parametro> getParametros() {
+		return parametros.values();
+	}
+	
+	public Parametro getParametro(String nombre) {
+		return parametros.get(nombre);
 	}
 	
 	public List<Parametro> getListaParametros() {

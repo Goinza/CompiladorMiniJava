@@ -19,8 +19,12 @@ public class Constructor extends EntidadDeclarada implements EntidadLlamable {
 		parametros = new HashMap<String, Parametro>();
 	}
 	
-	public Map<String, Parametro> getParametros() {
-		return parametros;
+	public Iterable<Parametro> getParametros() {
+		return parametros.values();
+	}
+	
+	public Parametro getParametro(String nombre) {
+		return parametros.get(nombre);
 	}
 	
 	public void agregarParametro(Parametro p) throws ExcepcionSemantica {
@@ -31,7 +35,7 @@ public class Constructor extends EntidadDeclarada implements EntidadLlamable {
 	}
 
 	public void verificarDeclaracion() throws ExcepcionSemantica {
-		if (TablaSimbolos.getTabla().getClases().get(nombre) == null) {
+		if (TablaSimbolos.getTabla().getClase(nombre) == null) {
 			throw new ExcepcionSemantica(token, "No se puede crear instancia de una clase inexistente");
 		}
 		
