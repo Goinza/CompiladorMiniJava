@@ -1,4 +1,4 @@
-package semantico;
+package semantico_ts;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -143,7 +143,7 @@ public class Clase extends EntidadDeclarada {
 		for (Atributo a : atributosPadre) {
 			atributoActual = atributos.get(a.getNombre());
 			if (atributoActual != null) {
-				throw new ExcepcionSemantica(atributoActual.token, "El atributo " + atributoActual.getNombre() + " ya existe en una super clase");
+				throw new ExcepcionSemantica(atributoActual.token, "El atributo " + atributoActual.getNombre() + " ya existe en una clase ancestro");
 			}
 			atributos.put(a.getNombre(), a);
 		}
@@ -166,9 +166,10 @@ public class Clase extends EntidadDeclarada {
 	private boolean esMetodoMain(Metodo m) {
 		boolean esEstatico = m.esEstatico();
 		boolean ceroParametros = m.getListaParametros().size() == 0;
-		boolean retornoVoid = m.getTipoRetorno().getNombre() == "void";
+		boolean retornoVoid = m.getTipoRetorno().getNombre().equals("void");
+		boolean nombreMain = m.getNombre().equals("main");
 		
-		return esEstatico && ceroParametros && retornoVoid;
+		return esEstatico && retornoVoid && nombreMain && ceroParametros;
 	}
 	
 }

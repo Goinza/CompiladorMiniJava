@@ -1,4 +1,4 @@
-package semantico;
+package semantico_ts;
 
 public class ClaseSystem extends Clase {
 

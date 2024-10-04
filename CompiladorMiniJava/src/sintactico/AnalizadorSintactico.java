@@ -7,19 +7,19 @@ import java.util.List;
 import lexico.AnalizadorLexico;
 import lexico.ExcepcionLexica;
 import main.Token;
-import semantico.Atributo;
-import semantico.Clase;
-import semantico.Constructor;
-import semantico.ExcepcionSemantica;
-import semantico.Metodo;
-import semantico.Parametro;
-import semantico.TablaSimbolos;
-import semantico.Tipo;
-import semantico.TipoBooleano;
-import semantico.TipoCaracter;
-import semantico.TipoClase;
-import semantico.TipoEntero;
-import semantico.TipoVoid;
+import semantico_ts.Atributo;
+import semantico_ts.Clase;
+import semantico_ts.Constructor;
+import semantico_ts.ExcepcionSemantica;
+import semantico_ts.Metodo;
+import semantico_ts.Parametro;
+import semantico_ts.TablaSimbolos;
+import semantico_ts.Tipo;
+import semantico_ts.TipoBooleano;
+import semantico_ts.TipoCaracter;
+import semantico_ts.TipoClase;
+import semantico_ts.TipoEntero;
+import semantico_ts.TipoVoid;
 
 public class AnalizadorSintactico {
 

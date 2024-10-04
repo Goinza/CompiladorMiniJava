@@ -4,8 +4,8 @@ import java.io.FileNotFoundException;
 
 import lexico.AnalizadorLexico;
 import lexico.ExcepcionLexica;
-import semantico.ExcepcionSemantica;
-import semantico.TablaSimbolos;
+import semantico_ts.ExcepcionSemantica;
+import semantico_ts.TablaSimbolos;
 import sintactico.AnalizadorSintactico;
 import sintactico.ExcepcionSintactica;
 import sourcemanager.SourceManager;

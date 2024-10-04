@@ -1,4 +1,4 @@
-package semantico;
+package semantico_ts;
 
 public abstract class TipoPrimitivo extends Tipo {
 	

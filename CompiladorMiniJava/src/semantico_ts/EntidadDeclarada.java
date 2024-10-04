@@ -1,4 +1,4 @@
-package semantico;
+package semantico_ts;
 
 import main.Token;
 

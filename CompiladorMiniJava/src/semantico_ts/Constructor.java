@@ -1,4 +1,4 @@
-package semantico;
+package semantico_ts;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,11 +34,7 @@ public class Constructor extends EntidadDeclarada implements EntidadLlamable {
 		parametros.put(p.getNombre(), p);
 	}
 
-	public void verificarDeclaracion() throws ExcepcionSemantica {
-		if (TablaSimbolos.getTabla().getClase(nombre) == null) {
-			throw new ExcepcionSemantica(token, "No se puede crear instancia de una clase inexistente");
-		}
-		
+	public void verificarDeclaracion() throws ExcepcionSemantica {		
 		for (Parametro p : parametros.values()) {
 			p.verificarDeclaracion();
 		}

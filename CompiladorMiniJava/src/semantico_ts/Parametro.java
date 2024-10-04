@@ -1,4 +1,4 @@
-package semantico;
+package semantico_ts;
 
 import main.Token;
 
@@ -28,7 +28,7 @@ public class Parametro extends EntidadDeclarada {
 	}
 	
 	public boolean equals(Parametro p) {
-		return nombre.equals(p.getNombre()) && tipo.equals(p.getTipo());
+		return tipo.equals(p.getTipo());
 	}
 	
 }
