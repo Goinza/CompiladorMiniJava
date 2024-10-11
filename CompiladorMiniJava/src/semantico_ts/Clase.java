@@ -112,7 +112,7 @@ public class Clase extends EntidadDeclarada {
 	
 	public void verificarHerenciaCircular(Map<String, Clase> visitados) throws ExcepcionSemantica {		
 		if (visitados.get(nombre) != null) {
-			throw new ExcepcionSemantica(token, "La clase" + nombre + " contiene herencia circular");
+			throw new ExcepcionSemantica(token, "La clase " + nombre + " contiene herencia circular");
 		}
 		visitados.put(nombre, this);
 		Clase clasePadre = TablaSimbolos.getTabla().getClase(nombrePadre);
