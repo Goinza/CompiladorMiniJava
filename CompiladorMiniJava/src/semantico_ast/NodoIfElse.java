@@ -4,24 +4,24 @@ import main.Token;
 
 public class NodoIfElse extends NodoSentencia {
 	
-	private NodoExpCompuesta condicion;
-	private NodoBloque bloqueThen;
-	private NodoBloque bloqueElse;
+	private NodoExpresion condicion;
+	private NodoSentencia sentenciaThen;
+	private NodoSentencia sentenciaElse;
 
 	public NodoIfElse(Token token) {
 		this.token = token;
 	}
 	
-	public void setCondicion(NodoExpCompuesta exp) {
+	public void setCondicion(NodoExpresion exp) {
 		condicion = exp;
 	}
 	
-	public void setBloqueThen(NodoBloque bloque) {
-		bloqueThen = bloque;
+	public void setBloqueThen(NodoSentencia sentencia) {
+		sentenciaThen = sentencia;
 	}
 	
-	public void setBloqueElse(NodoBloque bloque) {
-		bloqueElse = bloque;
+	public void setBloqueElse(NodoSentencia sentencia) {
+		sentenciaElse = sentencia;
 	}
 	
 	@Override

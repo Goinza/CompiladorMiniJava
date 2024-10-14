@@ -3,7 +3,7 @@ package semantico_ast;
 import main.Token;
 import semantico_ts.Tipo;
 
-public class NodoLiteralBooleano extends NodoOperando {
+public class NodoLiteralBooleano extends NodoLiteral {
 	
 	public NodoLiteralBooleano(Token token) {
 		this.token = token;

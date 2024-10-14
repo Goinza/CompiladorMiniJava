@@ -6,13 +6,15 @@ import java.util.List;
 import main.Token;
 import semantico_ts.Tipo;
 
-public class NodoLlamadaEstatica extends NodoOperando {
+public class NodoLlamadaEstatica extends NodoAcceso {
 	
+	private Token tokenClase;
 	private NodoEncadenado encadenado;
 	private List<NodoExpCompuesta> parametros;
 	
-	public NodoLlamadaEstatica(Token token) {
+	public NodoLlamadaEstatica(Token token, Token tokenClase) {
 		this.token = token;
+		this.tokenClase = tokenClase;
 		parametros = new LinkedList<NodoExpCompuesta>();
 	}
 	

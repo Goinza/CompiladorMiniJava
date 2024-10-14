@@ -6,7 +6,7 @@ import java.util.List;
 import main.Token;
 import semantico_ts.Tipo;
 
-public class NodoConstructor extends NodoOperando {
+public class NodoConstructor extends NodoAcceso {
 	
 	private NodoEncadenado encadenado;
 	private List<NodoExpCompuesta> parametros;

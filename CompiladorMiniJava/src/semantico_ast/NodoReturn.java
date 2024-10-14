@@ -4,13 +4,13 @@ import main.Token;
 
 public class NodoReturn extends NodoSentencia {
 	
-	private NodoExpCompuesta retorno;
+	private NodoExpresion retorno;
 	
 	public NodoReturn(Token token) {
 		this.token = token;
 	}
 	
-	public void setRetorno(NodoExpCompuesta exp) {
+	public void setRetorno(NodoExpresion exp) {
 		retorno = exp;
 	}
 

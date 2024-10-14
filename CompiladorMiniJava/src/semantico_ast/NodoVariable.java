@@ -3,7 +3,7 @@ package semantico_ast;
 import main.Token;
 import semantico_ts.Tipo;
 
-public class NodoVariable extends NodoOperando {
+public class NodoVariable extends NodoAcceso {
 	
 	private NodoEncadenado encadenado;
 	

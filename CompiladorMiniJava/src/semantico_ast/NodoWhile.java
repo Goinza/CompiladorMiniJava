@@ -2,23 +2,23 @@ package semantico_ast;
 
 import main.Token;
 
-public class NodoIf extends NodoSentencia {
+public class NodoWhile extends NodoSentencia {
 	
 	private NodoExpresion condicion;
-	private NodoSentencia bloqueThen;
+	private NodoSentencia sentencia;
 	
-	public NodoIf(Token token) {
+	public NodoWhile(Token token) {
 		this.token = token;
 	}
-	
+
 	public void setCondicion(NodoExpresion exp) {
 		condicion = exp;
 	}
 	
-	public void setBloqueThen(NodoSentencia bloque) {
-		bloqueThen = bloque;
+	public void setSentencia(NodoSentencia sent) {
+		sentencia = sent;
 	}
-
+	
 	@Override
 	public void chequear() {
 		// TODO Auto-generated method stub

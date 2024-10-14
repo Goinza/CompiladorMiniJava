@@ -3,7 +3,7 @@ package semantico_ast;
 import java.util.LinkedList;
 import java.util.List;
 
-public class NodoBloque {
+public class NodoBloque extends NodoSentencia {
 	
 	private List<NodoSentencia> sentencias;
 	

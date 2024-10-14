@@ -1,21 +1,27 @@
 package semantico_ts;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import main.Token;
+import semantico_ast.NodoBloque;
 
 public class TablaSimbolos {
 	
 	private Map<String, Clase> clases;
 	private Clase claseActual;
 	private EntidadLlamable metodoActual;
+	private NodoBloque bloqueActual;
+	private List<NodoBloque> ast;
 	private Metodo main;
 	private Token eof;
 	static private TablaSimbolos ts;
 	
 	private TablaSimbolos() throws ExcepcionSemantica {
 		clases = new HashMap<String, Clase>();
+		ast = new LinkedList<NodoBloque>();
 	}
 	
 	public static TablaSimbolos getTabla() throws ExcepcionSemantica {
@@ -39,6 +45,10 @@ public class TablaSimbolos {
 		eof = t;
 	}
 	
+	public void agregarAST(NodoBloque bloque) {
+		ast.addFirst(bloque);
+	}
+	
 	public Iterable<Clase> getClases() {
 		return clases.values();
 	}
@@ -55,6 +65,10 @@ public class TablaSimbolos {
 		return metodoActual;
 	}
 	
+	public NodoBloque getBloqueActual() {
+		return bloqueActual;
+	}
+	
 	public void agregarClase(Clase c) throws ExcepcionSemantica {
 		if (clases.get(c.getNombre()) != null) {
 			throw new ExcepcionSemantica(c.getToken(), "La clase " + c.getNombre() + " está repetida.");
@@ -68,6 +82,10 @@ public class TablaSimbolos {
 	
 	public void setMetodoActual(EntidadLlamable m) {
 		metodoActual = m;
+	}
+	
+	public void setBloqueActual(NodoBloque bloque) {
+		bloqueActual = bloque;
 	}
 	
 	public void verificarDeclaracion() throws ExcepcionSemantica {
@@ -91,6 +109,12 @@ public class TablaSimbolos {
 		Clase [] predefinidas = {new ClaseObject(), new ClaseString(), new ClaseSystem()};
 		for (Clase c : predefinidas) {
 			agregarClase(c);
+		}
+	}
+	
+	private void chequearAST() {
+		for (NodoBloque bloque : ast) {
+			bloque.chequear();
 		}
 	}
 
