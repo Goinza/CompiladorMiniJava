@@ -8,20 +8,19 @@ import semantico_ts.Tipo;
 
 public class NodoConstructor extends NodoAcceso {
 	
-	private NodoEncadenado encadenado;
-	private List<NodoExpCompuesta> parametros;
+	private List<NodoExpresion> parametros;
 	
 	public NodoConstructor(Token token) {
 		this.token = token;
-		parametros = new LinkedList<NodoExpCompuesta>();
+		parametros = new LinkedList<NodoExpresion>();
 	}
 	
-	public void setEncadenado(NodoEncadenado encadenado) {
-		this.encadenado = encadenado;
-	}
-	
-	public void agregarParametro(NodoExpCompuesta exp) {
+	public void agregarParametro(NodoExpresion exp) {
 		parametros.addLast(exp);
+	}
+	
+	public void setParametros(List<NodoExpresion> lista) {
+		parametros = lista;
 	}
 
 	@Override

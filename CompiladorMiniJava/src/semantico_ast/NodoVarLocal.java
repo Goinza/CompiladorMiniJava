@@ -4,19 +4,14 @@ import main.Token;
 
 public class NodoVarLocal extends NodoSentencia {
 	
-	private NodoVariable ladoIzquierdo;
-	private NodoExpCompuesta ladoDerecho;
+	private NodoExpCompuesta asignacion;
 	
 	public NodoVarLocal(Token token) {
 		this.token = token;
 	}
 	
-	public void setLadoIzquierdo(NodoVariable var) {
-		ladoIzquierdo = var;
-	}
-	
-	public void setLadoDerecho(NodoExpCompuesta exp) {
-		ladoDerecho = exp;
+	public void setAsignacion(NodoExpCompuesta exp) {
+		asignacion = exp;
 	}
 
 	@Override

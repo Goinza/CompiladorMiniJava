@@ -1,5 +1,6 @@
 package semantico_ts;
 
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,7 +14,7 @@ public class TablaSimbolos {
 	private Map<String, Clase> clases;
 	private Clase claseActual;
 	private EntidadLlamable metodoActual;
-	private NodoBloque bloqueActual;
+	private Deque<NodoBloque> bloqueActual;
 	private List<NodoBloque> ast;
 	private Metodo main;
 	private Token eof;
@@ -22,6 +23,7 @@ public class TablaSimbolos {
 	private TablaSimbolos() throws ExcepcionSemantica {
 		clases = new HashMap<String, Clase>();
 		ast = new LinkedList<NodoBloque>();
+		bloqueActual = new LinkedList<NodoBloque>();
 	}
 	
 	public static TablaSimbolos getTabla() throws ExcepcionSemantica {
@@ -66,7 +68,7 @@ public class TablaSimbolos {
 	}
 	
 	public NodoBloque getBloqueActual() {
-		return bloqueActual;
+		return bloqueActual.getFirst();
 	}
 	
 	public void agregarClase(Clase c) throws ExcepcionSemantica {
@@ -84,8 +86,12 @@ public class TablaSimbolos {
 		metodoActual = m;
 	}
 	
-	public void setBloqueActual(NodoBloque bloque) {
-		bloqueActual = bloque;
+	public void agregarBloqueActual(NodoBloque bloque) {
+		bloqueActual.addFirst(bloque);
+	}
+	
+	public void removerBloqueActual() {
+		bloqueActual.removeFirst();
 	}
 	
 	public void verificarDeclaracion() throws ExcepcionSemantica {

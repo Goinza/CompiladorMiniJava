@@ -5,14 +5,8 @@ import semantico_ts.Tipo;
 
 public class NodoVariableEncadenada extends NodoEncadenado {
 	
-	private NodoEncadenado encadenado;
-	
 	public NodoVariableEncadenada(Token token) {
 		this.token = token;
-	}
-	
-	public void setEncadenado(NodoEncadenado encadenado) {
-		this.encadenado = encadenado;
 	}
 
 	@Override

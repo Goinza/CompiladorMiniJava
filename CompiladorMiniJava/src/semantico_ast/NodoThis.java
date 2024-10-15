@@ -3,9 +3,9 @@ package semantico_ast;
 import main.Token;
 import semantico_ts.Tipo;
 
-public class NodoVariable extends NodoAcceso {
+public class NodoThis extends NodoAcceso {
 	
-	public NodoVariable(Token token) {
+	public NodoThis(Token token) {
 		this.token = token;
 	}
 
