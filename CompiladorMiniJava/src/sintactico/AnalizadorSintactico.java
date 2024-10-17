@@ -8,48 +8,8 @@ import java.util.List;
 import lexico.AnalizadorLexico;
 import lexico.ExcepcionLexica;
 import main.Token;
-import semantico_ast.NodoAcceso;
-import semantico_ast.NodoBloque;
-import semantico_ast.NodoConstructor;
-import semantico_ast.NodoEncadenado;
-import semantico_ast.NodoExpAsignacion;
-import semantico_ast.NodoExpBinaria;
-import semantico_ast.NodoExpCompuesta;
-import semantico_ast.NodoExpUnaria;
-import semantico_ast.NodoExpresion;
-import semantico_ast.NodoIf;
-import semantico_ast.NodoIfElse;
-import semantico_ast.NodoLiteral;
-import semantico_ast.NodoLiteralBooleano;
-import semantico_ast.NodoLiteralCaracter;
-import semantico_ast.NodoLiteralEntero;
-import semantico_ast.NodoLiteralNulo;
-import semantico_ast.NodoLiteralString;
-import semantico_ast.NodoLlamada;
-import semantico_ast.NodoLlamadaEncadenada;
-import semantico_ast.NodoLlamadaEstatica;
-import semantico_ast.NodoOperando;
-import semantico_ast.NodoReturn;
-import semantico_ast.NodoSentencia;
-import semantico_ast.NodoSwitch;
-import semantico_ast.NodoThis;
-import semantico_ast.NodoVarLocal;
-import semantico_ast.NodoVariable;
-import semantico_ast.NodoVariableEncadenada;
-import semantico_ast.NodoWhile;
-import semantico_ts.Atributo;
-import semantico_ts.Clase;
-import semantico_ts.Constructor;
-import semantico_ts.ExcepcionSemantica;
-import semantico_ts.Metodo;
-import semantico_ts.Parametro;
-import semantico_ts.TablaSimbolos;
-import semantico_ts.Tipo;
-import semantico_ts.TipoBooleano;
-import semantico_ts.TipoCaracter;
-import semantico_ts.TipoClase;
-import semantico_ts.TipoEntero;
-import semantico_ts.TipoVoid;
+import semantico_ast.*;
+import semantico_ts.*;
 
 public class AnalizadorSintactico {
 
@@ -317,7 +277,7 @@ public class AnalizadorSintactico {
 		return p;
 	}
 	
-	private NodoBloque bloque() throws ExcepcionLexica, ExcepcionSintactica {
+	private NodoBloque bloque() throws ExcepcionLexica, ExcepcionSintactica, ExcepcionSemantica {
 		NodoBloque bloque = new NodoBloque();
 		ts.agregarBloqueActual(bloque);	
 		ts.agregarAST(bloque);
@@ -329,7 +289,7 @@ public class AnalizadorSintactico {
 		return bloque;
 	}
 	
-	private void listaSentencias() throws ExcepcionLexica, ExcepcionSintactica {
+	private void listaSentencias() throws ExcepcionLexica, ExcepcionSintactica, ExcepcionSemantica {
 		List<String> primerosSentencia = Arrays.asList("puntoComa", "opSuma", "opResta", "opNegacion", "wordtrue", "wordfalse", "wordnull", "wordthis", "wordnew", "parentesisInicio", "wordvar", "wordreturn", "wordbreak", "wordif", "wordwhile", "wordswitch", "llaveInicio", "intLiteral", "charLiteral", "stringLiteral", "idMetVar", "idClase");
 		if (primerosSentencia.contains(tokenActual.getTipoToken())) {
 			sentencia();
@@ -340,7 +300,7 @@ public class AnalizadorSintactico {
 		}
 	}
 	
-	private NodoSentencia sentencia() throws ExcepcionLexica, ExcepcionSintactica {
+	private NodoSentencia sentencia() throws ExcepcionLexica, ExcepcionSintactica, ExcepcionSemantica {
 		NodoSentencia sentencia;
 		List<String> primerosExpresion = Arrays.asList("opSuma", "opResta", "opNegacion", "wordtrue", "wordfalse", "wordnull", "wordthis", "wordnew", "parentesisInicio", "intLiteral", "charLiteral", "stringLiteral", "idMetVar", "idClase");
 		if (tokenActual.getTipoToken().equals("puntoComa")) {
@@ -348,8 +308,10 @@ public class AnalizadorSintactico {
 			sentencia = null;
 		}
 		else if (primerosExpresion.contains(tokenActual.getTipoToken())) {
-			sentencia = expresion();
+			NodoExpresion exp = expresion();
+			Token token = tokenActual;
 			match("puntoComa");
+			sentencia = new NodoSentExpresion(token, exp);
 		}
 		else if (tokenActual.getTipoToken().equals("wordvar")) {
 			sentencia = varLocal();
@@ -423,7 +385,7 @@ public class AnalizadorSintactico {
 		return nodo;
 	}
 	
-	private NodoSentencia ifNT() throws ExcepcionLexica, ExcepcionSintactica {
+	private NodoSentencia ifNT() throws ExcepcionLexica, ExcepcionSintactica, ExcepcionSemantica {
 		NodoSentencia nodo;
 		Token token = tokenActual;
 		match("wordif");
@@ -449,7 +411,7 @@ public class AnalizadorSintactico {
 		return nodo;
 	}
 	
-	private NodoSentencia elseOpcional() throws ExcepcionLexica, ExcepcionSintactica {
+	private NodoSentencia elseOpcional() throws ExcepcionLexica, ExcepcionSintactica, ExcepcionSemantica {
 		NodoSentencia sentenciaElse;
 		if (tokenActual.getTipoToken().equals("wordelse")) {
 			match("wordelse");
@@ -462,7 +424,7 @@ public class AnalizadorSintactico {
 		return sentenciaElse;
 	}
 	
-	private NodoWhile whileNT() throws ExcepcionLexica, ExcepcionSintactica {
+	private NodoWhile whileNT() throws ExcepcionLexica, ExcepcionSintactica, ExcepcionSemantica {
 		Token token = tokenActual;
 		match("wordwhile");
 		NodoWhile nodo = new NodoWhile(token);
@@ -476,68 +438,92 @@ public class AnalizadorSintactico {
 		return nodo;
 	}
 	
-	private NodoSwitch switchNT() throws ExcepcionLexica, ExcepcionSintactica {
+	private NodoSwitch switchNT() throws ExcepcionLexica, ExcepcionSintactica, ExcepcionSemantica {
+		Token token = tokenActual;
 		match("wordswitch");
+		NodoSwitch nodo = new NodoSwitch(token);
 		match("parentesisInicio");
-		expresion();
+		NodoExpresion exp = expresion();
+		nodo.setCondicion(exp);
 		match("parentesisFin");
 		match("llaveInicio");
-		listaSentenciasSwitch();
+		listaSentenciasSwitch(nodo);
 		match("llaveFin");
+		
+		return nodo;
 	}
 	
-	private void listaSentenciasSwitch() throws ExcepcionLexica, ExcepcionSintactica {
+	private void listaSentenciasSwitch(NodoSwitch nodo) throws ExcepcionLexica, ExcepcionSintactica, ExcepcionSemantica {
 		List<String> primerosSwitch = Arrays.asList("wordcase", "worddefault");
 		if (primerosSwitch.contains(tokenActual.getTipoToken())) {
-			sentenciaSwitch();
-			listaSentenciasSwitch();
+			sentenciaSwitch(nodo);
+			listaSentenciasSwitch(nodo);
 		}
 		else {
 			
 		}
 	}
 	
-	private void sentenciaSwitch() throws ExcepcionLexica, ExcepcionSintactica {
+	private void sentenciaSwitch(NodoSwitch nodo) throws ExcepcionLexica, ExcepcionSintactica, ExcepcionSemantica {
+		Token token;
+		NodoSentencia sentencia;
 		if (tokenActual.getTipoToken().equals("wordcase")) {
+			token = tokenActual;
 			match("wordcase");
-			literalPrimitivo();
+			NodoLiteral literal = literalPrimitivo();
 			match("dosPuntos");
-			sentenciaOpcional();
+			sentencia = sentenciaOpcional();
+			NodoCaseSwitch nodoCase = new NodoCaseSwitch(token, literal, sentencia);
+			nodo.agregarBloqueCase(nodoCase);
 		}
 		else if (tokenActual.getTipoToken().equals("worddefault")) {
+			token = tokenActual;
 			match("worddefault");
 			match("dosPuntos");
-			sentencia();
+			sentencia = sentencia();
+			NodoDefaultSwitch nodoDefault = new NodoDefaultSwitch(token, sentencia);
+			nodo.setBloqueDefault(nodoDefault);
 		}
 		else {
 			throw new ExcepcionSintactica(tokenActual, "case o default");
 		}
 	}
 	
-	private void sentenciaOpcional() throws ExcepcionLexica, ExcepcionSintactica {
+	private NodoSentencia sentenciaOpcional() throws ExcepcionLexica, ExcepcionSintactica, ExcepcionSemantica {
 		List<String> primerosSentencia = Arrays.asList("puntoComa", "opSuma", "opResta", "opNegacion", "wordtrue", "wordfalse", "wordnull", "wordthis", "wordnew", "parentesisInicio", "wordvar", "wordreturn", "wordbreak", "wordif", "wordwhile", "wordswitch", "llaveInicio", "intLiteral", "charLiteral", "stringLiteral", "idMetVar", "idClase");
+		NodoSentencia nodo;
 		if (primerosSentencia.contains(tokenActual.getTipoToken())) {
-			sentencia();
+			nodo = sentencia();
 		}
 		else {
-			
+			nodo = null;
 		}
+		
+		return nodo;
 	}
 	
 	private NodoExpresion expresion() throws ExcepcionLexica, ExcepcionSintactica {
-		expresionCompuesta();
-		extensionExpresion();
+		NodoExpCompuesta expComp = expresionCompuesta();
+		NodoExpresion exp = extensionExpresion(expComp);
+		
+		return exp;
 	}
 	
-	private void extensionExpresion() throws ExcepcionLexica, ExcepcionSintactica {
+	private NodoExpresion extensionExpresion(NodoExpCompuesta expComp) throws ExcepcionLexica, ExcepcionSintactica {
 		List<String> primerosAsignacion = Arrays.asList("asignacion", "asignacionSuma", "asignacionResta");
+		NodoExpresion exp;
 		if (primerosAsignacion.contains(tokenActual.getTipoToken())) {
-			operadorAsignacion();
-			expresionCompuesta();
+			NodoExpAsignacion asignacion = operadorAsignacion();
+			asignacion.setLadoIzquierdo(expComp);
+			NodoExpCompuesta expComp2 = expresionCompuesta();
+			asignacion.setLadoDerecho(expComp2);
+			exp = asignacion;
 		}
 		else {
-			
+			exp = null;
 		}
+		
+		return exp;
 	}
 	
 	private NodoExpAsignacion operadorAsignacion() throws ExcepcionLexica, ExcepcionSintactica {
@@ -769,7 +755,9 @@ public class AnalizadorSintactico {
 			nodo = accesoMetodoEstatico();
 		}
 		else if (tokenActual.getTipoToken().equals("parentesisInicio")) {
-			nodo = expresionParentizada();
+			Token token = tokenActual;
+			NodoExpresion exp = expresionParentizada();
+			nodo = new NodoAccesoExpresion(token, exp);
 		}
 		else {
 			throw new ExcepcionSintactica(tokenActual, "this, identificador de metodo/variable, new, identificador de clase o (");

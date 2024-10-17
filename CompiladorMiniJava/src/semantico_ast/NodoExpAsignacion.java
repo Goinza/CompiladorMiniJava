@@ -5,15 +5,15 @@ import semantico_ts.Tipo;
 
 public class NodoExpAsignacion extends NodoExpresion {
 	
-	private NodoVariable ladoIzquierdo;
+	private NodoExpCompuesta ladoIzquierdo;
 	private NodoExpCompuesta ladoDerecho;
 	
 	public NodoExpAsignacion(Token token) {
 		this.token = token;
 	}
 	
-	public void setLadoIzquierdo(NodoVariable var) {
-		ladoIzquierdo = var;
+	public void setLadoIzquierdo(NodoExpCompuesta exp) {
+		ladoIzquierdo = exp;
 	}
 	
 	public void setLadoDerecho(NodoExpCompuesta exp) {

@@ -4,10 +4,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import main.Token;
+import semantico_ts.ExcepcionSemantica;
 
 public class NodoSwitch extends NodoSentencia {
 	
-	private NodoExpCompuesta condicion;
+	private NodoExpresion condicion;
 	private List<NodoCaseSwitch> bloquesCase;
 	private NodoDefaultSwitch bloqueDefault;
 	
@@ -16,7 +17,7 @@ public class NodoSwitch extends NodoSentencia {
 		bloquesCase = new LinkedList<NodoCaseSwitch>();
 	}
 	
-	public void setCondicion(NodoExpCompuesta exp) {
+	public void setCondicion(NodoExpresion exp) {
 		condicion = exp;
 	}
 	
@@ -24,7 +25,10 @@ public class NodoSwitch extends NodoSentencia {
 		bloquesCase.addLast(nodoCase);
 	}
 	
-	public void setBloqueDefault(NodoDefaultSwitch nodoDefault) {
+	public void setBloqueDefault(NodoDefaultSwitch nodoDefault) throws ExcepcionSemantica {
+		if (nodoDefault != null) {
+			throw new ExcepcionSemantica(nodoDefault.getToken(), "Un bloque switch no puede tener más de un caso default");
+		}
 		bloqueDefault = nodoDefault;
 	}
 

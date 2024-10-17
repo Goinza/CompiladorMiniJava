@@ -118,7 +118,7 @@ public class TablaSimbolos {
 		}
 	}
 	
-	private void chequearAST() {
+	public void chequearAST() {
 		for (NodoBloque bloque : ast) {
 			bloque.chequear();
 		}

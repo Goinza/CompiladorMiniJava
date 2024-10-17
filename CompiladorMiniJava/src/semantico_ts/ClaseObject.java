@@ -8,6 +8,7 @@ public class ClaseObject extends Clase {
 		super("Object");
 		agregarMetodosPredefinidos();
 		estaConsolidada = true;
+		constructor = new Constructor("Object");
 	}
 	
 	private void agregarMetodosPredefinidos() throws ExcepcionSemantica {

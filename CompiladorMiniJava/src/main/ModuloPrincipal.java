@@ -24,6 +24,7 @@ public class ModuloPrincipal {
 			new AnalizadorSintactico(lexico);	
 			TablaSimbolos.getTabla().verificarDeclaracion();
 			TablaSimbolos.getTabla().consolidar();
+			TablaSimbolos.getTabla().chequearAST();
 			
 			System.out.println("[SinErrores]");
 		} catch (FileNotFoundException e1) {

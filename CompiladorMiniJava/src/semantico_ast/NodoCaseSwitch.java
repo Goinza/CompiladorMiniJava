@@ -2,24 +2,22 @@ package semantico_ast;
 
 import main.Token;
 
-public class NodoCaseSwitch extends NodoSentencia {
+public class NodoCaseSwitch {
 	
-	private NodoOperando caso;
-	private NodoBloque bloque;
+	private Token token;
+	private NodoLiteral caso;
+	private NodoSentencia sentencia;
 	
-	public NodoCaseSwitch(Token token) {
+	public NodoCaseSwitch(Token token, NodoLiteral caso, NodoSentencia sentencia) {
 		this.token = token;
-	}
-	
-	public void setCaso(NodoOperando caso) {
 		this.caso = caso;
+		this.sentencia = sentencia;
 	}
 	
-	public void setBloque(NodoBloque bloque) {
-		this.bloque = bloque;
+	public Token getToken() {
+		return token;
 	}
 
-	@Override
 	public void chequear() {
 		// TODO Auto-generated method stub
 

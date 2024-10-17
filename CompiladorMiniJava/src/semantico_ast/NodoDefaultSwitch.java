@@ -2,19 +2,20 @@ package semantico_ast;
 
 import main.Token;
 
-public class NodoDefaultSwitch extends NodoSentencia {
+public class NodoDefaultSwitch {
 	
-	private NodoBloque bloque;
+	private Token token;
+	private NodoSentencia sentencia;
 	
-	public NodoDefaultSwitch(Token token) {
+	public NodoDefaultSwitch(Token token, NodoSentencia sentencia) {
 		this.token = token;
+		this.sentencia = sentencia;
 	}
 	
-	public void setBloque(NodoBloque bloque) {
-		this.bloque = bloque;
+	public Token getToken() {
+		return token;
 	}
 
-	@Override
 	public void chequear() {
 		// TODO Auto-generated method stub
 
