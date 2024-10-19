@@ -1,6 +1,7 @@
 package semantico_ast;
 
 import main.Token;
+import semantico_ts.ExcepcionSemantica;
 
 public class NodoCaseSwitch {
 	
@@ -18,7 +19,7 @@ public class NodoCaseSwitch {
 		return token;
 	}
 
-	public void chequear() {
+	public void chequear() throws ExcepcionSemantica {
 		// TODO Auto-generated method stub
 
 	}

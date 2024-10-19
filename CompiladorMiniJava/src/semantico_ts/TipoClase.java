@@ -19,4 +19,13 @@ public class TipoClase extends Tipo {
 		}
 	}
 
+	public boolean conformaCon(Tipo t) throws ExcepcionSemantica {
+		Clase clase = TablaSimbolos.getTabla().getClase(nombre);
+		Clase clase2 = TablaSimbolos.getTabla().getClase(t.getNombre());
+		if (clase2 != null) {
+			return clase.esDescendienteDe(clase2);
+		}
+		return false;
+	}
+
 }

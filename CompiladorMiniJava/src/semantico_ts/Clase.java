@@ -172,4 +172,11 @@ public class Clase extends EntidadDeclarada {
 		return esEstatico && retornoVoid && nombreMain && ceroParametros;
 	}
 	
+	public boolean esDescendienteDe(Clase c) throws ExcepcionSemantica {
+		boolean esHijo = nombrePadre.equals(c.getNombre());
+		Clase clasePadre = TablaSimbolos.getTabla().getClase(nombrePadre);
+		
+		return esHijo || clasePadre.esDescendienteDe(c);
+	}
+	
 }

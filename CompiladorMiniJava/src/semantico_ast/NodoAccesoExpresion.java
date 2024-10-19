@@ -1,6 +1,7 @@
 package semantico_ast;
 
 import main.Token;
+import semantico_ts.ExcepcionSemantica;
 import semantico_ts.Tipo;
 
 public class NodoAccesoExpresion extends NodoAcceso {
@@ -13,9 +14,20 @@ public class NodoAccesoExpresion extends NodoAcceso {
 	}
 
 	@Override
-	public Tipo chequear() {
-		// TODO Auto-generated method stub
-		return null;
+	public InfoCheck chequear() throws ExcepcionSemantica {
+		//Exp parentizada nunca es asignable
+		InfoCheck infoExp = exp.chequear();
+		InfoCheck infoEnc;
+		InfoCheck infoReturn;
+		if (encadenado != null) {
+			infoEnc = encadenado.chequear(infoExp.getTipo());
+			infoReturn = new InfoCheck(infoEnc.getTipo(), false);
+		}
+		else {
+			infoReturn = new InfoCheck(infoExp.getTipo(), false);
+		}
+		
+		return infoReturn;
 	}
 
 }

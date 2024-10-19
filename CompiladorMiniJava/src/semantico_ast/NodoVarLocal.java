@@ -1,6 +1,7 @@
 package semantico_ast;
 
 import main.Token;
+import semantico_ts.ExcepcionSemantica;
 
 public class NodoVarLocal extends NodoSentencia {
 	
@@ -15,7 +16,7 @@ public class NodoVarLocal extends NodoSentencia {
 	}
 
 	@Override
-	public void chequear() {
+	public void chequear() throws ExcepcionSemantica {
 		// TODO Auto-generated method stub
 
 	}

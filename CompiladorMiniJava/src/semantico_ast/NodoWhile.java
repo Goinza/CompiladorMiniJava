@@ -1,6 +1,8 @@
 package semantico_ast;
 
 import main.Token;
+import semantico_ts.ExcepcionSemantica;
+import semantico_ts.Tipo;
 
 public class NodoWhile extends NodoSentencia {
 	
@@ -20,9 +22,13 @@ public class NodoWhile extends NodoSentencia {
 	}
 	
 	@Override
-	public void chequear() {
-		// TODO Auto-generated method stub
-
+	public void chequear() throws ExcepcionSemantica {
+		Tipo tipoCondicion = condicion.chequear().getTipo();
+		boolean esBooleano = tipoCondicion.getNombre().equals("boolean");
+		if (!esBooleano) {
+			throw new ExcepcionSemantica(token, "La expresion debe ser del tipo booleano.");
+		}
+		sentencia.chequear();
 	}
 
 }

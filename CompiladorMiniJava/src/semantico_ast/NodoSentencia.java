@@ -1,6 +1,7 @@
 package semantico_ast;
 
 import main.Token;
+import semantico_ts.ExcepcionSemantica;
 
 public abstract class NodoSentencia {
 	
@@ -10,6 +11,6 @@ public abstract class NodoSentencia {
 		return token;
 	}
 	
-	public abstract void chequear();
+	public abstract void chequear() throws ExcepcionSemantica;
 
 }

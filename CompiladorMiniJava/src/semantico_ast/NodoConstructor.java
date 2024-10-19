@@ -4,14 +4,20 @@ import java.util.LinkedList;
 import java.util.List;
 
 import main.Token;
+import semantico_ts.Clase;
+import semantico_ts.Constructor;
+import semantico_ts.ExcepcionSemantica;
+import semantico_ts.Parametro;
+import semantico_ts.TablaSimbolos;
 import semantico_ts.Tipo;
+import semantico_ts.TipoClase;
 
 public class NodoConstructor extends NodoAcceso {
 	
 	private List<NodoExpresion> parametros;
 	
-	public NodoConstructor(Token token) {
-		this.token = token;
+	public NodoConstructor(Token idClase) {
+		this.token = idClase;
 		parametros = new LinkedList<NodoExpresion>();
 	}
 	
@@ -24,9 +30,37 @@ public class NodoConstructor extends NodoAcceso {
 	}
 
 	@Override
-	public Tipo chequear() {
-		// TODO Auto-generated method stub
-		return null;
+	public InfoCheck chequear() throws ExcepcionSemantica {
+		Clase clase = TablaSimbolos.getTabla().getClase(token.getLexema());
+		if (clase == null) {
+			throw new ExcepcionSemantica(token, "La clase " + token.getLexema() + " no existe.");
+		}
+		Constructor cons = clase.getConstructor();
+		Tipo tipoParam, tipoExp;
+		List<Parametro> listaParam = cons.getListaParametros();
+		int count = listaParam.size();
+		if (count != parametros.size()) {
+			throw new ExcepcionSemantica(token, "El constructor " + token.getLexema() + " no tiene la cantidad correcta de parámetros.");
+		}
+		for (int i=0; i<count; i++) {
+			tipoParam = listaParam.get(i).getTipo();
+			tipoExp = parametros.get(i).chequear().getTipo();
+			if (!tipoExp.conformaCon(tipoParam)) {
+				Token t = parametros.get(i).getToken();
+				throw new ExcepcionSemantica(t, "El parámetro actual " + t.getLexema() + " no conforma con el tipo del parámetro formal.");
+			}
+		}
+		
+		Tipo tipoRetorno = new TipoClase(cons.getNombre());
+		InfoCheck infoReturn;
+		if (encadenado != null) {
+			infoReturn = encadenado.chequear(tipoRetorno);
+		}
+		else {
+			infoReturn = new InfoCheck(tipoRetorno, false);
+		}
+		
+		return infoReturn;
 	}
 
 }

@@ -1,7 +1,9 @@
 package semantico_ast;
 
 import main.Token;
+import semantico_ts.ExcepcionSemantica;
 import semantico_ts.Tipo;
+import semantico_ts.TipoEntero;
 
 public class NodoLiteralEntero extends NodoLiteral {
 	
@@ -10,9 +12,8 @@ public class NodoLiteralEntero extends NodoLiteral {
 	}
 
 	@Override
-	public Tipo chequear() {
-		// TODO Auto-generated method stub
-		return null;
+	public InfoCheck chequear() throws ExcepcionSemantica {
+		return new InfoCheck(new TipoEntero(), false);
 	}
 
 }

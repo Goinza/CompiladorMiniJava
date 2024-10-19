@@ -118,7 +118,7 @@ public class TablaSimbolos {
 		}
 	}
 	
-	public void chequearAST() {
+	public void chequearAST() throws ExcepcionSemantica {
 		for (NodoBloque bloque : ast) {
 			bloque.chequear();
 		}

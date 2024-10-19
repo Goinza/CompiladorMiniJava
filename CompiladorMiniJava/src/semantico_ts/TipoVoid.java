@@ -18,4 +18,8 @@ public class TipoVoid extends Tipo {
 		//Verificar que un atributo o parámetro no es responsabilidad de esta clase o metodo
 	}
 	
+	public boolean conformaCon(Tipo t) {
+		return this.equals(t);
+	}
+	
 }

@@ -5,16 +5,17 @@ import java.util.List;
 
 import main.Token;
 import semantico_ts.ExcepcionSemantica;
+import semantico_ts.Tipo;
 
 public class NodoSwitch extends NodoSentencia {
 	
 	private NodoExpresion condicion;
-	private List<NodoCaseSwitch> bloquesCase;
-	private NodoDefaultSwitch bloqueDefault;
+	private List<NodoCaseSwitch> casos;
+	private NodoDefaultSwitch casoDefault;
 	
 	public NodoSwitch(Token token) {
 		this.token = token;
-		bloquesCase = new LinkedList<NodoCaseSwitch>();
+		casos = new LinkedList<NodoCaseSwitch>();
 	}
 	
 	public void setCondicion(NodoExpresion exp) {
@@ -22,20 +23,31 @@ public class NodoSwitch extends NodoSentencia {
 	}
 	
 	public void agregarBloqueCase(NodoCaseSwitch nodoCase) {
-		bloquesCase.addLast(nodoCase);
+		casos.addLast(nodoCase);
 	}
 	
 	public void setBloqueDefault(NodoDefaultSwitch nodoDefault) throws ExcepcionSemantica {
 		if (nodoDefault != null) {
 			throw new ExcepcionSemantica(nodoDefault.getToken(), "Un bloque switch no puede tener más de un caso default");
 		}
-		bloqueDefault = nodoDefault;
+		casoDefault = nodoDefault;
 	}
 
 	@Override
-	public void chequear() {
-		// TODO Auto-generated method stub
-
+	public void chequear() throws ExcepcionSemantica {
+		Tipo tipoCondicion = condicion.chequear().getTipo();
+		boolean esEntero = tipoCondicion.getNombre().equals("int");
+		boolean esBooleano = tipoCondicion.getNombre().equals("boolean");
+		boolean esCaracter = tipoCondicion.getNombre().equals("char");
+		boolean esPrimitivo = esEntero || esBooleano || esCaracter;
+		if (!esPrimitivo) {
+			throw new ExcepcionSemantica(token, "La expresión debe ser de un tipo primitivo");
+		}
+		
+		for (NodoCaseSwitch cs : casos) {
+			cs.chequear();
+		}
+		casoDefault.chequear();
 	}
 
 }

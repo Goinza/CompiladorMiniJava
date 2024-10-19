@@ -1,6 +1,7 @@
 package semantico_ast;
 
 import main.Token;
+import semantico_ts.ExcepcionSemantica;
 import semantico_ts.Tipo;
 
 public abstract class NodoEncadenado {
@@ -12,6 +13,6 @@ public abstract class NodoEncadenado {
 		this.encadenado = encadenado;
 	}
 	
-	public abstract Tipo chequear(Tipo t);
+	public abstract InfoCheck chequear(Tipo t) throws ExcepcionSemantica;
 	
 }

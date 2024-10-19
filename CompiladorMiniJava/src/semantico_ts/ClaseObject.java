@@ -23,5 +23,9 @@ public class ClaseObject extends Clase {
 	
 	public void verificarHerenciaCircular(Map<String, Clase> visitados) throws ExcepcionSemantica {
 	}
+	
+	public boolean esDescendienteDe(Clase c) {
+		return false;
+	}
 
 }
