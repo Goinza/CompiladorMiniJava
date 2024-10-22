@@ -14,7 +14,7 @@ public class TablaSimbolos {
 	private Map<String, Clase> clases;
 	private Clase claseActual;
 	private EntidadLlamable metodoActual;
-	private Deque<NodoBloque> bloqueActual;
+	private NodoBloque bloqueActual;
 	private List<NodoBloque> ast;
 	private Metodo main;
 	private Token eof;
@@ -23,7 +23,6 @@ public class TablaSimbolos {
 	private TablaSimbolos() throws ExcepcionSemantica {
 		clases = new HashMap<String, Clase>();
 		ast = new LinkedList<NodoBloque>();
-		bloqueActual = new LinkedList<NodoBloque>();
 	}
 	
 	public static TablaSimbolos getTabla() throws ExcepcionSemantica {
@@ -68,7 +67,7 @@ public class TablaSimbolos {
 	}
 	
 	public NodoBloque getBloqueActual() {
-		return bloqueActual.getFirst();
+		return bloqueActual;
 	}
 	
 	public void agregarClase(Clase c) throws ExcepcionSemantica {
@@ -86,12 +85,8 @@ public class TablaSimbolos {
 		metodoActual = m;
 	}
 	
-	public void agregarBloqueActual(NodoBloque bloque) {
-		bloqueActual.addFirst(bloque);
-	}
-	
-	public void removerBloqueActual() {
-		bloqueActual.removeFirst();
+	public void setBloqueActual(NodoBloque bloque) {
+		bloqueActual = bloque;
 	}
 	
 	public void verificarDeclaracion() throws ExcepcionSemantica {

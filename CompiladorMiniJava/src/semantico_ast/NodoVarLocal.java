@@ -2,13 +2,16 @@ package semantico_ast;
 
 import main.Token;
 import semantico_ts.ExcepcionSemantica;
+import semantico_ts.TablaSimbolos;
+import semantico_ts.Tipo;
+import semantico_ts.VarLocal;
 
 public class NodoVarLocal extends NodoSentencia {
 	
 	private NodoExpCompuesta asignacion;
 	
-	public NodoVarLocal(Token token) {
-		this.token = token;
+	public NodoVarLocal(Token idMetVar) {
+		this.token = idMetVar;
 	}
 	
 	public void setAsignacion(NodoExpCompuesta exp) {
@@ -17,8 +20,9 @@ public class NodoVarLocal extends NodoSentencia {
 
 	@Override
 	public void chequear() throws ExcepcionSemantica {
-		// TODO Auto-generated method stub
-
+		Tipo tipoExp = asignacion.chequear().getTipo();
+		VarLocal var = new VarLocal(token, tipoExp);
+		TablaSimbolos.getTabla().getBloqueActual().agregarVarLocal(var);
 	}
 
 }

@@ -1,5 +1,6 @@
 package sintactico;
 
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -107,12 +108,15 @@ public class AnalizadorSintactico {
 		Tipo tipo = tipoMiembro();
 		Token token = tokenActual;
 		match("idMetVar");
-		List<Parametro> parametros = contUnidad();
+		SimpleEntry<NodoBloque, List<Parametro>> pair = contUnidad();
+		NodoBloque bloque = pair == null ? null : pair.getKey();
+		List<Parametro> parametros = pair == null ? null :pair.getValue();
 		
 		if (parametros != null) {
 			Metodo m = new Metodo(token, tipo, esEstatico);
 			ts.getClaseActual().agregarMetodo(m);
 			ts.setMetodoActual(m);
+			bloque.setMetodo(m);
 			for (Parametro p : parametros) {
 				m.agregarParametro(p);
 			}
@@ -123,20 +127,21 @@ public class AnalizadorSintactico {
 		}
 	}
 	
-	private List<Parametro> contUnidad() throws ExcepcionLexica, ExcepcionSintactica, ExcepcionSemantica {
-		List<Parametro> parametros = null;
+	private SimpleEntry<NodoBloque, List<Parametro>> contUnidad() throws ExcepcionLexica, ExcepcionSintactica, ExcepcionSemantica {
+		SimpleEntry<NodoBloque, List<Parametro>> pair = null;
 		if (tokenActual.getTipoToken().equals("puntoComa")) {
 			match("puntoComa");
 		}
 		else if (tokenActual.getTipoToken().equals("parentesisInicio")) {
-			parametros = argsFormales();
-			bloque();
+			List<Parametro> parametros = argsFormales();
+			NodoBloque bloque = bloque();
+			pair = new SimpleEntry<NodoBloque, List<Parametro>>(bloque, parametros);
 		}
 		else {
 			throw new ExcepcionSintactica(tokenActual, "; o (");
 		}
 		
-		return parametros;
+		return pair;
 	}
 	
 	private void constructor() throws ExcepcionLexica, ExcepcionSintactica, ExcepcionSemantica {
@@ -278,13 +283,13 @@ public class AnalizadorSintactico {
 	}
 	
 	private NodoBloque bloque() throws ExcepcionLexica, ExcepcionSintactica, ExcepcionSemantica {
-		NodoBloque bloque = new NodoBloque();
-		ts.agregarBloqueActual(bloque);	
+		NodoBloque bloque = new NodoBloque(ts.getBloqueActual());
+		ts.setBloqueActual(bloque);	
 		ts.agregarAST(bloque);
 		match("llaveInicio");
 		listaSentencias();
 		match("llaveFin");
-		ts.removerBloqueActual();
+		ts.setBloqueActual(bloque.getBloquePadre());
 		
 		return bloque;
 	}
@@ -563,7 +568,7 @@ public class AnalizadorSintactico {
 			entExp = extensionExpresionCompuesta(binaria);
 		}
 		else {
-			entExp = null;
+			entExp = exp;
 		}
 		
 		return entExp;
@@ -797,7 +802,9 @@ public class AnalizadorSintactico {
 		match("idClase");
 		List<NodoExpresion> lista = argsActuales();
 		NodoConstructor nodo = new NodoConstructor(token);
-		nodo.setParametros(lista);
+		if (lista != null) {
+			nodo.setParametros(lista);
+		}		
 		
 		return nodo;
 	}

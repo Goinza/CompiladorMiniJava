@@ -45,7 +45,7 @@ public class NodoSwitch extends NodoSentencia {
 		}
 		
 		for (NodoCaseSwitch cs : casos) {
-			cs.chequear();
+			cs.chequear(tipoCondicion);
 		}
 		casoDefault.chequear();
 	}
