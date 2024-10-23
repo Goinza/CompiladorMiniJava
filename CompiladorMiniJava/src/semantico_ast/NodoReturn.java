@@ -22,7 +22,7 @@ public class NodoReturn extends NodoSentencia {
 	public void chequear() throws ExcepcionSemantica {
 		try {
 			if (retorno != null) {
-				Metodo metodoActual = (Metodo) TablaSimbolos.getTabla().getMetodoActual();
+				Metodo metodoActual = (Metodo) TablaSimbolos.getTabla().getBloqueActual().getMetodo();
 				Tipo tipoMet = metodoActual.getTipoRetorno();
 				InfoCheck infoRetorno = retorno.chequear();
 				if (!infoRetorno.getTipo().conformaCon(tipoMet)) {

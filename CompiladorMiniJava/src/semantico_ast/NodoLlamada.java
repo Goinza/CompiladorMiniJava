@@ -30,7 +30,7 @@ public class NodoLlamada extends NodoAcceso {
 
 	@Override
 	public InfoCheck chequear() throws ExcepcionSemantica {
-		Clase claseActual = TablaSimbolos.getTabla().getClaseActual();
+		Clase claseActual = TablaSimbolos.getTabla().getBloqueActual().getClase();
 		Metodo met = claseActual.getMetodo(token.getLexema());
 		
 		if (met == null || met.esEstatico()) {

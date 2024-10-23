@@ -6,7 +6,6 @@ class A {
     
      void m1(){
         a1 = 4;
-        
     }
     
 }    

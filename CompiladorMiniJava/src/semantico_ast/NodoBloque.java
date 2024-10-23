@@ -1,7 +1,9 @@
 package semantico_ast;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import semantico_ts.Clase;
 import semantico_ts.EntidadLlamable;
@@ -14,14 +16,14 @@ public class NodoBloque extends NodoSentencia {
 	
 	private List<NodoSentencia> sentencias;
 	private NodoBloque bloquePadre;
-	private List<VarLocal> locales;
+	private Map<String, VarLocal> locales;
 	private EntidadLlamable metodo;
 	private Clase clase;
 	
 	public NodoBloque(NodoBloque padre) throws ExcepcionSemantica {
 		sentencias = new LinkedList<NodoSentencia>();
 		bloquePadre = padre;
-		locales = new LinkedList<VarLocal>();
+		locales = new HashMap<String, VarLocal>();
 		metodo = TablaSimbolos.getTabla().getMetodoActual();
 		clase = TablaSimbolos.getTabla().getClaseActual();
 	}
@@ -30,12 +32,16 @@ public class NodoBloque extends NodoSentencia {
 		sentencias.addLast(ns);
 	}
 	
-	public void agregarVarLocal(VarLocal var) {
-		locales.addLast(var);
+	public void agregarVarLocal(VarLocal var) throws ExcepcionSemantica {
+		String nombreVar = var.getToken().getLexema();
+		if (locales.get(nombreVar) != null) {
+			throw new ExcepcionSemantica(var.getToken(), "La variable local está repetida.");
+		}
+		locales.put(nombreVar, var);
 	}
 	
-	public List<VarLocal> getVariablesLocales() {
-		return locales;
+	public Iterable<VarLocal> getVariablesLocales() {
+		return locales.values();
 	}
 	
 	public NodoBloque getBloquePadre() {
@@ -52,10 +58,10 @@ public class NodoBloque extends NodoSentencia {
 	
 	public void chequear() throws ExcepcionSemantica {
 		if (bloquePadre != null) {
-			locales = bloquePadre.getVariablesLocales();
+			locales = bloquePadre.locales;
 		}
 		else {
-			locales = new LinkedList<VarLocal>();
+			locales = new HashMap<String, VarLocal>();
 		}
 		TablaSimbolos.getTabla().setBloqueActual(this);
 		for (NodoSentencia ns : sentencias) {

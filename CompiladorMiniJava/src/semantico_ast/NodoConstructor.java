@@ -1,6 +1,5 @@
 package semantico_ast;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import main.Token;
@@ -16,9 +15,9 @@ public class NodoConstructor extends NodoAcceso {
 	
 	private List<NodoExpresion> parametros;
 	
-	public NodoConstructor(Token idClase) {
+	public NodoConstructor(Token idClase, List<NodoExpresion> parametros) {
 		this.token = idClase;
-		parametros = new LinkedList<NodoExpresion>();
+		this.parametros = parametros;
 	}
 	
 	public void agregarParametro(NodoExpresion exp) {

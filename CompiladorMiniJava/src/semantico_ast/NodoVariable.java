@@ -19,8 +19,6 @@ public class NodoVariable extends NodoAcceso {
 
 	@Override
 	public InfoCheck chequear() throws ExcepcionSemantica {
-		//Variable es parametro, var local o atributo de clase
-		// TODO Auto-generated method stub
 		InfoCheck infoVar = null;
 		NodoBloque bloqueActual = TablaSimbolos.getTabla().getBloqueActual();
 		EntidadLlamable metodo = bloqueActual.getMetodo();
@@ -37,7 +35,7 @@ public class NodoVariable extends NodoAcceso {
 			p = params.next();
 			if (p.getToken().getLexema().equals(token.getLexema())) {
 				found = true;
-				infoVar = new InfoCheck(p.getTipo(), true);
+				infoVar = encadenado != null ? encadenado.chequear(p.getTipo()) : new InfoCheck(p.getTipo(), true);
 			}
 		}
 		
@@ -45,7 +43,7 @@ public class NodoVariable extends NodoAcceso {
 			v = locales.next();
 			if (v.getToken().getLexema().equals(token.getLexema())) {
 				found = true;
-				infoVar = new InfoCheck(v.getTipo(), true);
+				infoVar = encadenado != null ? encadenado.chequear(v.getTipo()) : new InfoCheck(v.getTipo(), true);
 			}
 		}
 		
@@ -53,7 +51,7 @@ public class NodoVariable extends NodoAcceso {
 			a = atributos.next();
 			if (a.getToken().getLexema().equals(token.getLexema())) {
 				found = true;
-				infoVar = new InfoCheck(a.getTipo(), true);
+				infoVar = encadenado != null ? encadenado.chequear(a.getTipo()) : new InfoCheck(a.getTipo(), true);
 			}
 		}
 		

@@ -526,7 +526,7 @@ public class AnalizadorSintactico {
 			exp = asignacion;
 		}
 		else {
-			exp = null;
+			exp = expComp;
 		}
 		
 		return exp;
@@ -801,10 +801,7 @@ public class AnalizadorSintactico {
 		Token token = tokenActual;
 		match("idClase");
 		List<NodoExpresion> lista = argsActuales();
-		NodoConstructor nodo = new NodoConstructor(token);
-		if (lista != null) {
-			nodo.setParametros(lista);
-		}		
+		NodoConstructor nodo = new NodoConstructor(token, lista);	
 		
 		return nodo;
 	}
@@ -840,14 +837,12 @@ public class AnalizadorSintactico {
 	}
 	
 	private List<NodoExpresion> listaExpsOpcional() throws ExcepcionLexica, ExcepcionSintactica {
-		List<NodoExpresion> lista;
+		List<NodoExpresion> lista = new LinkedList<NodoExpresion>();
 		List<String> primerosListaExps = Arrays.asList("opSuma", "opResta", "opNegacion", "wordtrue", "wordfalse", "wordnull", "wordthis", "wordnew", "parentesisInicio", "intLiteral", "charLiteral", "stringLiteral", "idMetVar", "idClase");
 		if (primerosListaExps.contains(tokenActual.getTipoToken())) {
-			lista = new LinkedList<NodoExpresion>();
 			listaExps(lista);
 		}
 		else {
-			lista = null;
 		}
 		
 		return lista;
