@@ -29,12 +29,18 @@ public class NodoExpAsignacion extends NodoExpresion {
 		}
 		Tipo tipoIzq = infoIzq.getTipo();
 		Tipo tipoDer = ladoDerecho.chequear().getTipo();
+		String op = token.getTipoToken();
 		
-		if (!tipoDer.conformaCon(tipoIzq)) {
+		if (op == "asignacion" && !tipoDer.conformaCon(tipoIzq)) {
 			throw new ExcepcionSemantica(token, "El tipo del lado derecho de la asignación no conforma con el tipo del lado izquierdo.");
 		}
+		if (op == "asignacionSuma" || op == "asignacionResta") {
+			if (!(tipoIzq.equals(tipoDer) && tipoIzq.getNombre().equals("int"))) {
+				throw new ExcepcionSemantica(token, "Este tipo de asignación solo es compatible con tipo entero.");
+			}
+		}
 		
-		return new InfoCheck(tipoDer, false);
+		return new InfoCheck(tipoDer, false, true);
 	}
 
 }

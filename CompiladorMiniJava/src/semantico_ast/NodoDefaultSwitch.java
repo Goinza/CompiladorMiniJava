@@ -11,6 +11,7 @@ public class NodoDefaultSwitch {
 	public NodoDefaultSwitch(Token token, NodoSentencia sentencia) {
 		this.token = token;
 		this.sentencia = sentencia;
+		sentencia.setBreak(true);
 	}
 	
 	public Token getToken() {

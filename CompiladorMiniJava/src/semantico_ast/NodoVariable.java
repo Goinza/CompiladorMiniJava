@@ -7,6 +7,7 @@ import semantico_ts.Atributo;
 import semantico_ts.Clase;
 import semantico_ts.EntidadLlamable;
 import semantico_ts.ExcepcionSemantica;
+import semantico_ts.Metodo;
 import semantico_ts.Parametro;
 import semantico_ts.TablaSimbolos;
 import semantico_ts.VarLocal;
@@ -29,13 +30,13 @@ public class NodoVariable extends NodoAcceso {
 		boolean found = false;
 		Parametro p;
 		VarLocal v;
-		Atributo a;
-		
+		Atributo a;		
+			
 		while (params.hasNext() && !found) {
 			p = params.next();
 			if (p.getToken().getLexema().equals(token.getLexema())) {
 				found = true;
-				infoVar = encadenado != null ? encadenado.chequear(p.getTipo()) : new InfoCheck(p.getTipo(), true);
+				infoVar = encadenado != null ? encadenado.chequear(p.getTipo()) : new InfoCheck(p.getTipo(), true, false);
 			}
 		}
 		
@@ -43,7 +44,7 @@ public class NodoVariable extends NodoAcceso {
 			v = locales.next();
 			if (v.getToken().getLexema().equals(token.getLexema())) {
 				found = true;
-				infoVar = encadenado != null ? encadenado.chequear(v.getTipo()) : new InfoCheck(v.getTipo(), true);
+				infoVar = encadenado != null ? encadenado.chequear(v.getTipo()) : new InfoCheck(v.getTipo(), true, false);
 			}
 		}
 		
@@ -51,7 +52,15 @@ public class NodoVariable extends NodoAcceso {
 			a = atributos.next();
 			if (a.getToken().getLexema().equals(token.getLexema())) {
 				found = true;
-				infoVar = encadenado != null ? encadenado.chequear(a.getTipo()) : new InfoCheck(a.getTipo(), true);
+				infoVar = encadenado != null ? encadenado.chequear(a.getTipo()) : new InfoCheck(a.getTipo(), true, false);
+				if (!a.esEstatico()) {
+					EntidadLlamable llamada = TablaSimbolos.getTabla().getBloqueActual().getMetodo();
+					if (llamada instanceof Metodo) {
+						if (((Metodo)llamada).esEstatico()) {
+							throw new ExcepcionSemantica(token, "No se puede acceder a un atributo no estático desde un método estático.");
+						}
+					}
+				}
 			}
 		}
 		

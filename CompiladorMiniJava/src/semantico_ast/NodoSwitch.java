@@ -27,7 +27,7 @@ public class NodoSwitch extends NodoSentencia {
 	}
 	
 	public void setBloqueDefault(NodoDefaultSwitch nodoDefault) throws ExcepcionSemantica {
-		if (nodoDefault != null) {
+		if (casoDefault != null) {
 			throw new ExcepcionSemantica(nodoDefault.getToken(), "Un bloque switch no puede tener más de un caso default");
 		}
 		casoDefault = nodoDefault;

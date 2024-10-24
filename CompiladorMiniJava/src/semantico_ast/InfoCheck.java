@@ -6,10 +6,12 @@ public class InfoCheck {
 
 	private Tipo tipo;
 	private boolean esAsignable;
+	private boolean esSentencia;
 	
-	public InfoCheck(Tipo tipo, boolean esAsignable) {
+	public InfoCheck(Tipo tipo, boolean esAsignable, boolean esSentencia) {
 		this.tipo = tipo;
 		this.esAsignable = esAsignable;
+		this.esSentencia = esSentencia;
 	}
 	
 	public Tipo getTipo() {
@@ -18,6 +20,10 @@ public class InfoCheck {
 	
 	public boolean esAsignable() {
 		return esAsignable;
+	}
+	
+	public boolean esSentencia() {
+		return esSentencia;
 	}
 	
 }

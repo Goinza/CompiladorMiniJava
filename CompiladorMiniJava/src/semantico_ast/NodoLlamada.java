@@ -5,6 +5,7 @@ import java.util.List;
 
 import main.Token;
 import semantico_ts.Clase;
+import semantico_ts.EntidadLlamable;
 import semantico_ts.ExcepcionSemantica;
 import semantico_ts.Metodo;
 import semantico_ts.Parametro;
@@ -33,6 +34,14 @@ public class NodoLlamada extends NodoAcceso {
 		Clase claseActual = TablaSimbolos.getTabla().getBloqueActual().getClase();
 		Metodo met = claseActual.getMetodo(token.getLexema());
 		
+		EntidadLlamable llamada = TablaSimbolos.getTabla().getBloqueActual().getMetodo();
+		if (llamada instanceof Metodo) {
+			if (((Metodo)llamada).esEstatico()) {
+				throw new ExcepcionSemantica(token, "No se puede llamar a un método no estático desde un método estático.");
+			}
+		}
+		
+		
 		if (met == null || met.esEstatico()) {
 			throw new ExcepcionSemantica(token, "El método no está definido en la clase " + claseActual.getNombre() +".");
 		}
@@ -48,7 +57,7 @@ public class NodoLlamada extends NodoAcceso {
 			tipoExp = parametros.get(i).chequear().getTipo();
 			if (!tipoExp.conformaCon(tipoParam)) {
 				Token t = parametros.get(i).getToken();
-				throw new ExcepcionSemantica(t, "El parámetro actual " + t.getLexema() + " no conforma con el tipo del parámetro formal.");
+				throw new ExcepcionSemantica(token, "El parámetro actual no conforma con el tipo del parámetro formal.");
 			}
 		}
 
@@ -58,7 +67,7 @@ public class NodoLlamada extends NodoAcceso {
 			infoReturn = encadenado.chequear(tipoLlamada);
 		}
 		else {
-			infoReturn = new InfoCheck(tipoLlamada, false);
+			infoReturn = new InfoCheck(tipoLlamada, false, true);
 		}
 		
 		return infoReturn;

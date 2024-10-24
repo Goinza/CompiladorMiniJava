@@ -31,6 +31,9 @@ public class NodoLlamadaEncadenada extends NodoEncadenado {
 	@Override
 	public InfoCheck chequear(Tipo t) throws ExcepcionSemantica {
 		Clase clase = TablaSimbolos.getTabla().getClase(t.getNombre());
+		if (clase == null) {
+			throw new ExcepcionSemantica(token, "Parte izquierda de expresión punto es un tipo primitivo o void.");
+		}
 		Metodo met = clase.getMetodo(token.getLexema());
 		
 		if (met == null || met.esEstatico()) {
@@ -59,7 +62,7 @@ public class NodoLlamadaEncadenada extends NodoEncadenado {
 			infoReturn = encadenado.chequear(tipoLlamada);
 		}
 		else {
-			infoReturn = new InfoCheck(tipoLlamada, false);
+			infoReturn = new InfoCheck(tipoLlamada, false, true);
 		}
 		
 		return infoReturn;

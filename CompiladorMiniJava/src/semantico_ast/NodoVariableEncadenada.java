@@ -25,7 +25,7 @@ public class NodoVariableEncadenada extends NodoEncadenado {
 			infoReturn = encadenado.chequear(atr.getTipo());
 		}
 		else {
-			infoReturn = new InfoCheck(atr.getTipo(), true);
+			infoReturn = new InfoCheck(atr.getTipo(), true, false);
 		}		
 		
 		return infoReturn;

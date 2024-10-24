@@ -56,7 +56,7 @@ public class NodoConstructor extends NodoAcceso {
 			infoReturn = encadenado.chequear(tipoRetorno);
 		}
 		else {
-			infoReturn = new InfoCheck(tipoRetorno, false);
+			infoReturn = new InfoCheck(tipoRetorno, false, true);
 		}
 		
 		return infoReturn;

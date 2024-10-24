@@ -19,6 +19,7 @@ public class NodoWhile extends NodoSentencia {
 	
 	public void setSentencia(NodoSentencia sent) {
 		sentencia = sent;
+		sentencia.setBreak(true);
 	}
 	
 	@Override

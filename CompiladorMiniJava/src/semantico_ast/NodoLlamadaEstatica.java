@@ -60,7 +60,7 @@ public class NodoLlamadaEstatica extends NodoAcceso {
 			infoReturn = encadenado.chequear(tipoLlamada);
 		}
 		else {
-			infoReturn = new InfoCheck(tipoLlamada, false);
+			infoReturn = new InfoCheck(tipoLlamada, false, true);
 		}
 		
 		return infoReturn;

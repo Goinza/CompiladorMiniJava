@@ -36,7 +36,7 @@ public class NodoExpBinaria extends NodoExpCompuesta {
 		
 		if (intToInt.contains(token.getTipoToken())) {
 			if (tipoIzq.equals(tipoDer) && tipoIzq.getNombre().equals("int")) {
-				infoReturn = new InfoCheck(tipoIzq, false);
+				infoReturn = new InfoCheck(tipoIzq, false, false);
 			}
 			else {
 				throw new ExcepcionSemantica(token, "Al menos uno de los operandos no es de tipo entero.");
@@ -44,7 +44,7 @@ public class NodoExpBinaria extends NodoExpCompuesta {
 		}
 		else if (boolToBool.contains(token.getTipoToken())) {
 			if (tipoIzq.equals(tipoDer) && tipoIzq.getNombre().equals("boolean")) {
-				infoReturn = new InfoCheck(tipoIzq, false);
+				infoReturn = new InfoCheck(tipoIzq, false, false);
 			}
 			else {
 				throw new ExcepcionSemantica(token, "Al menos uno de los operandos no es de tipo booleano.");
@@ -52,7 +52,7 @@ public class NodoExpBinaria extends NodoExpCompuesta {
 		}
 		else if (intToBool.contains(token.getTipoToken())) {
 			if (tipoIzq.equals(tipoDer) && tipoIzq.getNombre().equals("int")) {
-				infoReturn = new InfoCheck(new TipoBooleano(), false);
+				infoReturn = new InfoCheck(new TipoBooleano(), false, false);
 			}
 			else {
 				throw new ExcepcionSemantica(token, "Al menos uno de los operandos no es de tipo entero.");
@@ -61,7 +61,7 @@ public class NodoExpBinaria extends NodoExpCompuesta {
 		else {
 			//Relacion de igualdad, conformidad en una de las direcciones
 			if (tipoIzq.conformaCon(tipoDer) || tipoDer.conformaCon(tipoIzq)) {
-				infoReturn = new InfoCheck(new TipoBooleano(), false);
+				infoReturn = new InfoCheck(new TipoBooleano(), false, false);
 			}
 			else {
 				throw new ExcepcionSemantica(token, "Los operandos no son compatibles para esta operación.");

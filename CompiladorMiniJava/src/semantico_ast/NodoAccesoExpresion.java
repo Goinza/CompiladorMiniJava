@@ -21,10 +21,10 @@ public class NodoAccesoExpresion extends NodoAcceso {
 		InfoCheck infoReturn;
 		if (encadenado != null) {
 			infoEnc = encadenado.chequear(infoExp.getTipo());
-			infoReturn = new InfoCheck(infoEnc.getTipo(), false);
+			infoReturn = new InfoCheck(infoEnc.getTipo(), false, infoEnc.esSentencia());
 		}
 		else {
-			infoReturn = new InfoCheck(infoExp.getTipo(), false);
+			infoReturn = new InfoCheck(infoExp.getTipo(), false, infoExp.esSentencia());
 		}
 		
 		return infoReturn;

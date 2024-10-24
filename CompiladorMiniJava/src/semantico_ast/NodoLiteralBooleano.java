@@ -13,7 +13,7 @@ public class NodoLiteralBooleano extends NodoLiteral {
 
 	@Override
 	public InfoCheck chequear() throws ExcepcionSemantica {
-		return new InfoCheck(new TipoBooleano(), false);
+		return new InfoCheck(new TipoBooleano(), false, false);
 	}
 
 }

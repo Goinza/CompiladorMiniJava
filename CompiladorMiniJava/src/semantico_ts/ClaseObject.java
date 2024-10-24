@@ -25,7 +25,7 @@ public class ClaseObject extends Clase {
 	}
 	
 	public boolean esDescendienteDe(Clase c) {
-		return false;
+		return nombre.equals(c.getNombre());
 	}
 
 }

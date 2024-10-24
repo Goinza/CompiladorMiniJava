@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import main.Token;
 import semantico_ts.Clase;
 import semantico_ts.EntidadLlamable;
 import semantico_ts.ExcepcionSemantica;
@@ -56,17 +57,20 @@ public class NodoBloque extends NodoSentencia {
 		return clase;
 	}
 	
-	public void chequear() throws ExcepcionSemantica {
+	public void chequear() throws ExcepcionSemantica {		
 		if (bloquePadre != null) {
-			locales = bloquePadre.locales;
+			locales = new HashMap<String, VarLocal>(bloquePadre.locales);
 		}
 		else {
 			locales = new HashMap<String, VarLocal>();
 		}
 		TablaSimbolos.getTabla().setBloqueActual(this);
 		for (NodoSentencia ns : sentencias) {
+			ns.setBreak(admiteBreak);
 			ns.chequear();
+			
 		}
+		TablaSimbolos.getTabla().setBloqueActual(bloquePadre);
 	}
 
 	public void setMetodo(Metodo m) {

@@ -14,6 +14,9 @@ public class NodoCaseSwitch {
 		this.token = token;
 		this.caso = caso;
 		this.sentencia = sentencia;
+		if (sentencia != null) {
+			sentencia.setBreak(true);	
+		}		
 	}
 	
 	public Token getToken() {
@@ -25,7 +28,9 @@ public class NodoCaseSwitch {
 		if (!tipoCaso.conformaCon(tipoCondicion)) {
 			throw new ExcepcionSemantica(token, "El tipo del caso no conforma con el tipo de la condición");
 		}
-		sentencia.chequear();
+		if (sentencia != null) {
+			sentencia.chequear();
+		}		
 	}
 
 }

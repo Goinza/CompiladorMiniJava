@@ -14,12 +14,10 @@ public class NodoSentExpresion extends NodoSentencia {
 
 	@Override
 	public void chequear() throws ExcepcionSemantica {
-		if (!(exp instanceof NodoLlamada || exp instanceof NodoLlamadaEstatica || exp instanceof NodoConstructor
-				|| exp instanceof NodoExpAsignacion)) {
+		InfoCheck infoExp = exp.chequear();
+		if (!infoExp.esSentencia()) {
 			throw new ExcepcionSemantica(token, "La expresión debe ser una llamada o una asignación.");
 		}
-		
-		exp.chequear();
 	}
 
 }

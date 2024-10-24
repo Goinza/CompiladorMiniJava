@@ -13,7 +13,7 @@ public class NodoLiteralString extends NodoLiteral {
 
 	@Override
 	public InfoCheck chequear() throws ExcepcionSemantica {
-		return new InfoCheck(new TipoClase("String"), false);
+		return new InfoCheck(new TipoClase("String"), false, false);
 	}
 
 }

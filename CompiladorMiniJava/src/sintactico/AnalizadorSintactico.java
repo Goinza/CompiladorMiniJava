@@ -308,13 +308,14 @@ public class AnalizadorSintactico {
 	
 	private NodoSentencia sentencia() throws ExcepcionLexica, ExcepcionSintactica, ExcepcionSemantica {
 		NodoSentencia sentencia;
+		Token token;
 		List<String> primerosExpresion = Arrays.asList("opSuma", "opResta", "opNegacion", "wordtrue", "wordfalse", "wordnull", "wordthis", "wordnew", "parentesisInicio", "intLiteral", "charLiteral", "stringLiteral", "idMetVar", "idClase");
 		if (tokenActual.getTipoToken().equals("puntoComa")) {
 			match("puntoComa");
-			sentencia = null;
+			sentencia = new NodoSentenciaVacia();
 		}
 		else if (primerosExpresion.contains(tokenActual.getTipoToken())) {
-			Token token = tokenActual;
+			token = tokenActual;
 			NodoExpresion exp = expresion();
 			match("puntoComa");
 			sentencia = new NodoSentExpresion(token, exp);
@@ -328,9 +329,10 @@ public class AnalizadorSintactico {
 			match("puntoComa");
 		}
 		else if (tokenActual.getTipoToken().equals("wordbreak")) {
+			token = tokenActual;
 			breakNT();
 			match("puntoComa");
-			sentencia = null;
+			sentencia = new NodoBreak(token);
 		}
 		else if (tokenActual.getTipoToken().equals("wordif")) {
 			sentencia = ifNT();

@@ -13,7 +13,7 @@ public class NodoLiteralEntero extends NodoLiteral {
 
 	@Override
 	public InfoCheck chequear() throws ExcepcionSemantica {
-		return new InfoCheck(new TipoEntero(), false);
+		return new InfoCheck(new TipoEntero(), false, false);
 	}
 
 }
