@@ -27,7 +27,7 @@ public class NodoWhile extends NodoSentencia {
 		Tipo tipoCondicion = condicion.chequear().getTipo();
 		boolean esBooleano = tipoCondicion.getNombre().equals("boolean");
 		if (!esBooleano) {
-			throw new ExcepcionSemantica(token, "La expresion debe ser del tipo booleano.");
+			throw new ExcepcionSemantica(token, "La condición debe ser del tipo booleano.");
 		}
 		sentencia.chequear();
 	}

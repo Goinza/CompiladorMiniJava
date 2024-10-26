@@ -36,7 +36,7 @@ public class NodoExpAsignacion extends NodoExpresion {
 		}
 		if (op == "asignacionSuma" || op == "asignacionResta") {
 			if (!(tipoIzq.equals(tipoDer) && tipoIzq.getNombre().equals("int"))) {
-				throw new ExcepcionSemantica(token, "Este tipo de asignación solo es compatible con tipo entero.");
+				throw new ExcepcionSemantica(token, "Este tipo de asignación sólo es compatible con el tipo entero.");
 			}
 		}
 		

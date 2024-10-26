@@ -57,7 +57,7 @@ public class NodoLlamada extends NodoAcceso {
 			tipoExp = parametros.get(i).chequear().getTipo();
 			if (!tipoExp.conformaCon(tipoParam)) {
 				Token t = parametros.get(i).getToken();
-				throw new ExcepcionSemantica(token, "El parámetro actual no conforma con el tipo del parámetro formal.");
+				throw new ExcepcionSemantica(token, "El parámetro actual no conforma con el tipo del parámetro formal" + t.getLexema() + ".");
 			}
 		}
 

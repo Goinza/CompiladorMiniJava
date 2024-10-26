@@ -46,7 +46,7 @@ public class NodoConstructor extends NodoAcceso {
 			tipoExp = parametros.get(i).chequear().getTipo();
 			if (!tipoExp.conformaCon(tipoParam)) {
 				Token t = parametros.get(i).getToken();
-				throw new ExcepcionSemantica(t, "El parámetro actual " + t.getLexema() + " no conforma con el tipo del parámetro formal.");
+				throw new ExcepcionSemantica(t, "El parámetro actual no conforma con el tipo del parámetro formal" + t.getLexema() + ".");
 			}
 		}
 		

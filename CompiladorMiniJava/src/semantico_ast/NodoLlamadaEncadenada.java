@@ -32,7 +32,7 @@ public class NodoLlamadaEncadenada extends NodoEncadenado {
 	public InfoCheck chequear(Tipo t) throws ExcepcionSemantica {
 		Clase clase = TablaSimbolos.getTabla().getClase(t.getNombre());
 		if (clase == null) {
-			throw new ExcepcionSemantica(token, "Parte izquierda de expresión punto es un tipo primitivo o void.");
+			throw new ExcepcionSemantica(token, "La parte izquierda de la expresión punto es un tipo primitivo o void.");
 		}
 		Metodo met = clase.getMetodo(token.getLexema());
 		

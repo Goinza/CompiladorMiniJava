@@ -65,7 +65,7 @@ public class NodoVariable extends NodoAcceso {
 		}
 		
 		if (!found) {
-			throw new ExcepcionSemantica(token, "La variable no existe.");
+			throw new ExcepcionSemantica(token, "La variable " + token.getLexema() + " no existe.");
 		}		
 		
 		return infoVar;
