@@ -32,5 +32,9 @@ public class NodoCaseSwitch {
 			sentencia.chequear();
 		}		
 	}
+	
+	public void generarCodigo() {
+		
+	}
 
 }

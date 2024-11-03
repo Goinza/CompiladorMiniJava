@@ -3,6 +3,7 @@ package semantico_ast;
 import main.Token;
 import semantico_ts.ExcepcionSemantica;
 import semantico_ts.Tipo;
+import traduccion.GeneradorCodigo;
 
 public class NodoExpUnaria extends NodoExpCompuesta {
 	
@@ -38,6 +39,22 @@ public class NodoExpUnaria extends NodoExpCompuesta {
 		} 
 
 		return infoReturn;
+	}
+
+	@Override
+	public void generarCodigo() {
+		operando.generarCodigo();
+		switch (token.getTipoToken()) {
+			case "opSuma":
+				break;
+			case "opResta":
+				GeneradorCodigo.generarInstruccion("NEG", "Menos unario");
+				break;
+			case "opNegacion":
+				GeneradorCodigo.generarInstruccion("NOT", "Negacion");
+				break;
+		}
+		
 	}
 
 }

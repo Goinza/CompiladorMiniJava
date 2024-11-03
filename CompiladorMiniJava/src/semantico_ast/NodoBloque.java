@@ -77,4 +77,11 @@ public class NodoBloque extends NodoSentencia {
 		metodo = m;		
 	}
 
+	@Override
+	public void generarCodigo() {
+		for (NodoSentencia ns : sentencias) {
+			ns.generarCodigo();
+		}
+	}
+
 }

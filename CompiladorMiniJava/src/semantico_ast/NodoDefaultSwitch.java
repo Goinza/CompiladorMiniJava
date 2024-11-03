@@ -21,5 +21,9 @@ public class NodoDefaultSwitch {
 	public void chequear() throws ExcepcionSemantica {
 		sentencia.chequear();
 	}
+	
+	public void generarCodigo() {
+		
+	}
 
 }

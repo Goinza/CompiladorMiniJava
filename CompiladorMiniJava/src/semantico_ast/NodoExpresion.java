@@ -2,7 +2,6 @@ package semantico_ast;
 
 import main.Token;
 import semantico_ts.ExcepcionSemantica;
-import semantico_ts.Tipo;
 
 public abstract class NodoExpresion {
 	
@@ -13,5 +12,7 @@ public abstract class NodoExpresion {
 	}
 	
 	public abstract InfoCheck chequear() throws ExcepcionSemantica;
+	
+	public abstract void generarCodigo();
 
 }

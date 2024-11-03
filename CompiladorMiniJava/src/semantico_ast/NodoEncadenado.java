@@ -15,4 +15,6 @@ public abstract class NodoEncadenado {
 	
 	public abstract InfoCheck chequear(Tipo t) throws ExcepcionSemantica;
 	
+	public abstract void generarCodigo();
+	
 }

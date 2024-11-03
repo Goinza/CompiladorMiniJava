@@ -7,6 +7,7 @@ import main.Token;
 import semantico_ts.ExcepcionSemantica;
 import semantico_ts.Tipo;
 import semantico_ts.TipoBooleano;
+import traduccion.GeneradorCodigo;
 
 public class NodoExpBinaria extends NodoExpCompuesta {
 	
@@ -69,6 +70,54 @@ public class NodoExpBinaria extends NodoExpCompuesta {
 		}
 		
 		return infoReturn;
+	}
+
+	@Override
+	public void generarCodigo() {
+		ladoIzquierdo.generarCodigo();
+		ladoDerecho.generarCodigo();
+		switch (token.getTipoToken()) {
+			case "opSuma": 
+				GeneradorCodigo.generarInstruccion("ADD", "Suma");
+				break;
+			case "opResta":
+				GeneradorCodigo.generarInstruccion("SUB", "Resta");
+				break;
+			case "opMultiplicacion":
+				GeneradorCodigo.generarInstruccion("MUL", "Multiplicacion");
+				break;
+			case "opDivision":
+				GeneradorCodigo.generarInstruccion("DIV", "Division");
+				break;
+			case "opModulo":
+				GeneradorCodigo.generarInstruccion("MOD", "Modulo");
+				break;
+			case "opOr":
+				GeneradorCodigo.generarInstruccion("OR", "");
+				break;
+			case "opAnd":
+				GeneradorCodigo.generarInstruccion("AND", "");
+				break;
+			case "opMenor":
+				GeneradorCodigo.generarInstruccion("LT", "Menor");
+				break;
+			case "opMenorIgual":
+				GeneradorCodigo.generarInstruccion("LE", "Menor o igual");
+				break;
+			case "opMayor":
+				GeneradorCodigo.generarInstruccion("GT", "Mayor");
+				break;
+			case "opMayorIgual":
+				GeneradorCodigo.generarInstruccion("GE", "Mayor o igual");
+				break;
+			case "opIgual":
+				GeneradorCodigo.generarInstruccion("EQ", "Igual");
+				break;
+			case "opDistinto":
+				GeneradorCodigo.generarInstruccion("NE", "Distinto");
+				break;
+		}
+		
 	}
 
 }

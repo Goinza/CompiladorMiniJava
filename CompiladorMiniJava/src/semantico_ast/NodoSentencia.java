@@ -21,5 +21,7 @@ public abstract class NodoSentencia {
 	public void setBreak(boolean admiteBreak) {
 		this.admiteBreak = admiteBreak;
 	}
+	
+	public abstract void generarCodigo();
 
 }
