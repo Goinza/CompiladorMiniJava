@@ -12,7 +12,7 @@ public class ClaseObject extends Clase {
 	}
 	
 	private void agregarMetodosPredefinidos() throws ExcepcionSemantica {
-		Metodo m = new Metodo("debugPrint", new TipoVoid(), true);
+		Metodo m = new Metodo("debugPrint", new TipoVoid(), true, this);
 		Parametro p = new Parametro("i", new TipoEntero());
 		m.agregarParametro(p);
 		this.agregarMetodo(m);

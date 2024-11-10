@@ -2,6 +2,8 @@ package semantico_ts;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import main.Token;
@@ -11,8 +13,10 @@ public class Clase extends EntidadDeclarada {
 	protected Token padre;
 	protected String nombrePadre;
 	protected Map<String, Atributo> atributos;
+	protected List<Atributo> listaAtributos;
 	protected Constructor constructor;
 	protected Map<String, Metodo> metodos;
+	protected List<Metodo> listaMetodos;
 	protected boolean estaConsolidada;
 	
 	public Clase(Token token) {
@@ -25,6 +29,8 @@ public class Clase extends EntidadDeclarada {
 		atributos = new HashMap<String, Atributo>();
 		metodos = new HashMap<String, Metodo>();
 		estaConsolidada = false;
+		listaAtributos = new LinkedList<Atributo>();
+		listaMetodos = new LinkedList<Metodo>();
 	}
 	
 	public Token getPadre() {
@@ -67,6 +73,7 @@ public class Clase extends EntidadDeclarada {
 			throw new ExcepcionSemantica(a.getToken(), "El atributo " + a.getNombre() + " está repetido.");
 		}
 		atributos.put(a.getNombre(), a);
+		listaAtributos.add(a);
 	}
 
 	public void setConstructor(Constructor c) throws ExcepcionSemantica {
@@ -84,6 +91,7 @@ public class Clase extends EntidadDeclarada {
 			throw new ExcepcionSemantica(m.getToken(), "El método " + m.getNombre() + " está repetido.");
 		}
 		metodos.put(m.getNombre(), m);
+		listaMetodos.add(m);
 		
 		if (esMetodoMain(m)) {
 			TablaSimbolos.getTabla().setMain(m);
@@ -137,8 +145,9 @@ public class Clase extends EntidadDeclarada {
 		estaConsolidada = true;
 	}
 	
-	private void consolidarAtributos(Clase clasePadre) throws ExcepcionSemantica {		
-		Iterable<Atributo> atributosPadre = clasePadre.getAtributos();
+	private void consolidarAtributos(Clase clasePadre) throws ExcepcionSemantica {	
+		//Usamos reversed para que los atributos del padre esten al inicio de la lista en el mismo orden
+		Iterable<Atributo> atributosPadre = clasePadre.listaAtributos.reversed();
 		Atributo atributoActual;
 		for (Atributo a : atributosPadre) {
 			atributoActual = atributos.get(a.getNombre());
@@ -146,16 +155,19 @@ public class Clase extends EntidadDeclarada {
 				throw new ExcepcionSemantica(atributoActual.token, "El atributo " + atributoActual.getNombre() + " ya existe en una clase ancestro");
 			}
 			atributos.put(a.getNombre(), a);
+			listaAtributos.addFirst(a);
 		}
 	}
 	
-	private void consolidarMetodos(Clase clasePadre) throws ExcepcionSemantica {		
-		Iterable<Metodo> metodosPadre = clasePadre.getMetodos();
+	private void consolidarMetodos(Clase clasePadre) throws ExcepcionSemantica {	
+		//Usamos reversed para que los metodos del padre esten al inicio de la lista en el mismo orden
+		Iterable<Metodo> metodosPadre = clasePadre.listaMetodos.reversed();
 		Metodo metodoActual;
 		for (Metodo m : metodosPadre) {
 			metodoActual = metodos.get(m.getNombre());
 			if (metodoActual == null) {
 				metodos.put(m.getNombre(), m);
+				listaMetodos.addFirst(m);
 			}
 			else if (!metodoActual.equals(m)) {
 				throw new ExcepcionSemantica(metodoActual.getToken(), "El metodo " + metodoActual.getNombre() + " esta sobrecargado");
@@ -178,6 +190,18 @@ public class Clase extends EntidadDeclarada {
 		Clase clasePadre = TablaSimbolos.getTabla().getClase(nombrePadre);
 		
 		return iguales || esHijo || clasePadre.esDescendienteDe(c);
+	}
+
+	public void generarCodigo() {
+		// VT, .DATA
+		// atributos estaticos
+		
+		constructor.generarCodigo();		
+		for (Metodo m : listaMetodos) {
+			if (m.perteneceClase(this)) {
+				m.generarCodigo();	
+			}			
+		}		
 	}
 	
 }

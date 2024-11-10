@@ -8,6 +8,7 @@ import semantico_ts.Metodo;
 import semantico_ts.TablaSimbolos;
 import semantico_ts.Tipo;
 import semantico_ts.TipoClase;
+import traduccion.GeneradorCodigo;
 
 public class NodoThis extends NodoAcceso {
 	
@@ -29,6 +30,11 @@ public class NodoThis extends NodoAcceso {
 		InfoCheck infoReturn = encadenado == null ? new InfoCheck(tipoThis, false, false) : encadenado.chequear(tipoThis);
 		
 		return infoReturn;
+	}
+
+	@Override
+	public void generarCodigo() {
+		GeneradorCodigo.generarInstruccion("LOAD 3", "this");		
 	}
 
 }

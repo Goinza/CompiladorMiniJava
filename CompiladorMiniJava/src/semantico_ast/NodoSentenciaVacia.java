@@ -7,4 +7,8 @@ public class NodoSentenciaVacia extends NodoSentencia {
 	public void chequear() throws ExcepcionSemantica {
 	}
 
+	@Override
+	public void generarCodigo() {		
+	}
+
 }

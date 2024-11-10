@@ -7,52 +7,34 @@ import java.util.Map;
 
 import main.Token;
 
-public class Metodo extends EntidadDeclarada implements EntidadLlamable {
+public class Metodo extends EntidadLlamable {
 	
 	private Tipo tipoRetorno;
 	private Map<String, Parametro> parametros;
 	private List<Parametro> listaParametros;
 	private boolean esEstatico;
+	private Clase claseOriginal;
 	
-	public Metodo(Token token, Tipo tipoRetorno, boolean esEstatico) {
-		this(token.getLexema(), tipoRetorno, esEstatico);
+	public Metodo(Token token, Tipo tipoRetorno, boolean esEstatico, Clase claseOriginal) {
+		this(token.getLexema(), tipoRetorno, esEstatico, claseOriginal);
 		this.token = token;
 	}
 	
-	public Metodo(String nombre, Tipo tipoRetorno, boolean esEstatico) {
+	public Metodo(String nombre, Tipo tipoRetorno, boolean esEstatico, Clase claseOriginal) {
 		this.nombre = nombre;
 		this.tipoRetorno = tipoRetorno;
 		parametros = new HashMap<String, Parametro>();
 		listaParametros = new ArrayList<Parametro>();
 		this.esEstatico = esEstatico;
+		this.claseOriginal = claseOriginal;
 	}
 	
 	public Tipo getTipoRetorno() {
 		return tipoRetorno;
 	}
 	
-	public Iterable<Parametro> getParametros() {
-		return parametros.values();
-	}
-	
-	public Parametro getParametro(String nombre) {
-		return parametros.get(nombre);
-	}
-	
-	public List<Parametro> getListaParametros() {
-		return listaParametros;
-	}
-	
 	public boolean esEstatico() {
 		return esEstatico;
-	}
-	
-	public void agregarParametro(Parametro p) throws ExcepcionSemantica {
-		if (parametros.get(p.getNombre()) != null) {
-			throw new ExcepcionSemantica(p.getToken(), "El parámetro " + p.getNombre() + " está repetido.");
-		}
-		parametros.put(p.getNombre(), p);
-		listaParametros.addLast(p);
 	}
 	
 	public void verificarDeclaracion() throws ExcepcionSemantica {
@@ -78,6 +60,15 @@ public class Metodo extends EntidadDeclarada implements EntidadLlamable {
 		}	
 		
 		return isEquals;
+	}
+	
+	public boolean perteneceClase(Clase clase) {
+		return claseOriginal.equals(clase); 
+	}
+	
+	public void generarCodigo() {
+		//Etiqueta, registro de activacion, actualizacion del FP
+		bloquePrincipal.generarCodigo();
 	}
 
 }

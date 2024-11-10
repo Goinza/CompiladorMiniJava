@@ -47,6 +47,7 @@ public class TablaSimbolos {
 	}
 	
 	public void agregarAST(NodoBloque bloque) {
+		metodoActual.setBloquePrincipal(bloque);
 		ast.addFirst(bloque);
 	}
 	
@@ -116,6 +117,14 @@ public class TablaSimbolos {
 	public void chequearAST() throws ExcepcionSemantica {
 		for (NodoBloque bloque : ast) {
 			bloque.chequear();
+		}
+	}
+	
+	public void generarCodigo() {
+		//LLamada a main, halt, cargamos primitivas malloc y heap_int
+		
+		for (Clase c : clases.values()) {
+			c.generarCodigo();
 		}
 	}
 

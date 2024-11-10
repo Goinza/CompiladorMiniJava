@@ -7,7 +7,7 @@ import java.util.Map;
 
 import main.Token;
 
-public class Constructor extends EntidadDeclarada implements EntidadLlamable {
+public class Constructor extends EntidadLlamable {
 
 	private Map<String, Parametro> parametros;
 	private List<Parametro> listaParametros;
@@ -22,31 +22,17 @@ public class Constructor extends EntidadDeclarada implements EntidadLlamable {
 		parametros = new HashMap<String, Parametro>();
 		listaParametros = new ArrayList<Parametro>();
 	}
-	
-	public Iterable<Parametro> getParametros() {
-		return parametros.values();
-	}
-	
-	public List<Parametro> getListaParametros() {
-		return listaParametros;
-	}
-	
-	public Parametro getParametro(String nombre) {
-		return parametros.get(nombre);
-	}
-	
-	public void agregarParametro(Parametro p) throws ExcepcionSemantica {
-		if (parametros.get(p.getNombre()) != null) {
-			throw new ExcepcionSemantica(p.getToken(), "El parámetro " + p.getNombre() + " está repetido.");
-		}
-		parametros.put(p.getNombre(), p);
-		listaParametros.addLast(p);
-	}
 
 	public void verificarDeclaracion() throws ExcepcionSemantica {		
 		for (Parametro p : parametros.values()) {
 			p.verificarDeclaracion();
 		}
+	}
+	
+	public void generarCodigo() {
+		//Etiqueta, registro de activacion, actualizacion del FP (similar a metodo?)
+		//Usar RET 1 porque tiene "this"
+		bloquePrincipal.generarCodigo();
 	}
 	
 }

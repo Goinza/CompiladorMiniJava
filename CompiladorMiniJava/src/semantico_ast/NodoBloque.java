@@ -33,12 +33,16 @@ public class NodoBloque extends NodoSentencia {
 		sentencias.addLast(ns);
 	}
 	
-	public void agregarVarLocal(VarLocal var) throws ExcepcionSemantica {
+	//Retorna offset de la variable agregada
+	public int agregarVarLocal(VarLocal var) throws ExcepcionSemantica {
+		int offset = locales.size(); //Primera variable tiene offset 0, entonces el offset es el tamaño de la tabla antes de agregar la var local
 		String nombreVar = var.getToken().getLexema();
 		if (locales.get(nombreVar) != null) {
 			throw new ExcepcionSemantica(var.getToken(), "La variable local está repetida.");
 		}
 		locales.put(nombreVar, var);
+		
+		return offset * -1;
 	}
 	
 	public Iterable<VarLocal> getVariablesLocales() {

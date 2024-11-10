@@ -113,7 +113,7 @@ public class AnalizadorSintactico {
 		List<Parametro> parametros = pair == null ? null :pair.getValue();
 		
 		if (parametros != null) {
-			Metodo m = new Metodo(token, tipo, esEstatico);
+			Metodo m = new Metodo(token, tipo, esEstatico, ts.getClaseActual());
 			ts.getClaseActual().agregarMetodo(m);
 			ts.setMetodoActual(m);
 			bloque.setMetodo(m);

@@ -20,4 +20,9 @@ public class NodoSentExpresion extends NodoSentencia {
 		}
 	}
 
+	@Override
+	public void generarCodigo() {
+		exp.generarCodigo();		
+	}
+
 }
