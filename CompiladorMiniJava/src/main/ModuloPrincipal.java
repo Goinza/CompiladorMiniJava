@@ -25,6 +25,7 @@ public class ModuloPrincipal {
 			TablaSimbolos.getTabla().verificarDeclaracion();
 			TablaSimbolos.getTabla().consolidar();
 			TablaSimbolos.getTabla().chequearAST();
+			TablaSimbolos.getTabla().generarCodigo();
 			
 			System.out.println("[SinErrores]");
 		} catch (FileNotFoundException e1) {

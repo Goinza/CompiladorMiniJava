@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import main.Token;
+import traduccion.BloqueConstructorVacio;
 import traduccion.Etiquetable;
 import traduccion.GeneradorCodigo;
 
@@ -117,6 +118,8 @@ public class Clase extends EntidadDeclarada implements Etiquetable {
 		}
 		else {
 			constructor = new Constructor(nombre);
+			BloqueConstructorVacio bloque = new BloqueConstructorVacio();
+			bloque.setMetodo(constructor);
 		}
 	}
 	

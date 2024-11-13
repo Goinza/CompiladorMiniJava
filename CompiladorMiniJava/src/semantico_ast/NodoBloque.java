@@ -22,7 +22,6 @@ public class NodoBloque extends NodoSentencia{
 	private Map<String, VarLocal> locales;
 	private EntidadLlamable metodo;
 	private Clase clase;
-	private int etiqueta;
 	
 	public NodoBloque(NodoBloque padre) throws ExcepcionSemantica {
 		sentencias = new LinkedList<NodoSentencia>();
