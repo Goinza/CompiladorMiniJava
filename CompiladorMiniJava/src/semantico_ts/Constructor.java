@@ -2,15 +2,12 @@ package semantico_ts;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import main.Token;
+import traduccion.Etiquetable;
+import traduccion.GeneradorCodigo;
 
-public class Constructor extends EntidadLlamable {
-
-	private Map<String, Parametro> parametros;
-	private List<Parametro> listaParametros;
+public class Constructor extends EntidadLlamable implements Etiquetable {
 	
 	public Constructor(Token token) {
 		this(token.getLexema());
@@ -32,7 +29,20 @@ public class Constructor extends EntidadLlamable {
 	public void generarCodigo() {
 		//Etiqueta, registro de activacion, actualizacion del FP (similar a metodo?)
 		//Usar RET 1 porque tiene "this"
+		GeneradorCodigo.generarInstruccionEtiquetada(getEtiqueta(), "LOADFP", "Apila el valor del registro FP");
+		GeneradorCodigo.generarInstruccion("LOADSP", "Apila el valor del registro FP");
+		GeneradorCodigo.generarInstruccion("STOREFP", "Apila el valor del registro FP");
+		
 		bloquePrincipal.generarCodigo();
+		
+		GeneradorCodigo.generarInstruccion("STOREFP", "Almacena el tope de la pila en el registro");
+		int cantParametros = listaParametros.size() + 1;
+		GeneradorCodigo.generarInstruccion("RET " + cantParametros, null);
+	}
+
+	@Override
+	public String getEtiqueta() {
+		return "lblConstructor@" + nombre;
 	}
 	
 }

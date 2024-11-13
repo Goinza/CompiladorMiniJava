@@ -12,14 +12,17 @@ import semantico_ts.ExcepcionSemantica;
 import semantico_ts.Metodo;
 import semantico_ts.TablaSimbolos;
 import semantico_ts.VarLocal;
+import traduccion.Etiquetable;
+import traduccion.GeneradorCodigo;
 
-public class NodoBloque extends NodoSentencia {
+public class NodoBloque extends NodoSentencia{
 	
 	private List<NodoSentencia> sentencias;
 	private NodoBloque bloquePadre;
 	private Map<String, VarLocal> locales;
 	private EntidadLlamable metodo;
 	private Clase clase;
+	private int etiqueta;
 	
 	public NodoBloque(NodoBloque padre) throws ExcepcionSemantica {
 		sentencias = new LinkedList<NodoSentencia>();
@@ -77,8 +80,11 @@ public class NodoBloque extends NodoSentencia {
 		TablaSimbolos.getTabla().setBloqueActual(bloquePadre);
 	}
 
-	public void setMetodo(Metodo m) {
+	public void setMetodo(EntidadLlamable m) {
 		metodo = m;		
+		if (bloquePadre == null) {
+			metodo.setBloquePrincipal(this);
+		}
 	}
 
 	@Override
@@ -86,6 +92,9 @@ public class NodoBloque extends NodoSentencia {
 		for (NodoSentencia ns : sentencias) {
 			ns.generarCodigo();
 		}
+		
+		locales.size();
+		GeneradorCodigo.generarInstruccion("FMEM " + locales.size(), null);
 	}
 
 }

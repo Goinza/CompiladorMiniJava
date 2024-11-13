@@ -1,6 +1,5 @@
 package semantico_ts;
 
-import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -8,6 +7,7 @@ import java.util.Map;
 
 import main.Token;
 import semantico_ast.NodoBloque;
+import traduccion.GeneradorCodigo;
 
 public class TablaSimbolos {
 	
@@ -47,7 +47,6 @@ public class TablaSimbolos {
 	}
 	
 	public void agregarAST(NodoBloque bloque) {
-		metodoActual.setBloquePrincipal(bloque);
 		ast.addFirst(bloque);
 	}
 	
@@ -121,11 +120,44 @@ public class TablaSimbolos {
 	}
 	
 	public void generarCodigo() {
-		//LLamada a main, halt, cargamos primitivas malloc y heap_int
-		
+		callMain();
+		primitivaHeapInit();
+		primitivaMalloc();		
 		for (Clase c : clases.values()) {
 			c.generarCodigo();
 		}
 	}
+	
+	private void callMain() {
+		String labelMain = main.getEtiqueta();
+		GeneradorCodigo.generarInstruccion(".CODE", null);
+		GeneradorCodigo.generarInstruccion("PUSH simple_heap_init", null);
+		GeneradorCodigo.generarInstruccion("CALL", null);
+		GeneradorCodigo.generarInstruccion("PUSH " + labelMain, null);
+		GeneradorCodigo.generarInstruccion("CALL", null);
+		GeneradorCodigo.generarInstruccion("HALT", null);
+	}
+	
+	private void primitivaHeapInit() {
+		GeneradorCodigo.generarInstruccionEtiquetada("simple_heap_init", "RET 0", "Retorna inmediatamente");
+	}
+	
+	private void primitivaMalloc() {
+		GeneradorCodigo.generarInstruccionEtiquetada("simple_malloc", "LOADFP", "Inicialización unidad");
+		GeneradorCodigo.generarInstruccion("LOADSP", null);
+		GeneradorCodigo.generarInstruccion("STOREFP", "Finaliza inicialización del RA");
+		GeneradorCodigo.generarInstruccion("LOADHL", "hl");
+		GeneradorCodigo.generarInstruccion("DUP", "hl");
+		GeneradorCodigo.generarInstruccion("PUSH 1", "1");
+		GeneradorCodigo.generarInstruccion("ADD", "hl+1");
+		GeneradorCodigo.generarInstruccion("STORE 4", "Guarda el resultado (puntero a primera celda de memoria");
+		GeneradorCodigo.generarInstruccion("LOAD 3", "Carga la cantidad de celdas a alojar");
+		GeneradorCodigo.generarInstruccion("ADD", null);
+		GeneradorCodigo.generarInstruccion("STOREHL", "Mueve el heap limit (hl). Expande el heap");
+		GeneradorCodigo.generarInstruccion("STOREFP", null);
+		GeneradorCodigo.generarInstruccion("RET 1", "Retorna eliminando el parámetro");
+	}
+	
+	
 
 }

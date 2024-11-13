@@ -1,14 +1,16 @@
 package semantico_ts;
 
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import main.Token;
+import traduccion.Etiquetable;
+import traduccion.GeneradorCodigo;
 
-public class Clase extends EntidadDeclarada {
+public class Clase extends EntidadDeclarada implements Etiquetable {
 
 	protected Token padre;
 	protected String nombrePadre;
@@ -192,16 +194,50 @@ public class Clase extends EntidadDeclarada {
 		return iguales || esHijo || clasePadre.esDescendienteDe(c);
 	}
 
-	public void generarCodigo() {
-		// VT, .DATA
-		// atributos estaticos
+	public void generarCodigo() {		
+		GeneradorCodigo.generarInstruccion(".DATA", null);		
 		
+		//VT
+		List<Metodo> dinamicos = getMetodosDinamicos();
+		if (dinamicos.size() == 0) {
+			GeneradorCodigo.generarInstruccionEtiquetada(getEtiqueta(), "NOP", null);
+		}
+		else {
+			Iterator<Metodo> it = dinamicos.iterator();
+			Metodo m = it.next();
+			GeneradorCodigo.generarInstruccionEtiquetada(getEtiqueta(), "DW " + m.getEtiqueta(), null);			
+			while (it.hasNext()) {
+				m = it.next();
+				GeneradorCodigo.generarInstruccion("DW " + m.getEtiqueta(), null);
+			}
+		}
+		
+		//Reservar espacios para atributos estaticos
+		
+		//Generar codigo metodos y constructor
+		GeneradorCodigo.generarInstruccion(".CODE", null);
 		constructor.generarCodigo();		
 		for (Metodo m : listaMetodos) {
 			if (m.perteneceClase(this)) {
 				m.generarCodigo();	
 			}			
 		}		
+	}
+
+	@Override
+	public String getEtiqueta() {
+		return "lblVT" + nombre;
+	}
+	
+	private List<Metodo> getMetodosDinamicos() {
+		List<Metodo> dinamicos = new LinkedList<Metodo>();
+		for (Metodo m : listaMetodos) {
+			if (!m.esEstatico()) {
+				dinamicos.addLast(m);
+			}
+		}
+		
+		return dinamicos;
 	}
 	
 }

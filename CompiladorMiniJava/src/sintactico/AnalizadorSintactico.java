@@ -285,7 +285,9 @@ public class AnalizadorSintactico {
 	private NodoBloque bloque() throws ExcepcionLexica, ExcepcionSintactica, ExcepcionSemantica {
 		NodoBloque bloque = new NodoBloque(ts.getBloqueActual());
 		ts.setBloqueActual(bloque);	
-		ts.agregarAST(bloque);
+		if (bloque.getBloquePadre() == null) {
+			ts.agregarAST(bloque);
+		}		
 		match("llaveInicio");
 		listaSentencias();
 		match("llaveFin");

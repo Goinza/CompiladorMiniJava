@@ -3,15 +3,14 @@ package semantico_ts;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import main.Token;
+import traduccion.Etiquetable;
+import traduccion.GeneradorCodigo;
 
-public class Metodo extends EntidadLlamable {
+public class Metodo extends EntidadLlamable implements Etiquetable {
 	
 	private Tipo tipoRetorno;
-	private Map<String, Parametro> parametros;
-	private List<Parametro> listaParametros;
 	private boolean esEstatico;
 	private Clase claseOriginal;
 	
@@ -66,9 +65,25 @@ public class Metodo extends EntidadLlamable {
 		return claseOriginal.equals(clase); 
 	}
 	
-	public void generarCodigo() {
-		//Etiqueta, registro de activacion, actualizacion del FP
+	public void generarCodigo() {		
+		//Instrucciones que finalizan la construccion del RA
+		GeneradorCodigo.generarInstruccionEtiquetada(getEtiqueta(), "LOADFP", "Apila el valor del registro FP");
+		GeneradorCodigo.generarInstruccion("LOADSP", "Apila el valor del registro FP");
+		GeneradorCodigo.generarInstruccion("STOREFP", "Apila el valor del registro FP");
+		
 		bloquePrincipal.generarCodigo();
+		
+		GeneradorCodigo.generarInstruccion("STOREFP", "Almacena el tope de la pila en el registro");
+		int cantParametros = listaParametros.size();
+		if (!esEstatico) {
+			cantParametros++; //"this" cuenta como un parámetro mas para RET
+		}
+		GeneradorCodigo.generarInstruccion("RET " + cantParametros, null);
+	}
+
+	@Override
+	public String getEtiqueta() {
+		return "lblMet" + nombre + "@" + claseOriginal.getNombre();
 	}
 
 }

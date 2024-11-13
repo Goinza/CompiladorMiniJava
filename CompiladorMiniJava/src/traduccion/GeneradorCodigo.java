@@ -10,12 +10,23 @@ public class GeneradorCodigo {
 		
 	}
 	
+	//El comentario puede ser nulo
 	public static void generarInstruccion(String instruccion, String comentario) {
+		String linea = instruccion;
+		if (comentario != null) {
+			linea += " ; " + comentario;
+		}
 		
+		System.out.println(linea);
 	}
 	
 	public static void generarInstruccionEtiquetada(String etiqueta, String instruccion, String comentario) {
+		String linea = etiqueta + " : " + instruccion;
+		if (comentario != null) {
+			linea += " ; " + comentario;
+		}
 		
+		System.out.println(linea);
 	}
 	
 	
