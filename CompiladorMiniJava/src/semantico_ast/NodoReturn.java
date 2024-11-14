@@ -34,4 +34,10 @@ public class NodoReturn extends NodoSentencia {
 			throw new ExcepcionSemantica(token, "Un constructor no puede retornar una expresión.");
 		}		
 	}
+
+	@Override
+	public void generarCodigo() {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -38,4 +38,10 @@ public class NodoIfElse extends NodoSentencia {
 		}
 	}
 
+	@Override
+	public void generarCodigo() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

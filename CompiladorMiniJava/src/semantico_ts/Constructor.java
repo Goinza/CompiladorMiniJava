@@ -24,6 +24,15 @@ public class Constructor extends EntidadLlamable implements Etiquetable {
 		for (Parametro p : parametros.values()) {
 			p.verificarDeclaracion();
 		}
+		
+		int paramOffset = 4;
+		//Asigno offsets en el orden inverso de la lista de parametros
+		//De tal manera que el offset del ultimo parametro es 4 (constructor tiene "this")
+		Iterable<Parametro> paramReversed = listaParametros.reversed();
+		for (Parametro p : paramReversed) {
+			p.setOffset(paramOffset);
+			paramOffset++;
+		}
 	}
 	
 	public void generarCodigo() {

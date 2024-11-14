@@ -50,4 +50,10 @@ public class NodoSwitch extends NodoSentencia {
 		casoDefault.chequear();
 	}
 
+	@Override
+	public void generarCodigo() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

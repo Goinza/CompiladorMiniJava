@@ -42,6 +42,18 @@ public class Metodo extends EntidadLlamable implements Etiquetable {
 		for (Parametro p : parametros.values()) {
 			p.verificarDeclaracion();
 		}
+		
+		int paramOffset = 3;
+		if (!esEstatico) {
+			paramOffset++;
+		}
+		//Asigno offsets en el orden inverso de la lista de parametros
+		//De tal manera que el offset del ultimo parametro es 3 en metodos estaticos y 4 en dinamicos
+		Iterable<Parametro> paramReversed = listaParametros.reversed();
+		for (Parametro p : paramReversed) {
+			p.setOffset(paramOffset);
+			paramOffset++;
+		}
 	}
 	
 	public boolean equals(Metodo m) {

@@ -62,4 +62,10 @@ public class NodoConstructor extends NodoAcceso {
 		return infoReturn;
 	}
 
+	@Override
+	public void generarCodigo() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

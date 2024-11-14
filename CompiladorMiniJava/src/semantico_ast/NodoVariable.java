@@ -71,4 +71,10 @@ public class NodoVariable extends NodoAcceso {
 		return infoVar;
 	}
 
+	@Override
+	public void generarCodigo() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

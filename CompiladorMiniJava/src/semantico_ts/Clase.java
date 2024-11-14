@@ -177,6 +177,11 @@ public class Clase extends EntidadDeclarada implements Etiquetable {
 			else if (!metodoActual.equals(m)) {
 				throw new ExcepcionSemantica(metodoActual.getToken(), "El metodo " + metodoActual.getNombre() + " esta sobrecargado");
 			}
+			else {
+				//Metodo redefinido, mantener el offset
+				listaMetodos.remove(metodoActual);
+				listaMetodos.addFirst(metodoActual);
+			}
 		}
 	}	
 	

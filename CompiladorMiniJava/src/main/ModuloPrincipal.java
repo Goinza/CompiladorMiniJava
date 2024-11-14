@@ -10,6 +10,7 @@ import sintactico.AnalizadorSintactico;
 import sintactico.ExcepcionSintactica;
 import sourcemanager.SourceManager;
 import sourcemanager.SourceManagerImpl;
+import traduccion.GeneradorCodigo;
 
 public class ModuloPrincipal {
 
@@ -20,6 +21,7 @@ public class ModuloPrincipal {
 		try {
 			TablaSimbolos.inicializarTabla();
 			sm.open(pathFile);
+			GeneradorCodigo.openFile(pathFile);
 			AnalizadorLexico lexico = new AnalizadorLexico(sm);
 			new AnalizadorSintactico(lexico);	
 			TablaSimbolos.getTabla().verificarDeclaracion();

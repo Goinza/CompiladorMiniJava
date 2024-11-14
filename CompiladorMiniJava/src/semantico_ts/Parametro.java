@@ -1,10 +1,12 @@
 package semantico_ts;
 
 import main.Token;
+import traduccion.Offset;
 
-public class Parametro extends EntidadDeclarada {
+public class Parametro extends EntidadDeclarada implements Offset {
 
 	private Tipo tipo;
+	private int offset;
 	
 	public Parametro(Token token, Tipo tipo) {
 		this(token.getLexema(), tipo);
@@ -29,6 +31,16 @@ public class Parametro extends EntidadDeclarada {
 	
 	public boolean equals(Parametro p) {
 		return tipo.equals(p.getTipo());
+	}
+
+	@Override
+	public int getOffset() {
+		return offset;
+	}
+
+	@Override
+	public void setOffset(int offset) {
+		this.offset = offset;
 	}
 	
 }

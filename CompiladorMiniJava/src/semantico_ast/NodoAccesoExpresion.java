@@ -2,7 +2,6 @@ package semantico_ast;
 
 import main.Token;
 import semantico_ts.ExcepcionSemantica;
-import semantico_ts.Tipo;
 
 public class NodoAccesoExpresion extends NodoAcceso {
 	
@@ -28,6 +27,12 @@ public class NodoAccesoExpresion extends NodoAcceso {
 		}
 		
 		return infoReturn;
+	}
+
+	@Override
+	public void generarCodigo() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

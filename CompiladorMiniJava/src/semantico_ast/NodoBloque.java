@@ -4,15 +4,11 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
-import main.Token;
 import semantico_ts.Clase;
 import semantico_ts.EntidadLlamable;
 import semantico_ts.ExcepcionSemantica;
-import semantico_ts.Metodo;
 import semantico_ts.TablaSimbolos;
 import semantico_ts.VarLocal;
-import traduccion.Etiquetable;
 import traduccion.GeneradorCodigo;
 
 public class NodoBloque extends NodoSentencia{
@@ -36,15 +32,14 @@ public class NodoBloque extends NodoSentencia{
 	}
 	
 	//Retorna offset de la variable agregada
-	public int agregarVarLocal(VarLocal var) throws ExcepcionSemantica {
+	public void agregarVarLocal(VarLocal var) throws ExcepcionSemantica {
 		int offset = locales.size(); //Primera variable tiene offset 0, entonces el offset es el tamaño de la tabla antes de agregar la var local
+		var.setOffset(offset * -1); //Var locales tienen offset negativo
 		String nombreVar = var.getToken().getLexema();
 		if (locales.get(nombreVar) != null) {
 			throw new ExcepcionSemantica(var.getToken(), "La variable local está repetida.");
 		}
 		locales.put(nombreVar, var);
-		
-		return offset * -1;
 	}
 	
 	public Iterable<VarLocal> getVariablesLocales() {

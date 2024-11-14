@@ -68,4 +68,10 @@ public class NodoLlamadaEncadenada extends NodoEncadenado {
 		return infoReturn;
 	}
 
+	@Override
+	public void generarCodigo() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

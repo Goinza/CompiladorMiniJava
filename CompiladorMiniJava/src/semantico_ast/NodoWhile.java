@@ -32,4 +32,10 @@ public class NodoWhile extends NodoSentencia {
 		sentencia.chequear();
 	}
 
+	@Override
+	public void generarCodigo() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

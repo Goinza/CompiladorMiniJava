@@ -43,4 +43,10 @@ public class NodoExpAsignacion extends NodoExpresion {
 		return new InfoCheck(tipoDer, false, true);
 	}
 
+	@Override
+	public void generarCodigo() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

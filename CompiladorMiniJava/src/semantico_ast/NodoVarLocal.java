@@ -24,7 +24,7 @@ public class NodoVarLocal extends NodoSentencia {
 	public void chequear() throws ExcepcionSemantica {
 		Tipo tipoExp = asignacion.chequear().getTipo();
 		VarLocal var = new VarLocal(token, tipoExp);
-		offset = TablaSimbolos.getTabla().getBloqueActual().agregarVarLocal(var);
+		TablaSimbolos.getTabla().getBloqueActual().agregarVarLocal(var);
 	}
 
 	@Override

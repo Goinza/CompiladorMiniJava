@@ -1,4 +1,4 @@
-///1234&exitosamente
+///&exitosamente
 
 
 class Init{
@@ -6,4 +6,28 @@ class Init{
     { 
 
     }
+}
+
+class A {
+	
+	void f() {
+		
+	}
+	
+	void g() {
+		
+	}
+	
+}
+
+class B extends A {
+	
+	void f() {
+		
+	}
+	
+	void h() {
+		
+	}
+	
 }

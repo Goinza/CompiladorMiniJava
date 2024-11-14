@@ -36,13 +36,13 @@ public class NodoLlamada extends NodoAcceso {
 		
 		EntidadLlamable llamada = TablaSimbolos.getTabla().getBloqueActual().getMetodo();
 		if (llamada instanceof Metodo) {
-			if (((Metodo)llamada).esEstatico()) {
+			if (((Metodo)llamada).esEstatico() && !met.esEstatico()) {
 				throw new ExcepcionSemantica(token, "No se puede llamar a un método no estático desde un método estático.");
 			}
 		}
 		
 		
-		if (met == null || met.esEstatico()) {
+		if (met == null) {
 			throw new ExcepcionSemantica(token, "El método no está definido en la clase " + claseActual.getNombre() +".");
 		}
 		
@@ -71,6 +71,12 @@ public class NodoLlamada extends NodoAcceso {
 		}
 		
 		return infoReturn;
+	}
+
+	@Override
+	public void generarCodigo() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
