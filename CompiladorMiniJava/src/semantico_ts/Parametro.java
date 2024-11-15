@@ -3,7 +3,7 @@ package semantico_ts;
 import main.Token;
 import traduccion.Offset;
 
-public class Parametro extends EntidadDeclarada implements Offset {
+public class Parametro extends EntidadDeclarada implements Variable {
 
 	private Tipo tipo;
 	private int offset;
@@ -41,6 +41,16 @@ public class Parametro extends EntidadDeclarada implements Offset {
 	@Override
 	public void setOffset(int offset) {
 		this.offset = offset;
+	}
+
+	@Override
+	public boolean esInstancia() {
+		return false;
+	}
+
+	@Override
+	public boolean esLocal() {
+		return true;
 	}
 	
 }

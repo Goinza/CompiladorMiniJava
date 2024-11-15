@@ -25,12 +25,14 @@ public class NodoVarLocal extends NodoSentencia {
 		Tipo tipoExp = asignacion.chequear().getTipo();
 		VarLocal var = new VarLocal(token, tipoExp);
 		TablaSimbolos.getTabla().getBloqueActual().agregarVarLocal(var);
+		offset = var.getOffset();
 	}
 
 	@Override
 	public void generarCodigo() {
+		GeneradorCodigo.generarInstruccion("RMEM 1", "Reserva memoria para var local");
 		asignacion.generarCodigo();
-		GeneradorCodigo.generarInstruccion("STORE " + offset, "Store Var Local " + token.getLexema());
+		GeneradorCodigo.generarInstruccion("STORE " + offset, "Store var local " + token.getLexema());
 	}
 
 }

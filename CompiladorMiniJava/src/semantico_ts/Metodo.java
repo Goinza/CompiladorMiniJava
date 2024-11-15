@@ -7,12 +7,14 @@ import java.util.List;
 import main.Token;
 import traduccion.Etiquetable;
 import traduccion.GeneradorCodigo;
+import traduccion.Offset;
 
-public class Metodo extends EntidadLlamable implements Etiquetable {
+public class Metodo extends EntidadLlamable implements Etiquetable, Offset {
 	
 	private Tipo tipoRetorno;
 	private boolean esEstatico;
 	private Clase claseOriginal;
+	private int offset;
 	
 	public Metodo(Token token, Tipo tipoRetorno, boolean esEstatico, Clase claseOriginal) {
 		this(token.getLexema(), tipoRetorno, esEstatico, claseOriginal);
@@ -96,6 +98,19 @@ public class Metodo extends EntidadLlamable implements Etiquetable {
 	@Override
 	public String getEtiqueta() {
 		return "lblMet" + nombre + "@" + claseOriginal.getNombre();
+	}
+
+	@Override
+	public int getOffset() {
+		if (esEstatico) {
+			return -1; //No se aplica offset a metodos estaticos ya que no pertenecen a la VT de la clase
+		}
+		return offset;
+	}
+
+	@Override
+	public void setOffset(int offset) {
+		this.offset = offset;
 	}
 
 }

@@ -11,10 +11,13 @@ import semantico_ts.Metodo;
 import semantico_ts.Parametro;
 import semantico_ts.TablaSimbolos;
 import semantico_ts.Tipo;
+import semantico_ts.TipoVoid;
+import traduccion.GeneradorCodigo;
 
 public class NodoLlamada extends NodoAcceso {
 	
 	private List<NodoExpresion> parametros;
+	private Metodo metodo;
 	
 	public NodoLlamada(Token idMetVar) {
 		this.token = idMetVar;
@@ -46,6 +49,8 @@ public class NodoLlamada extends NodoAcceso {
 			throw new ExcepcionSemantica(token, "El método no está definido en la clase " + claseActual.getNombre() +".");
 		}
 		
+		metodo = met;
+		
 		Tipo tipoParam, tipoExp;		
 		List<Parametro> listaParam = met.getListaParametros();
 		int count = listaParam.size();
@@ -76,7 +81,35 @@ public class NodoLlamada extends NodoAcceso {
 	@Override
 	public void generarCodigo() {
 		// TODO Auto-generated method stub
+		if (!metodo.esEstatico()) {
+			GeneradorCodigo.generarInstruccion("LOAD 3", "Cargo futuro this");
+			if (!(metodo.getTipoRetorno() instanceof TipoVoid)) {
+				GeneradorCodigo.generarInstruccion("RMEM 1", "Reservo lugar para el retorno");
+				GeneradorCodigo.generarInstruccion("SWAP", null);				
+			}
+			for (NodoExpresion ne : parametros) {
+				ne.generarCodigo();
+				GeneradorCodigo.generarInstruccion("SWAP", null);
+			}
+			GeneradorCodigo.generarInstruccion("DUP", "Duplico this para no perderlo");
+			GeneradorCodigo.generarInstruccion("LOADREF 0", "Cargo la VT");
+			GeneradorCodigo.generarInstruccion("LOADREF " + metodo.getOffset(), "Cargo la direccion de metodo");
+			GeneradorCodigo.generarInstruccion("CALL", null);
+		}
+		else {
+			if (!(metodo.getTipoRetorno() instanceof TipoVoid)) {
+				GeneradorCodigo.generarInstruccion("RMEM 1", "Reservo lugar para el retorno");			
+			}
+			for (NodoExpresion ne : parametros) {
+				ne.generarCodigo();
+			}
+			GeneradorCodigo.generarInstruccion("PUSH " + metodo.getEtiqueta(), "Cargo la etiqueta del metodo");
+			GeneradorCodigo.generarInstruccion("CALL", null);
+		}
 		
+		if (encadenado != null) {
+			encadenado.generarCodigo();
+		}
 	}
 
 }

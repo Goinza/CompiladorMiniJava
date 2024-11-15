@@ -11,8 +11,13 @@ import semantico_ts.Metodo;
 import semantico_ts.Parametro;
 import semantico_ts.TablaSimbolos;
 import semantico_ts.VarLocal;
+import semantico_ts.Variable;
+import traduccion.GeneradorCodigo;
 
 public class NodoVariable extends NodoAcceso {
+	
+	private Variable variable;
+	private boolean esLadoIzquierdoAsign;
 	
 	public NodoVariable(Token idMetVar) {
 		this.token = idMetVar;
@@ -36,6 +41,7 @@ public class NodoVariable extends NodoAcceso {
 			p = params.next();
 			if (p.getToken().getLexema().equals(token.getLexema())) {
 				found = true;
+				variable = p;
 				infoVar = encadenado != null ? encadenado.chequear(p.getTipo()) : new InfoCheck(p.getTipo(), true, false);
 			}
 		}
@@ -44,6 +50,7 @@ public class NodoVariable extends NodoAcceso {
 			v = locales.next();
 			if (v.getToken().getLexema().equals(token.getLexema())) {
 				found = true;
+				variable = v;
 				infoVar = encadenado != null ? encadenado.chequear(v.getTipo()) : new InfoCheck(v.getTipo(), true, false);
 			}
 		}
@@ -52,6 +59,7 @@ public class NodoVariable extends NodoAcceso {
 			a = atributos.next();
 			if (a.getToken().getLexema().equals(token.getLexema())) {
 				found = true;
+				variable = a;
 				infoVar = encadenado != null ? encadenado.chequear(a.getTipo()) : new InfoCheck(a.getTipo(), true, false);
 				if (!a.esEstatico()) {
 					EntidadLlamable llamada = TablaSimbolos.getTabla().getBloqueActual().getMetodo();
@@ -67,14 +75,34 @@ public class NodoVariable extends NodoAcceso {
 		if (!found) {
 			throw new ExcepcionSemantica(token, "La variable " + token.getLexema() + " no existe.");
 		}		
-		
+		esLadoIzquierdoAsign = infoVar.esAsignable();
 		return infoVar;
 	}
 
 	@Override
 	public void generarCodigo() {
-		// TODO Auto-generated method stub
+		if (variable.esInstancia()) {
+			GeneradorCodigo.generarInstruccion("LOAD 3", "Cargo this");
+			if (!esLadoIzquierdoAsign || encadenado == null) {
+				GeneradorCodigo.generarInstruccion("LOADREF " + variable.getOffset(), "Offset de variable en this");
+			}
+			else {
+				GeneradorCodigo.generarInstruccion("LOAD 3", "Cargo this");
+				GeneradorCodigo.generarInstruccion("STOREREF " + variable.getOffset(), "Offset de variable en this");
+			}
+		}
+		else if (variable.esLocal()) {
+			if (!esLadoIzquierdoAsign || encadenado == null) {
+				GeneradorCodigo.generarInstruccion("LOAD " + variable.getOffset(), "Offset de variable en RA");
+			}
+			else {
+				GeneradorCodigo.generarInstruccion("STORE " + variable.getOffset(), "Offset de variable en RA");
+			}
+		}
 		
+		if (encadenado != null) {
+			encadenado.generarCodigo();
+		}
 	}
 
 }

@@ -122,7 +122,7 @@ public class AnalizadorSintactico {
 			}
 		}
 		else {
-			Atributo a = new Atributo(token, tipo, esEstatico);
+			Atributo a = new Atributo(token, tipo, esEstatico, ts.getClaseActual());
 			ts.getClaseActual().agregarAtributo(a);
 		}
 	}

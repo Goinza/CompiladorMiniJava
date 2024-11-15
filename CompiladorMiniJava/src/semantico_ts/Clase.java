@@ -239,8 +239,11 @@ public class Clase extends EntidadDeclarada implements Etiquetable {
 	
 	private List<Metodo> getMetodosDinamicos() {
 		List<Metodo> dinamicos = new LinkedList<Metodo>();
+		int offset = 0;
 		for (Metodo m : listaMetodos) {
 			if (!m.esEstatico()) {
+				m.setOffset(offset);
+				offset++;
 				dinamicos.addLast(m);
 			}
 		}
