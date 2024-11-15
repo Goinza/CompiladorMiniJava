@@ -10,9 +10,12 @@ import semantico_ts.Parametro;
 import semantico_ts.TablaSimbolos;
 import semantico_ts.Tipo;
 import semantico_ts.TipoClase;
+import traduccion.GeneradorCodigo;
 
 public class NodoConstructor extends NodoAcceso {
 	
+	private Clase clase;
+	private Constructor cons;
 	private List<NodoExpresion> parametros;
 	
 	public NodoConstructor(Token idClase, List<NodoExpresion> parametros) {
@@ -30,11 +33,11 @@ public class NodoConstructor extends NodoAcceso {
 
 	@Override
 	public InfoCheck chequear() throws ExcepcionSemantica {
-		Clase clase = TablaSimbolos.getTabla().getClase(token.getLexema());
+		clase = TablaSimbolos.getTabla().getClase(token.getLexema());
 		if (clase == null) {
 			throw new ExcepcionSemantica(token, "La clase " + token.getLexema() + " no existe.");
 		}
-		Constructor cons = clase.getConstructor();
+		cons = clase.getConstructor();
 		Tipo tipoParam, tipoExp;
 		List<Parametro> listaParam = cons.getListaParametros();
 		int count = listaParam.size();
@@ -64,7 +67,23 @@ public class NodoConstructor extends NodoAcceso {
 
 	@Override
 	public void generarCodigo() {
-		// TODO Auto-generated method stub
+		int espacioMemoria = clase.getListaAtributos().size() + 1;
+		GeneradorCodigo.generarInstruccion("RMEM 1", "Reservo memoria para malloc");
+		GeneradorCodigo.generarInstruccion("PUSH " + espacioMemoria, "Cantidad de atributos de instancia + this");
+		GeneradorCodigo.generarInstruccion("PUSH simple_malloc", null);
+		GeneradorCodigo.generarInstruccion("CALL", null);
+		GeneradorCodigo.generarInstruccion("DUP", "Para no perder la referencia al nuevo CIR");
+		GeneradorCodigo.generarInstruccion("PUSH " + clase.getEtiqueta(), "Direccion del cominezo de la VT de la clase");
+		GeneradorCodigo.generarInstruccion("STOREREF 0", "Guardamos la Referencia a la VT en el CIR que creamos");
+		GeneradorCodigo.generarInstruccion("DUP", null);
+		
+		for (NodoExpresion ne : parametros) {
+			ne.generarCodigo();
+			GeneradorCodigo.generarInstruccion("SWAP", null);
+		}
+		
+		GeneradorCodigo.generarInstruccion("PUSH " + cons.getEtiqueta(), null);
+		GeneradorCodigo.generarInstruccion("CALL", "Llamo al constructor");
 		
 	}
 

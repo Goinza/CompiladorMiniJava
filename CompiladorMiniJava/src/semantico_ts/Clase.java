@@ -44,6 +44,10 @@ public class Clase extends EntidadDeclarada implements Etiquetable {
 		return atributos.values();
 	}
 	
+	public List<Atributo> getListaAtributos() {
+		return listaAtributos;
+	}
+	
 	public Atributo getAtributo(String nombre) {
 		return atributos.get(nombre);
 	}
@@ -221,6 +225,18 @@ public class Clase extends EntidadDeclarada implements Etiquetable {
 		}
 		
 		//Reservar espacios para atributos estaticos
+		int offset = 1;
+		for (Atributo a : listaAtributos) {
+			if (a.esEstatico()) {
+				GeneradorCodigo.generarInstruccionEtiquetada(a.getEtiqueta(), "DW 0", "Atr estatico");
+			}
+			else {
+				a.setOffset(offset);
+				offset++;
+			}
+		}
+		
+		GeneradorCodigo.generarLineaVacia();
 		
 		//Generar codigo metodos y constructor
 		GeneradorCodigo.generarInstruccion(".CODE", null);

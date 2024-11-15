@@ -10,10 +10,13 @@ import semantico_ts.Metodo;
 import semantico_ts.Parametro;
 import semantico_ts.TablaSimbolos;
 import semantico_ts.Tipo;
+import semantico_ts.TipoVoid;
+import traduccion.GeneradorCodigo;
 
 public class NodoLlamadaEncadenada extends NodoEncadenado {
 	
 	private List<NodoExpresion> parametros;
+	private Metodo metodo;
 	
 	public NodoLlamadaEncadenada(Token idMetVar) {
 		this.token = idMetVar;
@@ -34,14 +37,14 @@ public class NodoLlamadaEncadenada extends NodoEncadenado {
 		if (clase == null) {
 			throw new ExcepcionSemantica(token, "La parte izquierda de la expresión punto es un tipo primitivo o void.");
 		}
-		Metodo met = clase.getMetodo(token.getLexema());
+		metodo = clase.getMetodo(token.getLexema());
 		
-		if (met == null || met.esEstatico()) {
+		if (metodo == null || metodo.esEstatico()) {
 			throw new ExcepcionSemantica(token, "El método no está definido en la clase " + clase.getNombre() +".");
 		}
 		
 		Tipo tipoParam, tipoExp;		
-		List<Parametro> listaParam = met.getListaParametros();
+		List<Parametro> listaParam = metodo.getListaParametros();
 		int count = listaParam.size();
 		if (count != parametros.size()) {
 			throw new ExcepcionSemantica(token, "El método " + token.getLexema() + " no tiene la cantidad correcta de parámetros.");
@@ -56,7 +59,7 @@ public class NodoLlamadaEncadenada extends NodoEncadenado {
 		}
 
 
-		Tipo tipoLlamada = met.getTipoRetorno();
+		Tipo tipoLlamada = metodo.getTipoRetorno();
 		InfoCheck infoReturn;
 		if (encadenado != null) {
 			infoReturn = encadenado.chequear(tipoLlamada);
@@ -70,8 +73,22 @@ public class NodoLlamadaEncadenada extends NodoEncadenado {
 
 	@Override
 	public void generarCodigo() {
-		// TODO Auto-generated method stub
+		if (!(metodo.getTipoRetorno() instanceof TipoVoid)) {
+			GeneradorCodigo.generarInstruccion("RMEM 1", "Reservo lugar para el retorno");
+			GeneradorCodigo.generarInstruccion("SWAP", null);				
+		}
+		for (NodoExpresion ne : parametros) {
+			ne.generarCodigo();
+			GeneradorCodigo.generarInstruccion("SWAP", null);
+		}
+		GeneradorCodigo.generarInstruccion("DUP", "Duplico this para no perderlo");
+		GeneradorCodigo.generarInstruccion("LOADREF 0", "Cargo la VT");
+		GeneradorCodigo.generarInstruccion("LOADREF " + metodo.getOffset(), "Cargo la direccion de metodo");
+		GeneradorCodigo.generarInstruccion("CALL", null);
 		
+		if (encadenado != null) {
+			encadenado.generarCodigo();
+		}		
 	}
 
 }

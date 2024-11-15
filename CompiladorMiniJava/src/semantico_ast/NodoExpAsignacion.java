@@ -45,7 +45,9 @@ public class NodoExpAsignacion extends NodoExpresion {
 
 	@Override
 	public void generarCodigo() {
-		// TODO Auto-generated method stub
+		ladoIzquierdo.setEsLadoIzquierdoAsignacion();
+		ladoDerecho.generarCodigo();
+		ladoIzquierdo.generarCodigo();
 		
 	}
 

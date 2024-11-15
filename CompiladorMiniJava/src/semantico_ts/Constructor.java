@@ -47,6 +47,8 @@ public class Constructor extends EntidadLlamable implements Etiquetable {
 		GeneradorCodigo.generarInstruccion("STOREFP", "Almacena el tope de la pila en el registro");
 		int cantParametros = listaParametros.size() + 1;
 		GeneradorCodigo.generarInstruccion("RET " + cantParametros, null);
+		
+		GeneradorCodigo.generarLineaVacia();
 	}
 
 	@Override

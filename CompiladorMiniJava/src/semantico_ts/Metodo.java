@@ -93,6 +93,8 @@ public class Metodo extends EntidadLlamable implements Etiquetable, Offset {
 			cantParametros++; //"this" cuenta como un parámetro mas para RET
 		}
 		GeneradorCodigo.generarInstruccion("RET " + cantParametros, null);
+		
+		GeneradorCodigo.generarLineaVacia();
 	}
 
 	@Override

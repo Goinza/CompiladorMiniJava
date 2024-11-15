@@ -35,24 +35,22 @@ public class NodoLlamada extends NodoAcceso {
 	@Override
 	public InfoCheck chequear() throws ExcepcionSemantica {
 		Clase claseActual = TablaSimbolos.getTabla().getBloqueActual().getClase();
-		Metodo met = claseActual.getMetodo(token.getLexema());
+		metodo = claseActual.getMetodo(token.getLexema());
 		
 		EntidadLlamable llamada = TablaSimbolos.getTabla().getBloqueActual().getMetodo();
 		if (llamada instanceof Metodo) {
-			if (((Metodo)llamada).esEstatico() && !met.esEstatico()) {
+			if (((Metodo)llamada).esEstatico() && !metodo.esEstatico()) {
 				throw new ExcepcionSemantica(token, "No se puede llamar a un método no estático desde un método estático.");
 			}
 		}
 		
 		
-		if (met == null) {
+		if (metodo == null) {
 			throw new ExcepcionSemantica(token, "El método no está definido en la clase " + claseActual.getNombre() +".");
-		}
-		
-		metodo = met;
+		}		
 		
 		Tipo tipoParam, tipoExp;		
-		List<Parametro> listaParam = met.getListaParametros();
+		List<Parametro> listaParam = metodo.getListaParametros();
 		int count = listaParam.size();
 		if (count != parametros.size()) {
 			throw new ExcepcionSemantica(token, "El método " + token.getLexema() + " no tiene la cantidad correcta de parámetros.");
@@ -66,7 +64,7 @@ public class NodoLlamada extends NodoAcceso {
 			}
 		}
 
-		Tipo tipoLlamada = met.getTipoRetorno();
+		Tipo tipoLlamada = metodo.getTipoRetorno();
 		InfoCheck infoReturn;
 		if (encadenado != null) {
 			infoReturn = encadenado.chequear(tipoLlamada);
@@ -80,7 +78,6 @@ public class NodoLlamada extends NodoAcceso {
 
 	@Override
 	public void generarCodigo() {
-		// TODO Auto-generated method stub
 		if (!metodo.esEstatico()) {
 			GeneradorCodigo.generarInstruccion("LOAD 3", "Cargo futuro this");
 			if (!(metodo.getTipoRetorno() instanceof TipoVoid)) {

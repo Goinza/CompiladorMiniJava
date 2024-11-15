@@ -69,5 +69,17 @@ public class GeneradorCodigo {
 	}
 	
 	
+	public static void generarLineaVacia() {
+		if (consoleTesting) {
+			System.out.println("");
+		}
+		
+		try {
+			fw.write("\n");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 
 }

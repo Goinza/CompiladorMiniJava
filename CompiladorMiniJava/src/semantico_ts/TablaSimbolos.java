@@ -122,7 +122,7 @@ public class TablaSimbolos {
 	public void generarCodigo() {
 		callMain();
 		primitivaHeapInit();
-		primitivaMalloc();		
+		primitivaMalloc();	
 		for (Clase c : clases.values()) {
 			c.generarCodigo();
 		}
@@ -135,11 +135,13 @@ public class TablaSimbolos {
 		GeneradorCodigo.generarInstruccion("CALL", null);
 		GeneradorCodigo.generarInstruccion("PUSH " + labelMain, null);
 		GeneradorCodigo.generarInstruccion("CALL", null);
-		GeneradorCodigo.generarInstruccion("HALT", null);
+		GeneradorCodigo.generarInstruccion("HALT", null);	
+		GeneradorCodigo.generarLineaVacia();
 	}
 	
 	private void primitivaHeapInit() {
-		GeneradorCodigo.generarInstruccionEtiquetada("simple_heap_init", "RET 0", "Retorna inmediatamente");
+		GeneradorCodigo.generarInstruccionEtiquetada("simple_heap_init", "RET 0", "Retorna inmediatamente");	
+		GeneradorCodigo.generarLineaVacia();
 	}
 	
 	private void primitivaMalloc() {
@@ -155,7 +157,8 @@ public class TablaSimbolos {
 		GeneradorCodigo.generarInstruccion("ADD", null);
 		GeneradorCodigo.generarInstruccion("STOREHL", "Mueve el heap limit (hl). Expande el heap");
 		GeneradorCodigo.generarInstruccion("STOREFP", null);
-		GeneradorCodigo.generarInstruccion("RET 1", "Retorna eliminando el parámetro");
+		GeneradorCodigo.generarInstruccion("RET 1", "Retorna eliminando el parámetro");	
+		GeneradorCodigo.generarLineaVacia();
 	}
 	
 	

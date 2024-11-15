@@ -17,7 +17,6 @@ import traduccion.GeneradorCodigo;
 public class NodoVariable extends NodoAcceso {
 	
 	private Variable variable;
-	private boolean esLadoIzquierdoAsign;
 	
 	public NodoVariable(Token idMetVar) {
 		this.token = idMetVar;
@@ -75,7 +74,6 @@ public class NodoVariable extends NodoAcceso {
 		if (!found) {
 			throw new ExcepcionSemantica(token, "La variable " + token.getLexema() + " no existe.");
 		}		
-		esLadoIzquierdoAsign = infoVar.esAsignable();
 		return infoVar;
 	}
 
@@ -83,16 +81,16 @@ public class NodoVariable extends NodoAcceso {
 	public void generarCodigo() {
 		if (variable.esInstancia()) {
 			GeneradorCodigo.generarInstruccion("LOAD 3", "Cargo this");
-			if (!esLadoIzquierdoAsign || encadenado == null) {
+			if (!esLadoIzquierdoAsignacion() || encadenado != null) {
 				GeneradorCodigo.generarInstruccion("LOADREF " + variable.getOffset(), "Offset de variable en this");
 			}
 			else {
-				GeneradorCodigo.generarInstruccion("LOAD 3", "Cargo this");
+				GeneradorCodigo.generarInstruccion("SWAP", null);
 				GeneradorCodigo.generarInstruccion("STOREREF " + variable.getOffset(), "Offset de variable en this");
 			}
 		}
 		else if (variable.esLocal()) {
-			if (!esLadoIzquierdoAsign || encadenado == null) {
+			if (!esLadoIzquierdoAsignacion() || encadenado != null) {
 				GeneradorCodigo.generarInstruccion("LOAD " + variable.getOffset(), "Offset de variable en RA");
 			}
 			else {
