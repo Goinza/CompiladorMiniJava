@@ -155,7 +155,8 @@ public class AnalizadorSintactico {
 		for (Parametro p : parametros) {
 			c.agregarParametro(p);
 		}
-		bloque();
+		NodoBloque bloque = bloque();
+		bloque.setMetodo(c);
 	}
 	
 	private Tipo tipoMiembro() throws ExcepcionSintactica, ExcepcionLexica {

@@ -7,10 +7,15 @@ class Init{
     { 
     	debugPrint(1234);
         var x = 33;
-        debugPrint(x);
-    }
+        Test.printTest(x);
+    }   
     
-    static void printTest(int i) {
+}
+
+class Test {
+	
+	static void printTest(int i) {
     	debugPrint(i);
     }
+	
 }

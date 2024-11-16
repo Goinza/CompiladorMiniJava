@@ -66,7 +66,6 @@ public class NodoBloque extends NodoSentencia{
 			m1 = bloquePadre.getMetodo();
 			m2 = getMetodo();
 			if (m1 != null && m2 == null) {
-				System.err.println("HOla");
 				setMetodo(m1);
 			}
 			

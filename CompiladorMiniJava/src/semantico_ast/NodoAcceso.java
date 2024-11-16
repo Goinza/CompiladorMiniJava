@@ -8,5 +8,12 @@ public abstract class NodoAcceso extends NodoOperando {
 	public void setEncadenado(NodoEncadenado encadenado) {
 		this.encadenado = encadenado;
 	}
+	
+	public void setEsLadoIzquierdoAsignacion() {
+		esLadoIzqAsign = true;
+		if (encadenado != null) {
+			encadenado.setEsLadoIzquierdoAsignacion();
+		}		
+	}
 
 }

@@ -3,14 +3,20 @@ package semantico_ast;
 import main.Token;
 import semantico_ts.ExcepcionSemantica;
 import semantico_ts.Tipo;
+import traduccion.FactoryEtiquetas;
+import traduccion.GeneradorCodigo;
 
 public class NodoWhile extends NodoSentencia {
 	
 	private NodoExpresion condicion;
 	private NodoSentencia sentencia;
+	private String etiquetaInicio;
+	private String etiquetaFin;
 	
 	public NodoWhile(Token token) {
 		this.token = token;
+		etiquetaInicio = "lblWhileInicio" + FactoryEtiquetas.crearEtiqueta();
+		etiquetaFin = "lblWhileFin" + FactoryEtiquetas.crearEtiqueta();
 	}
 
 	public void setCondicion(NodoExpresion exp) {
@@ -33,9 +39,13 @@ public class NodoWhile extends NodoSentencia {
 	}
 
 	@Override
-	public void generarCodigo() {
-		// TODO Auto-generated method stub
-		
+	public void generarCodigo() {		
+		GeneradorCodigo.generarInstruccionEtiquetada(etiquetaInicio, "NOP", null);
+		condicion.generarCodigo();
+		GeneradorCodigo.generarInstruccion("BF " + etiquetaFin, "Fin de ultima iteracion");		
+		sentencia.generarCodigo();
+		GeneradorCodigo.generarInstruccion("JUMP " + etiquetaInicio, "Siguiente iteracion");
+		GeneradorCodigo.generarInstruccionEtiquetada(etiquetaFin, "NOP", null);		
 	}
 
 }

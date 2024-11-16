@@ -37,17 +37,16 @@ public class NodoLlamada extends NodoAcceso {
 		Clase claseActual = TablaSimbolos.getTabla().getBloqueActual().getClase();
 		metodo = claseActual.getMetodo(token.getLexema());
 		
+		if (metodo == null) {
+			throw new ExcepcionSemantica(token, "El método no está definido en la clase " + claseActual.getNombre() +".");
+		}	
+		
 		EntidadLlamable llamada = TablaSimbolos.getTabla().getBloqueActual().getMetodo();
 		if (llamada instanceof Metodo) {
 			if (((Metodo)llamada).esEstatico() && !metodo.esEstatico()) {
 				throw new ExcepcionSemantica(token, "No se puede llamar a un método no estático desde un método estático.");
 			}
-		}
-		
-		
-		if (metodo == null) {
-			throw new ExcepcionSemantica(token, "El método no está definido en la clase " + claseActual.getNombre() +".");
-		}		
+		}			
 		
 		Tipo tipoParam, tipoExp;		
 		List<Parametro> listaParam = metodo.getListaParametros();

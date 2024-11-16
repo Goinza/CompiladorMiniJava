@@ -3,15 +3,21 @@ package semantico_ast;
 import main.Token;
 import semantico_ts.ExcepcionSemantica;
 import semantico_ts.Tipo;
+import traduccion.FactoryEtiquetas;
+import traduccion.GeneradorCodigo;
 
 public class NodoIfElse extends NodoSentencia {
 	
 	private NodoExpresion condicion;
 	private NodoSentencia sentenciaThen;
 	private NodoSentencia sentenciaElse;
+	private String etiquetaElse;
+	private String etiquetaFin;
 
 	public NodoIfElse(Token token) {
 		this.token = token;
+		this.etiquetaElse = "lblElse" + FactoryEtiquetas.crearEtiqueta();
+		this.etiquetaFin = "lblEndIf" + FactoryEtiquetas.crearEtiqueta();
 	}
 	
 	public void setCondicion(NodoExpresion exp) {
@@ -40,8 +46,13 @@ public class NodoIfElse extends NodoSentencia {
 
 	@Override
 	public void generarCodigo() {
-		// TODO Auto-generated method stub
-		
+		condicion.generarCodigo();
+		GeneradorCodigo.generarInstruccion("BF " + etiquetaElse, "Salto al else si es falso");
+		sentenciaThen.generarCodigo();
+		GeneradorCodigo.generarInstruccion("JUMP " + etiquetaFin, "Salto al final del if");
+		GeneradorCodigo.generarInstruccionEtiquetada(etiquetaElse, "NOP", null);	
+		sentenciaElse.generarCodigo();
+		GeneradorCodigo.generarInstruccionEtiquetada(etiquetaFin, "NOP", null);	
 	}
 
 }

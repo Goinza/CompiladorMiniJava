@@ -10,11 +10,14 @@ import semantico_ts.Metodo;
 import semantico_ts.Parametro;
 import semantico_ts.TablaSimbolos;
 import semantico_ts.Tipo;
+import semantico_ts.TipoVoid;
+import traduccion.GeneradorCodigo;
 
 public class NodoLlamadaEstatica extends NodoAcceso {
 	
 	private Token tokenClase;
 	private List<NodoExpresion> parametros;
+	private Metodo metodo;
 	
 	public NodoLlamadaEstatica(Token token, Token tokenClase) {
 		this.token = token;
@@ -33,14 +36,17 @@ public class NodoLlamadaEstatica extends NodoAcceso {
 	@Override
 	public InfoCheck chequear() throws ExcepcionSemantica {
 		Clase clase = TablaSimbolos.getTabla().getClase(tokenClase.getLexema());
-		Metodo met = clase.getMetodo(token.getLexema());
+		metodo = clase.getMetodo(token.getLexema());
 		
-		if (met == null || !met.esEstatico()) {
+		if (metodo == null) {
 			throw new ExcepcionSemantica(token, "El método no está definido en la clase " + clase.getNombre() +".");
+		}
+		if (!metodo.esEstatico()) {
+			throw new ExcepcionSemantica(token, "El método no es estático");
 		}
 		
 		Tipo tipoParam, tipoExp;		
-		List<Parametro> listaParam = met.getListaParametros();
+		List<Parametro> listaParam = metodo.getListaParametros();
 		int count = listaParam.size();
 		if (count != parametros.size()) {
 			throw new ExcepcionSemantica(token, "El método " + token.getLexema() + " no tiene la cantidad correcta de parámetros.");
@@ -54,7 +60,7 @@ public class NodoLlamadaEstatica extends NodoAcceso {
 			}
 		}
 
-		Tipo tipoLlamada = met.getTipoRetorno();
+		Tipo tipoLlamada = metodo.getTipoRetorno();
 		InfoCheck infoReturn;
 		if (encadenado != null) {
 			infoReturn = encadenado.chequear(tipoLlamada);
@@ -68,8 +74,18 @@ public class NodoLlamadaEstatica extends NodoAcceso {
 
 	@Override
 	public void generarCodigo() {
-		// TODO Auto-generated method stub
+		if (!(metodo.getTipoRetorno() instanceof TipoVoid)) {
+			GeneradorCodigo.generarInstruccion("RMEM 1", "Reservo lugar para el retorno");			
+		}
+		for (NodoExpresion ne : parametros) {
+			ne.generarCodigo();
+		}
+		GeneradorCodigo.generarInstruccion("PUSH " + metodo.getEtiqueta(), "Cargo la etiqueta del metodo");
+		GeneradorCodigo.generarInstruccion("CALL", null);
 		
+		if (encadenado != null) {
+			encadenado.generarCodigo();
+		}
 	}
 
 }
