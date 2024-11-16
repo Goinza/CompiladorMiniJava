@@ -3,14 +3,18 @@ package semantico_ast;
 import main.Token;
 import semantico_ts.ExcepcionSemantica;
 import semantico_ts.Tipo;
+import traduccion.FactoryEtiquetas;
+import traduccion.GeneradorCodigo;
 
 public class NodoIf extends NodoSentencia {
 	
 	private NodoExpresion condicion;
 	private NodoSentencia sentenciaThen;
+	private String etiqueta;
 	
 	public NodoIf(Token token) {
 		this.token = token;
+		this.etiqueta = "lblElse" + FactoryEtiquetas.crearEtiqueta();
 	}
 	
 	public void setCondicion(NodoExpresion exp) {
@@ -30,12 +34,15 @@ public class NodoIf extends NodoSentencia {
 		else {
 			throw new ExcepcionSemantica(token, "La condición debe ser de tipo booleano.");
 		}
+		sentenciaThen.setBreak(admiteBreak);
 	}
 
 	@Override
 	public void generarCodigo() {
-		// TODO Auto-generated method stub
-		
+		condicion.generarCodigo();
+		GeneradorCodigo.generarInstruccion("BF " + etiqueta, "Salto si es falso");
+		sentenciaThen.generarCodigo();
+		GeneradorCodigo.generarInstruccionEtiquetada(etiqueta, "NOP", null);
 	}
 
 }

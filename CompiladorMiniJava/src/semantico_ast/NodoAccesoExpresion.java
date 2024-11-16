@@ -31,7 +31,10 @@ public class NodoAccesoExpresion extends NodoAcceso {
 
 	@Override
 	public void generarCodigo() {
-		// TODO Auto-generated method stub
+		exp.generarCodigo();
+		if (encadenado != null) {
+			encadenado.generarCodigo();
+		}
 		
 	}
 

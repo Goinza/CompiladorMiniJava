@@ -7,6 +7,7 @@ import java.util.Map;
 import semantico_ts.Clase;
 import semantico_ts.EntidadLlamable;
 import semantico_ts.ExcepcionSemantica;
+import semantico_ts.Metodo;
 import semantico_ts.TablaSimbolos;
 import semantico_ts.VarLocal;
 import traduccion.GeneradorCodigo;
@@ -24,7 +25,7 @@ public class NodoBloque extends NodoSentencia{
 		bloquePadre = padre;
 		locales = new HashMap<String, VarLocal>();
 		metodo = TablaSimbolos.getTabla().getMetodoActual();
-		clase = TablaSimbolos.getTabla().getClaseActual();
+		clase = TablaSimbolos.getTabla().getClaseActual();		
 	}
 	
 	public void agregarSentencia(NodoSentencia ns) {
@@ -61,6 +62,14 @@ public class NodoBloque extends NodoSentencia{
 	public void chequear() throws ExcepcionSemantica {		
 		if (bloquePadre != null) {
 			locales = new HashMap<String, VarLocal>(bloquePadre.locales);
+			EntidadLlamable m1, m2;
+			m1 = bloquePadre.getMetodo();
+			m2 = getMetodo();
+			if (m1 != null && m2 == null) {
+				System.err.println("HOla");
+				setMetodo(m1);
+			}
+			
 		}
 		else {
 			locales = new HashMap<String, VarLocal>();
@@ -87,8 +96,12 @@ public class NodoBloque extends NodoSentencia{
 			ns.generarCodigo();
 		}
 		
+		int localesPropias = locales.size();
+		if (bloquePadre != null) {
+			localesPropias -= bloquePadre.locales.size();
+		}
 		locales.size();
-		GeneradorCodigo.generarInstruccion("FMEM " + locales.size(), null);
+		GeneradorCodigo.generarInstruccion("FMEM " + localesPropias, null);
 	}
 
 }

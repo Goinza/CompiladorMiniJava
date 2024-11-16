@@ -1,16 +1,21 @@
-///1234&33&exitosamente
+///33&5&5&exitosamente
 
 
 class Init{
 	
     static void main()
     { 
-    	debugPrint(1234);
-        var x = 33;
-        debugPrint(x);
+    	var x = 33;
+    	
+    	if (x > 10) {
+    		debugPrint(x);
+    		x = 5;
+    		debugPrint(x);
+    	}
+    	
+    	if (x == 5) {
+    		debugPrint(x);
+    	}
     }
-    
-    static void printTest(int i) {
-    	debugPrint(i);
-    }
+
 }
