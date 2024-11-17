@@ -41,35 +41,35 @@ LOAD 0 ; Offset de variable en RA
 DUP ; Copia de la condicion
 PUSH 1 ; Literal entero
 EQ ; Igual
-BF lblCaseFin9 ; Salta este caso
-lblCaseInicio8: NOP
+BF lblCaseFin10 ; Salta este caso
+lblCaseInicio9: NOP
 PUSH 1 ; Literal entero
 PUSH lblMetdebugPrint@Object ; Cargo la etiqueta del metodo
 CALL
 FMEM 0
-JUMP lblCaseInicio10 ; Salto al codigo del siguiente caso
-lblCaseFin9: NOP
+JUMP lblCaseInicio11 ; Salto al codigo del siguiente caso
+lblCaseFin10: NOP
 DUP ; Copia de la condicion
 PUSH 2 ; Literal entero
 EQ ; Igual
-BF lblCaseFin11 ; Salta este caso
-lblCaseInicio10: NOP
+BF lblCaseFin12 ; Salta este caso
+lblCaseInicio11: NOP
 PUSH 2 ; Literal entero
 PUSH lblMetdebugPrint@Object ; Cargo la etiqueta del metodo
 CALL
 FMEM 0
-JUMP lblCaseInicio12 ; Salto al codigo del siguiente caso
-lblCaseFin11: NOP
+JUMP lblCaseInicio13 ; Salto al codigo del siguiente caso
+lblCaseFin12: NOP
 DUP ; Copia de la condicion
 PUSH 3 ; Literal entero
 EQ ; Igual
-BF lblCaseFin13 ; Salta este caso
-lblCaseInicio12: NOP
+BF lblCaseFin14 ; Salta este caso
+lblCaseInicio13: NOP
 PUSH 3 ; Literal entero
 PUSH lblMetdebugPrint@Object ; Cargo la etiqueta del metodo
 CALL
 FMEM 0
-lblCaseFin13: NOP
+lblCaseFin14: NOP
 PUSH 9 ; Literal entero
 NEG ; Menos unario
 PUSH lblMetdebugPrint@Object ; Cargo la etiqueta del metodo

@@ -37,11 +37,11 @@ STOREFP ; Apila el valor del registro FP
 RMEM 1 ; Reserva memoria para var local
 PUSH 1 ; Literal entero
 STORE 0 ; Store var local i
-lblWhileInicio6: NOP
+lblWhileInicio7: NOP
 LOAD 0 ; Offset de variable en RA
 PUSH 5 ; Literal entero
 LT ; Menor
-BF lblWhileFin7 ; Fin de ultima iteracion
+BF lblWhileFin8 ; Fin de ultima iteracion
 LOAD 0 ; Offset de variable en RA
 PUSH lblMetdebugPrint@Object ; Cargo la etiqueta del metodo
 CALL
@@ -50,8 +50,8 @@ LOAD 0 ; Offset de variable en RA
 ADD ; Suma
 STORE 0 ; Offset de variable en RA
 FMEM 0
-JUMP lblWhileInicio6 ; Siguiente iteracion
-lblWhileFin7: NOP
+JUMP lblWhileInicio7 ; Siguiente iteracion
+lblWhileFin8: NOP
 FMEM 1
 STOREFP ; Almacena el tope de la pila en el registro
 RET 0

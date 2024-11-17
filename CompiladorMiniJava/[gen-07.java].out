@@ -40,7 +40,7 @@ STORE 0 ; Store var local x
 LOAD 0 ; Offset de variable en RA
 PUSH 10 ; Literal entero
 GT ; Mayor
-BF lblElse1 ; Salto si es falso
+BF lblElse2 ; Salto si es falso
 LOAD 0 ; Offset de variable en RA
 PUSH lblMetdebugPrint@Object ; Cargo la etiqueta del metodo
 CALL
@@ -50,16 +50,16 @@ LOAD 0 ; Offset de variable en RA
 PUSH lblMetdebugPrint@Object ; Cargo la etiqueta del metodo
 CALL
 FMEM 0
-lblElse1: NOP
+lblElse2: NOP
 LOAD 0 ; Offset de variable en RA
 PUSH 5 ; Literal entero
 EQ ; Igual
-BF lblElse2 ; Salto si es falso
+BF lblElse3 ; Salto si es falso
 LOAD 0 ; Offset de variable en RA
 PUSH lblMetdebugPrint@Object ; Cargo la etiqueta del metodo
 CALL
 FMEM 0
-lblElse2: NOP
+lblElse3: NOP
 FMEM 1
 STOREFP ; Almacena el tope de la pila en el registro
 RET 0

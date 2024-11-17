@@ -1,7 +1,6 @@
 package semantico_ts;
 
 import main.Token;
-import traduccion.Offset;
 
 public class VarLocal implements Variable {
 

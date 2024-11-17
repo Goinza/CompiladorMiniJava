@@ -5,6 +5,7 @@ import semantico_ts.ExcepcionSemantica;
 import semantico_ts.Metodo;
 import semantico_ts.TablaSimbolos;
 import semantico_ts.Tipo;
+import semantico_ts.TipoVoid;
 import traduccion.GeneradorCodigo;
 
 public class NodoReturn extends NodoSentencia {
@@ -26,11 +27,23 @@ public class NodoReturn extends NodoSentencia {
 			if (retorno != null) {
 				metodo = (Metodo) TablaSimbolos.getTabla().getBloqueActual().getMetodo();
 				Tipo tipoMet = metodo.getTipoRetorno();
+				if (tipoMet instanceof TipoVoid) {
+					throw new ExcepcionSemantica(token, "El retorno no puede tener una expresion");
+				}
 				InfoCheck infoRetorno = retorno.chequear();
 				if (!infoRetorno.getTipo().conformaCon(tipoMet)) {
 					throw new ExcepcionSemantica(token, "El tipo de la expresión a retornar no conforma con el tipo de retorno de este método.");
 				}
-			}		
+			}
+			else {
+				if (metodo instanceof Metodo) {
+					metodo = (Metodo) TablaSimbolos.getTabla().getBloqueActual().getMetodo();
+					Tipo tipoMet = metodo.getTipoRetorno();
+					if (!(tipoMet instanceof TipoVoid)) {
+						throw new ExcepcionSemantica(token, "El retorno debe contener una expresion valida");
+					}
+				}				
+			}
 		}
 		catch (ClassCastException e) {
 			throw new ExcepcionSemantica(token, "Un constructor no puede retornar una expresión.");

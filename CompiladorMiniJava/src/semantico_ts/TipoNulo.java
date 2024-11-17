@@ -8,7 +8,7 @@ public class TipoNulo extends Tipo {
 
 	@Override
 	public boolean conformaCon(Tipo t) throws ExcepcionSemantica {
-		return true;
+		return t instanceof TipoClase;
 	}
 
 	@Override

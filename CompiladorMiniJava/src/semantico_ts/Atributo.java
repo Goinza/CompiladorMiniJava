@@ -2,7 +2,6 @@ package semantico_ts;
 
 import main.Token;
 import traduccion.Etiquetable;
-import traduccion.Offset;
 
 public class Atributo extends EntidadDeclarada implements Etiquetable, Variable{
 

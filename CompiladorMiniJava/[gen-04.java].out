@@ -46,6 +46,10 @@ MUL ; Multiplicacion
 LOAD 3 ; Cargo this
 SWAP
 STOREREF 2 ; Offset de variable en this
+.DATA
+lblString1: DW "hola",0 ; Literal String
+.CODE
+PUSH lblString1
 LOAD 3 ; Cargo this
 SWAP
 STOREREF 3 ; Offset de variable en this

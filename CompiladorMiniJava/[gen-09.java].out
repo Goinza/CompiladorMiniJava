@@ -40,28 +40,28 @@ STORE 0 ; Store var local x
 LOAD 0 ; Offset de variable en RA
 PUSH 10 ; Literal entero
 GT ; Mayor
-BF lblElse3 ; Salto si es falso
+BF lblElse4 ; Salto si es falso
 LOAD 0 ; Offset de variable en RA
 PUSH lblMetdebugPrint@Object ; Cargo la etiqueta del metodo
 CALL
 FMEM 0
-lblElse3: NOP
+lblElse4: NOP
 LOAD 0 ; Offset de variable en RA
 PUSH 5 ; Literal entero
 EQ ; Igual
-BF lblElse4 ; Salto al else si es falso
+BF lblElse5 ; Salto al else si es falso
 PUSH 1 ; Literal entero
 PUSH lblMetdebugPrint@Object ; Cargo la etiqueta del metodo
 CALL
 FMEM 0
-JUMP lblEndIf5 ; Salto al final del if
-lblElse4: NOP
+JUMP lblEndIf6 ; Salto al final del if
+lblElse5: NOP
 PUSH 1 ; Literal entero
 NEG ; Menos unario
 PUSH lblMetdebugPrint@Object ; Cargo la etiqueta del metodo
 CALL
 FMEM 0
-lblEndIf5: NOP
+lblEndIf6: NOP
 FMEM 1
 STOREFP ; Almacena el tope de la pila en el registro
 RET 0

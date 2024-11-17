@@ -7,7 +7,6 @@ import java.util.Map;
 import semantico_ts.Clase;
 import semantico_ts.EntidadLlamable;
 import semantico_ts.ExcepcionSemantica;
-import semantico_ts.Metodo;
 import semantico_ts.TablaSimbolos;
 import semantico_ts.VarLocal;
 import traduccion.GeneradorCodigo;
@@ -20,12 +19,20 @@ public class NodoBloque extends NodoSentencia{
 	private EntidadLlamable metodo;
 	private Clase clase;
 	
+	public NodoBloque() throws ExcepcionSemantica {
+		sentencias = new LinkedList<NodoSentencia>();
+		bloquePadre = TablaSimbolos.getTabla().getBloqueActual();
+		locales = new HashMap<String, VarLocal>();
+		metodo = TablaSimbolos.getTabla().getMetodoActual();		
+		clase = TablaSimbolos.getTabla().getClaseActual();
+	}
+	
 	public NodoBloque(NodoBloque padre) throws ExcepcionSemantica {
 		sentencias = new LinkedList<NodoSentencia>();
 		bloquePadre = padre;
 		locales = new HashMap<String, VarLocal>();
-		metodo = TablaSimbolos.getTabla().getMetodoActual();
-		clase = TablaSimbolos.getTabla().getClaseActual();		
+		metodo = TablaSimbolos.getTabla().getMetodoActual();		
+		clase = TablaSimbolos.getTabla().getClaseActual();
 	}
 	
 	public void agregarSentencia(NodoSentencia ns) {
@@ -68,7 +75,6 @@ public class NodoBloque extends NodoSentencia{
 			if (m1 != null && m2 == null) {
 				setMetodo(m1);
 			}
-			
 		}
 		else {
 			locales = new HashMap<String, VarLocal>();
@@ -76,8 +82,7 @@ public class NodoBloque extends NodoSentencia{
 		TablaSimbolos.getTabla().setBloqueActual(this);
 		for (NodoSentencia ns : sentencias) {
 			ns.setBreak(admiteBreak);
-			ns.chequear();
-			
+			ns.chequear();			
 		}
 		TablaSimbolos.getTabla().setBloqueActual(bloquePadre);
 	}
@@ -87,6 +92,10 @@ public class NodoBloque extends NodoSentencia{
 		if (bloquePadre == null) {
 			metodo.setBloquePrincipal(this);
 		}
+	}
+	
+	public void setClase(Clase c) {
+		clase = c;
 	}
 
 	@Override
