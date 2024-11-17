@@ -1,0 +1,189 @@
+.CODE
+PUSH simple_heap_init
+CALL
+PUSH lblMetmain@Init
+CALL
+HALT
+
+simple_heap_init: RET 0 ; Retorna inmediatamente
+
+simple_malloc: LOADFP ; Inicialización unidad
+LOADSP
+STOREFP ; Finaliza inicialización del RA
+LOADHL ; hl
+DUP ; hl
+PUSH 1 ; 1
+ADD ; hl+1
+STORE 4 ; Guarda el resultado (puntero a primera celda de memoria
+LOAD 3 ; Carga la cantidad de celdas a alojar
+ADD
+STOREHL ; Mueve el heap limit (hl). Expande el heap
+STOREFP
+RET 1 ; Retorna eliminando el parámetro
+
+.DATA
+lblVTInit: NOP
+
+.CODE
+lblConstructor@Init: LOADFP ; Apila el valor del registro FP
+LOADSP ; Apila el valor del registro FP
+STOREFP ; Apila el valor del registro FP
+STOREFP ; Almacena el tope de la pila en el registro
+RET 1
+
+lblMetmain@Init: LOADFP ; Apila el valor del registro FP
+LOADSP ; Apila el valor del registro FP
+STOREFP ; Apila el valor del registro FP
+RMEM 1 ; Reserva memoria para var local
+PUSH 33 ; Literal entero
+STORE 0 ; Store var local x
+LOAD 0 ; Offset de variable en RA
+PUSH 10 ; Literal entero
+GT ; Mayor
+BF lblElse1 ; Salto si es falso
+LOAD 0 ; Offset de variable en RA
+PUSH lblMetdebugPrint@Object ; Cargo la etiqueta del metodo
+CALL
+PUSH 5 ; Literal entero
+STORE 0 ; Offset de variable en RA
+LOAD 0 ; Offset de variable en RA
+PUSH lblMetdebugPrint@Object ; Cargo la etiqueta del metodo
+CALL
+FMEM 0
+lblElse1: NOP
+LOAD 0 ; Offset de variable en RA
+PUSH 5 ; Literal entero
+EQ ; Igual
+BF lblElse2 ; Salto si es falso
+LOAD 0 ; Offset de variable en RA
+PUSH lblMetdebugPrint@Object ; Cargo la etiqueta del metodo
+CALL
+FMEM 0
+lblElse2: NOP
+FMEM 1
+STOREFP ; Almacena el tope de la pila en el registro
+RET 0
+
+.DATA
+lblVTObject: NOP
+
+.CODE
+lblConstructor@Object: LOADFP ; Apila el valor del registro FP
+LOADSP ; Apila el valor del registro FP
+STOREFP ; Apila el valor del registro FP
+STOREFP ; Almacena el tope de la pila en el registro
+RET 1
+
+lblMetdebugPrint@Object: LOADFP ; Apila el valor del registro FP
+LOADSP ; Apila el valor del registro FP
+STOREFP ; Apila el valor del registro FP
+LOAD 3 ; Apila el parámetro
+IPRINT ; Imprime el entero en el tope de la pila
+STOREFP ; Almacena el tope de la pila en el registro
+RET 1
+
+.DATA
+lblVTString: NOP
+
+.CODE
+lblConstructor@String: LOADFP ; Apila el valor del registro FP
+LOADSP ; Apila el valor del registro FP
+STOREFP ; Apila el valor del registro FP
+STOREFP ; Almacena el tope de la pila en el registro
+RET 1
+
+.DATA
+lblVTSystem: NOP
+
+.CODE
+lblConstructor@System: LOADFP ; Apila el valor del registro FP
+LOADSP ; Apila el valor del registro FP
+STOREFP ; Apila el valor del registro FP
+STOREFP ; Almacena el tope de la pila en el registro
+RET 1
+
+lblMetread@System: LOADFP ; Apila el valor del registro FP
+LOADSP ; Apila el valor del registro FP
+STOREFP ; Apila el valor del registro FP
+READ ; Lee un valor entero
+PUSH 48 ; Por ASCII
+SUB
+STORE 3 ; Devuelve el valor entero leído, poniendo el tope de la pila en la locación reservada
+STOREFP ; Almacena el tope de la pila en el registro
+RET 0
+
+lblMetprintB@System: LOADFP ; Apila el valor del registro FP
+LOADSP ; Apila el valor del registro FP
+STOREFP ; Apila el valor del registro FP
+LOAD 3 ; Apila el parámetro
+BPRINT ; Imprime el boolean en el tope de la pila
+STOREFP ; Almacena el tope de la pila en el registro
+RET 1
+
+lblMetprintC@System: LOADFP ; Apila el valor del registro FP
+LOADSP ; Apila el valor del registro FP
+STOREFP ; Apila el valor del registro FP
+LOAD 3 ; Apila el parámetro
+CPRINT ; Imprime el char en el tope de la pila
+STOREFP ; Almacena el tope de la pila en el registro
+RET 1
+
+lblMetprintI@System: LOADFP ; Apila el valor del registro FP
+LOADSP ; Apila el valor del registro FP
+STOREFP ; Apila el valor del registro FP
+LOAD 3 ; Apila el parámetro
+IPRINT ; Imprime el entero en el tope de la pila
+STOREFP ; Almacena el tope de la pila en el registro
+RET 1
+
+lblMetprintS@System: LOADFP ; Apila el valor del registro FP
+LOADSP ; Apila el valor del registro FP
+STOREFP ; Apila el valor del registro FP
+LOAD 3 ; Apila el parámetro
+SPRINT ; Imprime el string en el tope de la pila
+STOREFP ; Almacena el tope de la pila en el registro
+RET 1
+
+lblMetprintln@System: LOADFP ; Apila el valor del registro FP
+LOADSP ; Apila el valor del registro FP
+STOREFP ; Apila el valor del registro FP
+PRNLN ; Imprime el caracter de nueva línea
+STOREFP ; Almacena el tope de la pila en el registro
+RET 0
+
+lblMetprintBln@System: LOADFP ; Apila el valor del registro FP
+LOADSP ; Apila el valor del registro FP
+STOREFP ; Apila el valor del registro FP
+LOAD 3 ; Apila el parámetro
+BPRINT ; Imprime el boolean en el tope de la pila
+PRNLN ; Imprime el caracter de nueva línea
+STOREFP ; Almacena el tope de la pila en el registro
+RET 1
+
+lblMetprintCln@System: LOADFP ; Apila el valor del registro FP
+LOADSP ; Apila el valor del registro FP
+STOREFP ; Apila el valor del registro FP
+LOAD 3 ; Apila el parámetro
+CPRINT ; Imprime el char en el tope de la pila
+PRNLN ; Imprime el caracter de nueva línea
+STOREFP ; Almacena el tope de la pila en el registro
+RET 1
+
+lblMetprintIln@System: LOADFP ; Apila el valor del registro FP
+LOADSP ; Apila el valor del registro FP
+STOREFP ; Apila el valor del registro FP
+LOAD 3 ; Apila el parámetro
+IPRINT ; Imprime el entero en el tope de la pila
+PRNLN ; Imprime el caracter de nueva línea
+STOREFP ; Almacena el tope de la pila en el registro
+RET 1
+
+lblMetprintSln@System: LOADFP ; Apila el valor del registro FP
+LOADSP ; Apila el valor del registro FP
+STOREFP ; Apila el valor del registro FP
+LOAD 3 ; Apila el parámetro
+SPRINT ; Imprime el string en el tope de la pila
+PRNLN ; Imprime el caracter de nueva línea
+STOREFP ; Almacena el tope de la pila en el registro
+RET 1
+

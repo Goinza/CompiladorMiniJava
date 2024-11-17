@@ -23,7 +23,7 @@ public class NodoDefaultSwitch {
 	}
 	
 	public void generarCodigo() {
-		
+		sentencia.generarCodigo();		
 	}
 
 }

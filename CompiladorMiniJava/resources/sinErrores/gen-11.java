@@ -9,7 +9,7 @@ class Init{
     	
     	while (i < 5) {
     		debugPrint(i);
-    		i += 1;
+    		i = 1 + i;
     	}
     }
 

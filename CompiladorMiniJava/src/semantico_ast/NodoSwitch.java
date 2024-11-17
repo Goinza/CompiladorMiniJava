@@ -6,6 +6,7 @@ import java.util.List;
 import main.Token;
 import semantico_ts.ExcepcionSemantica;
 import semantico_ts.Tipo;
+import traduccion.GeneradorCodigo;
 
 public class NodoSwitch extends NodoSentencia {
 	
@@ -47,13 +48,28 @@ public class NodoSwitch extends NodoSentencia {
 		for (NodoCaseSwitch cs : casos) {
 			cs.chequear(tipoCondicion);
 		}
-		casoDefault.chequear();
+		if (casoDefault != null) {
+			casoDefault.chequear();
+		}		
 	}
 
 	@Override
 	public void generarCodigo() {
-		// TODO Auto-generated method stub
-		
+		NodoCaseSwitch caso;	
+		int size = casos.size();
+		condicion.generarCodigo();	
+		for (int i=0; i<size; i++) {
+			caso = casos.get(i);
+			caso.generarCodigo();
+			if (i+1 < size) {
+				GeneradorCodigo.generarInstruccion("JUMP " + casos.get(i+1).getEtiquetaInicio(), "Salto al codigo del siguiente caso");
+			}		
+			GeneradorCodigo.generarInstruccionEtiquetada(caso.getEtiquetaFin(), "NOP", null);
+		}		
+		if (casoDefault != null) {
+			casoDefault.generarCodigo();
+		}
+		GeneradorCodigo.generarInstruccion("POP", "Elimina el valor de la condicion");
 	}
 
 }

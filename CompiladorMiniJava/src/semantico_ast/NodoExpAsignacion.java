@@ -3,6 +3,7 @@ package semantico_ast;
 import main.Token;
 import semantico_ts.ExcepcionSemantica;
 import semantico_ts.Tipo;
+import traduccion.GeneradorCodigo;
 
 public class NodoExpAsignacion extends NodoExpresion {
 	
@@ -45,8 +46,20 @@ public class NodoExpAsignacion extends NodoExpresion {
 
 	@Override
 	public void generarCodigo() {
+		String op = token.getTipoToken();
+		if (op == "asignacionSuma" || op == "asignacionResta") {
+			//Accede al valor original de la variable
+			ladoIzquierdo.generarCodigo();
+		}
 		ladoIzquierdo.setEsLadoIzquierdoAsignacion();
 		ladoDerecho.generarCodigo();
+		//Suma o resta el valor original del lado izquierdo con el lado derecho
+		if (op == "asignacionSuma") {
+			GeneradorCodigo.generarInstruccion("ADD", "Suma");
+		}
+		else if (op == "asignacionResta") {
+			GeneradorCodigo.generarInstruccion("SUB", "Resta");
+		}
 		ladoIzquierdo.generarCodigo();
 		
 	}
