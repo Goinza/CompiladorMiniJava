@@ -85,6 +85,9 @@ public class NodoConstructor extends NodoAcceso {
 		GeneradorCodigo.generarInstruccion("PUSH " + cons.getEtiqueta(), null);
 		GeneradorCodigo.generarInstruccion("CALL", "Llamo al constructor");
 		
+		if (encadenado != null) {
+			encadenado.generarCodigo();
+		}		
 	}
 
 }

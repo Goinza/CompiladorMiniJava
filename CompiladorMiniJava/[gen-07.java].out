@@ -22,6 +22,48 @@ STOREFP
 RET 1 ; Retorna eliminando el parámetro
 
 .DATA
+lblVTA: DW lblMetanother@A
+
+.CODE
+lblConstructor@A: LOADFP ; Apila el valor del registro FP
+LOADSP ; Apila el valor del registro FP
+STOREFP ; Apila el valor del registro FP
+STOREFP ; Almacena el tope de la pila en el registro
+RET 1
+
+lblMetanother@A: LOADFP ; Apila el valor del registro FP
+LOADSP ; Apila el valor del registro FP
+STOREFP ; Apila el valor del registro FP
+PUSH 10 ; Literal entero
+LOAD 3 ; Cargo this
+SWAP
+STOREREF 1 ; Offset de variable en this
+LOAD 3 ; Cargo this
+LOADREF 1 ; Offset de variable en this
+PUSH 10 ; Literal entero
+LT ; Menor
+BF lblElse4 ; Salto si es falso
+LOAD 3 ; Cargo this
+LOADREF 1 ; Offset de variable en this
+PUSH lblMetdebugPrint@Object ; Cargo la etiqueta del metodo
+CALL
+FMEM 0
+lblElse4: NOP
+LOAD 3 ; Cargo this
+LOADREF 1 ; Offset de variable en this
+PUSH 0 ; Literal entero
+GT ; Mayor
+BF lblElse5 ; Salto si es falso
+PUSH 1 ; Literal entero
+PUSH lblMetdebugPrint@Object ; Cargo la etiqueta del metodo
+CALL
+FMEM 0
+lblElse5: NOP
+FMEM 0
+STOREFP ; Almacena el tope de la pila en el registro
+RET 1
+
+.DATA
 lblVTInit: NOP
 
 .CODE
@@ -37,6 +79,20 @@ STOREFP ; Apila el valor del registro FP
 RMEM 1 ; Reserva memoria para var local
 PUSH 33 ; Literal entero
 STORE 0 ; Store var local x
+RMEM 1 ; Reservo memoria para malloc
+PUSH 2 ; Cantidad de atributos de instancia + this
+PUSH simple_malloc
+CALL
+DUP ; Para no perder la referencia al nuevo CIR
+PUSH lblVTA ; Direccion del cominezo de la VT de la clase
+STOREREF 0 ; Guardamos la Referencia a la VT en el CIR que creamos
+DUP
+PUSH lblConstructor@A
+CALL ; Llamo al constructor
+DUP ; Duplico this para no perderlo
+LOADREF 0 ; Cargo la VT
+LOADREF 0 ; Cargo la direccion de metodo
+CALL
 LOAD 0 ; Offset de variable en RA
 PUSH 10 ; Literal entero
 GT ; Mayor

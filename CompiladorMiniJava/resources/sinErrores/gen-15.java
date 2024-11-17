@@ -1,4 +1,4 @@
-///1&33&5&5&exitosamente
+///10&33&exitosamente
 
 
 class Init{
@@ -6,12 +6,11 @@ class Init{
     static void main()
     { 
     	var x = 33;
+    	var obj = new A();
     	
-    	new A().another();
+    	obj.another();
     	
     	if (x > 10) {
-    		debugPrint(x);
-    		x = 5;
     		debugPrint(x);
     	}
     	
@@ -34,7 +33,7 @@ class A {
     	}
     	
     	if (y > 0) {
-    		debugPrint(1);
+    		debugPrint(y);
     	}
 	}
 	

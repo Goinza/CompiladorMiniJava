@@ -47,7 +47,7 @@ public class TablaSimbolos {
 	}
 	
 	public void agregarAST(NodoBloque bloque) {
-		ast.addFirst(bloque);
+		ast.addLast(bloque);
 	}
 	
 	public Iterable<Clase> getClases() {
@@ -59,16 +59,10 @@ public class TablaSimbolos {
 	}
 	
 	public Clase getClaseActual() {
-		if (bloqueActual != null) {
-			return bloqueActual.getClase();
-		}
 		return claseActual;
 	}
 	
 	public EntidadLlamable getMetodoActual() {
-		if (bloqueActual != null) {
-			return bloqueActual.getMetodo();
-		}
 		return metodoActual;
 	}
 	
@@ -84,16 +78,10 @@ public class TablaSimbolos {
 	}
 	
 	public void setClaseActual(Clase c) {
-		if (bloqueActual != null) {
-			bloqueActual.setClase(c);
-		}
 		claseActual = c;
 	}
 	
 	public void setMetodoActual(EntidadLlamable m) {
-		if (bloqueActual != null) {
-			bloqueActual.setMetodo(m);
-		}
 		metodoActual = m;
 	}
 	

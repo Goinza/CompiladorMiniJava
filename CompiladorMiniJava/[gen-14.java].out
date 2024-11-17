@@ -22,6 +22,51 @@ STOREFP
 RET 1 ; Retorna eliminando el parámetro
 
 .DATA
+lblVTA: DW lblMetm1@A
+
+.CODE
+lblConstructor@A: LOADFP ; Apila el valor del registro FP
+LOADSP ; Apila el valor del registro FP
+STOREFP ; Apila el valor del registro FP
+STOREFP ; Almacena el tope de la pila en el registro
+RET 1
+
+lblMetm1@A: LOADFP ; Apila el valor del registro FP
+LOADSP ; Apila el valor del registro FP
+STOREFP ; Apila el valor del registro FP
+PUSH 2 ; Literal entero
+LOAD 3 ; Cargo this
+SWAP
+STOREREF 1 ; Offset de variable en this
+LOAD 3 ; Cargo this
+LOADREF 1 ; Offset de variable en this
+PUSH lblMetdebugPrint@Object ; Cargo la etiqueta del metodo
+CALL
+lblWhileInicio17: NOP
+LOAD 3 ; Cargo this
+LOADREF 1 ; Offset de variable en this
+PUSH 5 ; Literal entero
+LT ; Menor
+BF lblWhileFin18 ; Fin de ultima iteracion
+LOAD 3 ; Cargo this
+LOADREF 1 ; Offset de variable en this
+PUSH lblMetdebugPrint@Object ; Cargo la etiqueta del metodo
+CALL
+LOAD 3 ; Cargo this
+LOADREF 1 ; Offset de variable en this
+PUSH 1 ; Literal entero
+ADD ; Suma
+LOAD 3 ; Cargo this
+SWAP
+STOREREF 1 ; Offset de variable en this
+FMEM 0
+JUMP lblWhileInicio17 ; Siguiente iteracion
+lblWhileFin18: NOP
+FMEM 0
+STOREFP ; Almacena el tope de la pila en el registro
+RET 1
+
+.DATA
 lblVTInit: NOP
 
 .CODE
@@ -35,47 +80,22 @@ lblMetmain@Init: LOADFP ; Apila el valor del registro FP
 LOADSP ; Apila el valor del registro FP
 STOREFP ; Apila el valor del registro FP
 RMEM 1 ; Reserva memoria para var local
-PUSH 2 ; Literal entero
-STORE 0 ; Store var local i
+RMEM 1 ; Reservo memoria para malloc
+PUSH 2 ; Cantidad de atributos de instancia + this
+PUSH simple_malloc
+CALL
+DUP ; Para no perder la referencia al nuevo CIR
+PUSH lblVTA ; Direccion del cominezo de la VT de la clase
+STOREREF 0 ; Guardamos la Referencia a la VT en el CIR que creamos
+DUP
+PUSH lblConstructor@A
+CALL ; Llamo al constructor
+STORE 0 ; Store var local obj
 LOAD 0 ; Offset de variable en RA
-DUP ; Copia de la condicion
-PUSH 1 ; Literal entero
-EQ ; Igual
-BF lblCaseFin12 ; Salta este caso
-lblCaseInicio11: NOP
-PUSH 1 ; Literal entero
-PUSH lblMetdebugPrint@Object ; Cargo la etiqueta del metodo
+DUP ; Duplico this para no perderlo
+LOADREF 0 ; Cargo la VT
+LOADREF 0 ; Cargo la direccion de metodo
 CALL
-FMEM 0
-JUMP lblCaseInicio13 ; Salto al codigo del siguiente caso
-lblCaseFin12: NOP
-DUP ; Copia de la condicion
-PUSH 2 ; Literal entero
-EQ ; Igual
-BF lblCaseFin14 ; Salta este caso
-lblCaseInicio13: NOP
-PUSH 2 ; Literal entero
-PUSH lblMetdebugPrint@Object ; Cargo la etiqueta del metodo
-CALL
-FMEM 0
-JUMP lblCaseInicio15 ; Salto al codigo del siguiente caso
-lblCaseFin14: NOP
-DUP ; Copia de la condicion
-PUSH 3 ; Literal entero
-EQ ; Igual
-BF lblCaseFin16 ; Salta este caso
-lblCaseInicio15: NOP
-PUSH 3 ; Literal entero
-PUSH lblMetdebugPrint@Object ; Cargo la etiqueta del metodo
-CALL
-FMEM 0
-lblCaseFin16: NOP
-PUSH 9 ; Literal entero
-NEG ; Menos unario
-PUSH lblMetdebugPrint@Object ; Cargo la etiqueta del metodo
-CALL
-FMEM 0
-POP ; Elimina el valor de la condicion
 FMEM 1
 STOREFP ; Almacena el tope de la pila en el registro
 RET 0
