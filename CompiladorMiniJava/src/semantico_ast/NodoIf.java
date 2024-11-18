@@ -27,14 +27,14 @@ public class NodoIf extends NodoSentencia {
 
 	@Override
 	public void chequear() throws ExcepcionSemantica {
+		sentenciaThen.setBreak(admiteBreak);
 		Tipo tipoCondicion = condicion.chequear().getTipo();
 		if (tipoCondicion.getNombre().equals("boolean")) {
 			sentenciaThen.chequear();
 		}
 		else {
 			throw new ExcepcionSemantica(token, "La condición debe ser de tipo booleano.");
-		}
-		sentenciaThen.setBreak(admiteBreak);
+		}		
 	}
 
 	@Override

@@ -18,6 +18,7 @@ public class TablaSimbolos {
 	private List<NodoBloque> ast;
 	private Metodo main;
 	private Token eof;
+	private String etiquetaFinLoop;
 	static private TablaSimbolos ts;
 	
 	private TablaSimbolos() throws ExcepcionSemantica {
@@ -160,7 +161,13 @@ public class TablaSimbolos {
 		GeneradorCodigo.generarInstruccion("RET 1", "Retorna eliminando el parámetro");	
 		GeneradorCodigo.generarLineaVacia();
 	}
+
+	public void setEtiquetaFinLoop(String etiqueta) {
+		etiquetaFinLoop = etiqueta;
+	}
 	
-	
+	public String getEtiquetaFinLoop() {
+		return etiquetaFinLoop;
+	}
 
 }

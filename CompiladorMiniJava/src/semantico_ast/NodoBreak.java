@@ -2,6 +2,8 @@ package semantico_ast;
 
 import main.Token;
 import semantico_ts.ExcepcionSemantica;
+import semantico_ts.TablaSimbolos;
+import traduccion.GeneradorCodigo;
 
 public class NodoBreak extends NodoSentencia {
 		
@@ -18,8 +20,12 @@ public class NodoBreak extends NodoSentencia {
 
 	@Override
 	public void generarCodigo() {
-		// TODO Auto-generated method stub
-		
+		try {
+			String etiqueta = TablaSimbolos.getTabla().getEtiquetaFinLoop();
+			GeneradorCodigo.generarInstruccion("JUMP " + etiqueta, null);
+		} catch (ExcepcionSemantica e) {
+			e.printStackTrace();
+		}
 	}
 
 }

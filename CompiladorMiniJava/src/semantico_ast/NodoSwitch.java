@@ -5,7 +5,9 @@ import java.util.List;
 
 import main.Token;
 import semantico_ts.ExcepcionSemantica;
+import semantico_ts.TablaSimbolos;
 import semantico_ts.Tipo;
+import traduccion.FactoryEtiquetas;
 import traduccion.GeneradorCodigo;
 
 public class NodoSwitch extends NodoSentencia {
@@ -13,10 +15,12 @@ public class NodoSwitch extends NodoSentencia {
 	private NodoExpresion condicion;
 	private List<NodoCaseSwitch> casos;
 	private NodoDefaultSwitch casoDefault;
+	private String etiquetaFin;
 	
 	public NodoSwitch(Token token) {
 		this.token = token;
 		casos = new LinkedList<NodoCaseSwitch>();
+		etiquetaFin = "lblSwitchFin" + FactoryEtiquetas.crearEtiqueta();
 	}
 	
 	public void setCondicion(NodoExpresion exp) {
@@ -55,21 +59,29 @@ public class NodoSwitch extends NodoSentencia {
 
 	@Override
 	public void generarCodigo() {
-		NodoCaseSwitch caso;	
-		int size = casos.size();
-		condicion.generarCodigo();	
-		for (int i=0; i<size; i++) {
-			caso = casos.get(i);
-			caso.generarCodigo();
-			if (i+1 < size) {
-				GeneradorCodigo.generarInstruccion("JUMP " + casos.get(i+1).getEtiquetaInicio(), "Salto al codigo del siguiente caso");
+		try {
+			TablaSimbolos.getTabla().setEtiquetaFinLoop(etiquetaFin);
+			NodoCaseSwitch caso;	
+			int size = casos.size();
+			condicion.generarCodigo();	
+			for (int i=0; i<size; i++) {
+				caso = casos.get(i);
+				caso.generarCodigo();
+				if (i+1 < size) {
+					GeneradorCodigo.generarInstruccion("JUMP " + casos.get(i+1).getEtiquetaInicio(), "Salto al codigo del siguiente caso");
+				}		
+				GeneradorCodigo.generarInstruccionEtiquetada(caso.getEtiquetaFin(), "NOP", null);
 			}		
-			GeneradorCodigo.generarInstruccionEtiquetada(caso.getEtiquetaFin(), "NOP", null);
-		}		
-		if (casoDefault != null) {
-			casoDefault.generarCodigo();
+			if (casoDefault != null) {
+				casoDefault.generarCodigo();
+			}
+			GeneradorCodigo.generarInstruccionEtiquetada(etiquetaFin, "NOP", null);
+			GeneradorCodigo.generarInstruccion("POP", "Elimina el valor de la condicion");
+			TablaSimbolos.getTabla().setEtiquetaFinLoop("");
+		} catch (ExcepcionSemantica e) {
+			e.printStackTrace();
 		}
-		GeneradorCodigo.generarInstruccion("POP", "Elimina el valor de la condicion");
+		
 	}
 
 }

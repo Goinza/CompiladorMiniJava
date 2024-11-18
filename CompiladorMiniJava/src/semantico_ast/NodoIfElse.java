@@ -34,6 +34,8 @@ public class NodoIfElse extends NodoSentencia {
 	
 	@Override
 	public void chequear() throws ExcepcionSemantica {
+		sentenciaThen.setBreak(admiteBreak);
+		sentenciaElse.setBreak(admiteBreak);
 		Tipo tipoCondicion = condicion.chequear().getTipo();
 		if (tipoCondicion.getNombre().equals("boolean")) {
 			sentenciaThen.chequear();

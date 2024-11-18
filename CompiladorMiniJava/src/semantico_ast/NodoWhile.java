@@ -2,6 +2,7 @@ package semantico_ast;
 
 import main.Token;
 import semantico_ts.ExcepcionSemantica;
+import semantico_ts.TablaSimbolos;
 import semantico_ts.Tipo;
 import traduccion.FactoryEtiquetas;
 import traduccion.GeneradorCodigo;
@@ -39,13 +40,20 @@ public class NodoWhile extends NodoSentencia {
 	}
 
 	@Override
-	public void generarCodigo() {		
-		GeneradorCodigo.generarInstruccionEtiquetada(etiquetaInicio, "NOP", null);
-		condicion.generarCodigo();
-		GeneradorCodigo.generarInstruccion("BF " + etiquetaFin, "Fin de ultima iteracion");		
-		sentencia.generarCodigo();
-		GeneradorCodigo.generarInstruccion("JUMP " + etiquetaInicio, "Siguiente iteracion");
-		GeneradorCodigo.generarInstruccionEtiquetada(etiquetaFin, "NOP", null);		
+	public void generarCodigo() {	
+		try {
+			TablaSimbolos.getTabla().setEtiquetaFinLoop(etiquetaFin);
+			GeneradorCodigo.generarInstruccionEtiquetada(etiquetaInicio, "NOP", null);
+			condicion.generarCodigo();
+			GeneradorCodigo.generarInstruccion("BF " + etiquetaFin, "Fin de ultima iteracion");		
+			sentencia.generarCodigo();
+			GeneradorCodigo.generarInstruccion("JUMP " + etiquetaInicio, "Siguiente iteracion");
+			GeneradorCodigo.generarInstruccionEtiquetada(etiquetaFin, "NOP", null);	
+			TablaSimbolos.getTabla().setEtiquetaFinLoop("");
+		} catch (ExcepcionSemantica e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 }
